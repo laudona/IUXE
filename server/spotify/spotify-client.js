@@ -2,17 +2,17 @@ const SpotifyWebApi = require('spotify-web-api-node');
 const EventEmitter2 = require('eventemitter2').EventEmitter2;
 
 const scopes = ['user-read-private', 'user-read-email', 'user-read-playback-state', 'user-read-currently-playing', 'user-modify-playback-state'];
-const redirectUri = 'http://localhost:3000/spotify/callback';
-const clientId = '3848d012f506457997ebde1cb526ebcf';
-const clientSecret = '216e4d5ba034408d8c3d3113ecccbd1d';
 
 
 class SpotifyClient extends EventEmitter2 {
 
-    constructor() {
+    constructor({ redirectUri, clientId, clientSecret }) {
         super();
         this.refreshId = null;
         this.credentials = {};
+        console.log('Spotify client redirectUri', redirectUri);
+        console.log('Spotify client clientId', clientId);
+        console.log('Spotify client clientSecret', clientSecret);
         this.spotifyApi = new SpotifyWebApi({ redirectUri, clientId, clientSecret });
     }
 
@@ -22,11 +22,11 @@ class SpotifyClient extends EventEmitter2 {
         }
     }
 
-    startRefreshing() {
+    startRefreshing(expires_in) {
         if (!this.refreshId) {
             this.refreshId = setTimeout(() => {
                 this.refresh();
-            }, 1000 * 60 * 30);
+            }, (expires_in * 1000) / 2);
         }
     }
 
@@ -38,6 +38,7 @@ class SpotifyClient extends EventEmitter2 {
         this.stopRefreshing();
         return this.spotifyApi.authorizationCodeGrant(code).then(
             (data) => {
+                console.log('Data authorize ', data.body);
                 console.log('The token expires in ' + data.body['expires_in']);
                 console.log('The access token is ' + data.body['access_token']);
                 console.log('The refresh token is ' + data.body['refresh_token']);
@@ -52,16 +53,17 @@ class SpotifyClient extends EventEmitter2 {
         d.setSeconds(d.getSeconds() + expires_in);
         const expiresOn = d.getTime();
         this.credentials = { expiresOn, expires_in, access_token, refresh_token };
-        this.startRefreshing();
+        this.startRefreshing(expires_in);
         this.emit('spotify.granted.access', this);
         return this.credentials;
     }
 
     refresh() {
+        console.log('Refreshing spotify lease!');
         this.stopRefreshing();
         return this.spotifyApi.refreshAccessToken().then(
             (data) => {
-                console.log('Data sis ', data);
+                console.log('Data refresh ', data.body);
                 console.log('The token expires in ' + data.body['expires_in']);
                 console.log('The access token is ' + data.body['access_token']);
                 console.log('The refresh token is ' + data.body['refresh_token']);
@@ -116,6 +118,4 @@ class SpotifyClient extends EventEmitter2 {
     }
 }
 
-const client = new SpotifyClient();
-
-module.exports = client;
+module.exports = SpotifyClient;

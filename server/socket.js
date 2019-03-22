@@ -1,7 +1,7 @@
 const WebSocket = require('ws');
 
 
-module.exports = function ({port, users}, ip_address) {
+module.exports = function ({port, users}, ip_address, router) {
 
     function noop() {}
 

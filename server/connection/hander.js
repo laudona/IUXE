@@ -33,6 +33,8 @@ class Handler {
         } else if (data['type'] === 'action') {
             this.handler.action(data);
         }
+
+
     }
 
     received_binary (data) {

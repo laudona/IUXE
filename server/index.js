@@ -28,8 +28,11 @@ console.log(`loading config file \'${args['config']}\'...`);
 
 try {
     const config = require(args['config']);
-    const server = require('./server')(config['server'], args['ip_address']);
-    const socket = require('./socket')(config['socket'], args['ip_address']);
+    const Router = require('./router');
+    const router = new Router(config);
+    const spotify = require('./spotify')(config['spotify'], args['ip_address'], router);
+    const server = require('./server')(config['server'], args['ip_address'], router, spotify);
+    const socket = require('./socket')(config['socket'], args['ip_address'], router);
 } catch (e) {
     console.error(`Error starting server.`, e);
 }

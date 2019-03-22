@@ -1,6 +1,98 @@
 const Bus = require('../../bus');
 const spotify = require('./spotify-client');
+const _ = require('lodash');
 
+
+/*
+
+Track object
+------------
+artists - an array of simple artist objects
+duration_ms - integer
+href - string
+id - string
+is_playable - boolean
+name - string
+preview_url - string
+type - string
+uri - string
+
+Artist
+------
+href - string
+id - string
+name - string
+type - string
+uri - string
+
+ */
+
+const base_iri = 'http://www.tudelft.nl/ewi/iuxe#';
+
+/**
+ * Takes a basic name and turns it into an iri-resource
+ * @param name
+ * @returns {string}
+ */
+const resource = function (name) {
+    return base_iri + name;
+};
+
+/**
+ * Takes a basic name and turns it into an iri-resource
+ * @param name
+ * @returns {string}
+ */
+const type = function () {
+    return 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type';
+};
+
+/**
+ * Takes a number value and return a json-ld type
+ * @param i
+ * @returns {{"@value": string, "@type": string}}
+ */
+const integer = function (i) {
+    i = i || 0;
+    return {
+        "@value": t.toString(),
+        "@type": "http://www.w3.org/2001/XMLSchema#integer"
+    };
+};
+
+/**
+ * Takes a number value and return a json-ld type
+ * @param d
+ * @returns {{"@value": string, "@type": string}}
+ */
+const decimal = function (d) {
+    d = d || 0;
+    return {
+        "@value": d.toString(),
+        "@type": "http://www.w3.org/2001/XMLSchema#decimal"
+    };
+};
+
+/**
+ * Takes a track json object and transforms it into json-ld format.
+ * @param json
+ */
+const track = function (json) {
+    const obj = {
+        "@id": resource(json['id'])
+    };
+    if (!_.isUndefined(json['type'])) obj[type] = obj[type] = resource(json['type']);
+
+    obj[resource('album')] = resource(json['album']['name']);
+
+    if (!_.isUndefined(json['duration_ms'])) obj[resource('duration_ms')] = integer(json['duration_ms']);
+    if (!_.isUndefined(json['name'])) obj[resource('name')] = json['name'];
+    if (!_.isUndefined(json['popularity'])) obj[resource('popularity')] = integer(json['popularity']);
+    if (!_.isUndefined(json['track_number'])) obj[resource('track_number')] = integer(json['track_number']);
+    if (!_.isUndefined(json['uri'])) obj[resource('uri')] = json['uri'];
+
+    return obj; // track_number
+};
 
 class EventHandler {
 

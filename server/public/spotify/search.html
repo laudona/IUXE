@@ -1,10 +1,124 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900|Material+Icons" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/vuetify/dist/vuetify.min.css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
 </head>
 <body>
+<div id="app">
+    <v-app>
+        <v-content>
+            <v-container>
+                <v-text-field label="Regular" v-model="searchText"></v-text-field>
+                <v-btn color="info" @click="search(searchText)">Info</v-btn>
+                <v-tabs v-model="active" color="cyan" dark slider-color="yellow">
+                    <v-tab ripple>Search</v-tab>
+                    <v-tab ripple>N-Triples</v-tab>
+                    <v-tab-item>
+                        <v-card flat>
+                            <v-list two-line subheader>
+                                <template v-for="(item, index) in items">
+                                    <v-list-tile avatar @click="toggle(item.uri)">
+                                        <v-list-tile-avatar>
+                                            <img :src="item.img">
+                                        </v-list-tile-avatar>
 
+                                        <v-list-tile-content>
+                                            <v-list-tile-title>{{ item.name }} - {{item.artist}}: {{ item.duration_ms }} Sec</v-list-tile-title>
+                                            <v-list-tile-sub-title>{{ item.uri }}</v-list-tile-sub-title>
+                                        </v-list-tile-content>
+
+                                        <v-list-tile-action>
+                                            <v-icon v-if="!isSelected(item.uri)" color="grey lighten-1">star_border</v-icon>
+                                            <v-icon v-else color="yellow darken-2">star</v-icon>
+                                        </v-list-tile-action>
+                                    </v-list-tile>
+                                </template>
+                            </v-list>
+                        </v-card>
+                    </v-tab-item>
+                    <v-tab-item>
+                        <v-card flat>
+                            <v-card-text><pre>{{ntriple}}</pre></v-card-text>
+                        </v-card>
+                    </v-tab-item>
+                </v-tabs>
+            </v-container>
+        </v-content>
+    </v-app>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vuetify/dist/vuetify.js"></script>
+<script>
+    new Vue({
+        el: '#app',
+        data: () => ({
+            searchText: '',
+            active: null,
+            items: [],
+            text: 'Hello',
+            uris: [],
+            selected: [],
+            ntriple: '@prefix iuxe:  <http://www.tudelft.nl/ewi/iuxe#> .\n\n'
+        }),
+        methods: {
+            search (query) {
+                console.log('Searching ' + query);
+                const self = this;
+                fetch('/spotify/search?query=' + query)
+                    .then(function(response) {
+                        return response.json();
+                    })
+                    .then(function(myJson) {
+                        console.log(JSON.stringify(myJson['tracks']['items'][0], null, 4));
+                        self.items = myJson['tracks']['items'].map(item => ({
+                            'img' : item['album']['images'][1]['url'],
+                            'name': item['name'],
+                            'artist': item["artists"][0]["name"],
+                            'duration_ms': item['duration_ms'],
+                            'uri': item['uri'],
+                            'id': item['id'],
+                            'type': item['type'],
+                            'preview_url': item['preview_url'],
+                        }));
+                    });
+            },
+
+            isSelected (uri) {
+                return this.uris.indexOf(uri) > -1;
+            },
+
+            toggle (uri) {
+                console.log('Toggling uri ' + uri);
+                if (this.isSelected(uri)) {
+                    console.log('Removing ' + uri);
+                    const index = this.uris.indexOf(uri);
+                    this.uris.splice(index, 1);
+                    this.selected.splice(index, 1);
+                } else {
+                    this.items.forEach(item => {
+                        if (item.uri === uri) {
+                            console.log('Adding ' + uri);
+                            this.uris.push(item.uri);
+                            this.selected.push(item);
+                            this.ntriple += `iuxe:${item.id} iuxe:id "${item.id}" .\n`;
+                            this.ntriple += `iuxe:${item.id} iuxe:uri "${item.uri}" . \n`;
+                            this.ntriple += `iuxe:${item.id} iuxe:type iuxe:${item.type} . \n`;
+                            this.ntriple += `iuxe:${item.id} iuxe:name "${item.name}" . \n`;
+                            this.ntriple += `iuxe:${item.id} iuxe:artist "${item.artist}" . \n`;
+                            this.ntriple += `iuxe:${item.id} iuxe:img "${item.img}" . \n`;
+                            this.ntriple += `iuxe:${item.id} iuxe:preview_url "${item.preview_url}" . \n`;
+                            this.ntriple += `iuxe:${item.id} iuxe:duration_ms "${item.duration_ms}"^^<http://www.w3.org/2001/XMLSchema#integer> . \n`;
+                        }
+                    });
+                }
+            }
+        }
+    });
+</script>
 </body>
 </html>
+
+
