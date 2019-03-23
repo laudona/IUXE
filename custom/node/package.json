@@ -1,0 +1,24 @@
+{
+  "name": "purring-butter-custom-interface",
+  "version": "1.0.0",
+  "description": "An example of a minimal interface.",
+  "main": "index.js",
+  "scripts": {
+    "test": "node index.js --verify"
+  },
+  "repository": {
+    "type": "git",
+    "url": "gogs@guppy-games.net:pepper/purring-butter.git"
+  },
+  "keywords": [
+    "agent",
+    "interface",
+    "custom",
+    "iuxe"
+  ],
+  "author": "Ralf Wolter",
+  "license": "ISC",
+  "dependencies": {
+    "ws": "^6.2.0"
+  }
+}
