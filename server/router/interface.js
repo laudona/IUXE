@@ -11,10 +11,10 @@ class Interface {
         this.role = user.role;
         this.preferedDataType = user.preferedDataType;
 
-        console.log(`Client '${this.name}/${this.role}' joined.}`);
+        console.log(`Client '${this.name}/${this.role}' joined.`);
 
-        _.forEach(this.user.subscribes, subscribe => {
-            console.log(`Client '${this.name}/${this.role}' subscribed to '${subscribe}'.}`);
+        _.forEach(user.subscribes, subscribe => {
+            console.log(`Client '${this.name}/${this.role}' subscribed to '${subscribe}'.`);
             this.router.on(`subscribe`, msg => this.send_message_to_client(msg));
         });
     }
@@ -40,7 +40,7 @@ class Interface {
         console.log(`Client '${this.name}/${this.role}' left.}`);
     }
 
-    received_error = function  (err) {
+    received_error (err) {
         console.error(`Connection to '${this.name}/${this.role}' had error because ${err.message}`, err);
     }
 

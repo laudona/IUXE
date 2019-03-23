@@ -4,11 +4,12 @@ const route = require('koa-route');
 const serve = require('koa-static');
 const mount = require('koa-mount');
 
-module.exports = function ({port}, ip_address, router, spotify) {
+module.exports = function ({port, webDirectory}, ip_address, router, spotify) {
 
     const app = module.exports = new Koa();
 
     app.use(mount('/public', serve(path.join(__dirname, '/public'))));
+    app.use(mount('/www', serve(path.join(__dirname, webDirectory))));
     app.use(mount('/spotify', spotify));
 
 

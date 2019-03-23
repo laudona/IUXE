@@ -52,40 +52,40 @@ class Touch:
         self.send_callback = callback
 
     def on_right_bumper_pressed(self, *args):
-        self.on_touched("right_bumper", value, *args)
+        self.on_touched("right_bumper", *args)
 
     def on_left_bumper_pressed(self, *args):
-        self.on_touched("left_bumper", value, *args)
+        self.on_touched("left_bumper", *args)
 
     def on_back_bumper_pressed(self, *args):
-        self.on_touched("back_bumper", value, *args)
+        self.on_touched("back_bumper", *args)
 
     def on_front_head_touched(self, *args):
-        self.on_touched("front_head", value, *args)
+        self.on_touched("front_head", *args)
 
     def on_middle_head_touched(self, *args):
-        self.on_touched("middle_head", value, *args)
+        self.on_touched("middle_head", *args)
 
     def on_back_head_touched(self, *args):
-        self.on_touched("back_head", value, *args)
+        self.on_touched("back_head", *args)
 
     def on_right_hand_back_touched(self, *args):
-        self.on_touched("right_hand_back", value, *args)
+        self.on_touched("right_hand_back", *args)
 
     def on_right_hand_left_touched(self, *args):
-        self.on_touched("right_hand_left", value, *args)
+        self.on_touched("right_hand_left", *args)
 
     def on_right_hand_right_touched(self, *args):
-        self.on_touched("right_hand_right", value, *args)
+        self.on_touched("right_hand_right", *args)
 
     def on_left_hand_back_touched(self, *args):
-        self.on_touched("left_hand_back", value, *args)
+        self.on_touched("left_hand_back", *args)
 
     def on_left_hand_left_touched(self, *args):
-        self.on_touched("left_hand_left", value, *args)
+        self.on_touched("left_hand_left", *args)
 
     def on_left_hand_right_touched(self, *args):
-        self.on_touched("left_hand_right", value, *args)
+        self.on_touched("left_hand_right", *args)
 
     def on_touched(self, area, value, *args):
         event = "was_touched" if False else "was_released"

@@ -3,23 +3,28 @@ const _ = require('lodash');
 
 const connect = function(ws, router) {
 
-    let handler = dummyHandler;
+    let handler = router.guest();
 
     const login = function ({ name, code }) {
-        this.handler = router.login(ws, name, code);
+        console.log(`login attempt by ${name}.`);
+        handler = router.login(ws, name, code);
+        console.log(`Client is now identified as ${handler.name}.`);
     };
 
     const received = function (message) {
+        console.log(`Message received from ${handler.name}`);
         if (message instanceof Buffer) {
-            this.handler.binary(message);
+            handler.binary(message);
         } else {
             const data = JSON.parse(message);
             if (data['type'] === 'login') {
                 login(data);
             } else if (data['type'] === 'event') {
-                this.handler.event(data);
+                handler.event(data);
             } else if (data['type'] === 'action') {
-                this.handler.action(data);
+                handler.action(data);
+            } else {
+                console.error(`unknown message received from ${handler.name}`, data);    
             }
         }
     };
