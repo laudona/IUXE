@@ -37,7 +37,7 @@ if __name__ == '__main__':
 
         print('Client is up and running! Ready to process messages...')
         ws.run_forever()
-        app.run_forever()
+        # app.run_forever()
     except KeyboardInterrupt:
         ws.close()
         print("Client closed!")
