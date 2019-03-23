@@ -17,24 +17,29 @@ class PepperClient(WebSocketClient):
         print("Closed down", code, reason)
 
     def received_message(self, message):
-        print("Received message '{0}'".format(message))
-        print("Type of message is '{0}'".format(type(message.data)))
         data = json.loads(message.data)
 
         if 'action' in data:
+            print("Received action '{0}'.".format(data['action']))
             self.received_action(data)
         elif 'event' in data:
+            print("Received event '{0}'.".format(data['event']))
             self.received_event(data)
         else:
+            print("Received unknown data '{0}'.".format(data))
             self.received_unknown(data)
 
-    def received_action(self, data):
-        action = data.get('action', 'unknown')
-        args = data.get('args', [])
+    def received_action(self, message):
+        action = message.get('action', 'unknown')
+        data = message.get('data', {})
 
-        func = getattr(self.application, action, self.action_unknown)
-        func(*args)
-        self.send_json({'action': 'action_completed', 'args': [action]})
+        def create_fallback(action):
+            def fallback(data):
+                print("Action '{0}' was not defined in QiApplication. '{1}' is not a valid action".format(action, data))
+            return fallback
+
+        func = getattr(self.application, action, create_fallback(action))
+        func(data)
 
     def received_event(self, data):
         pass
@@ -42,12 +47,8 @@ class PepperClient(WebSocketClient):
     def received_unknown(self, data):
         pass
 
-    def action_unknown(self, *args):
-        print('Action was unknown.')
-        self.send_json({'action': 'action_unknown', 'args': []})
-
-    def send_audio_buffer(self, audio_buffer):
-        self.send(audio_buffer, binary=True)
+    def send_binary(self, data_buffer):
+        self.send(data_buffer, binary=True)
 
     def send_json(self, data):
         self.send(json.dumps(data), binary=False)

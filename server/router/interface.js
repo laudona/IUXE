@@ -1,4 +1,5 @@
 const convert = require('./convert');
+const _ = require('lodash');
 
 
 class Interface {
@@ -12,8 +13,10 @@ class Interface {
 
         console.log(`Client '${this.name}/${this.role}' joined.}`);
 
-        this.router.on(`${this.role}.action.*`, msg => this.send_action_to_client(msg));
-        this.router.on(`${this.role}.event.*`, msg => this.send_event_to_client(msg));
+        _.forEach(this.user.subscribes, subscribe => {
+            console.log(`Client '${this.name}/${this.role}' subscribed to '${subscribe}'.}`);
+            this.router.on(`subscribe`, msg => this.send_message_to_client(msg));
+        });
     }
 
     event ({ event, data, dataType }) {
@@ -39,6 +42,16 @@ class Interface {
 
     received_error = function  (err) {
         console.error(`Connection to '${this.name}/${this.role}' had error because ${err.message}`, err);
+    }
+
+    send_message_to_client(msg) {
+        if (msg['action']) {
+            this.send_action_to_client(msg);
+        } else if (msg['event']) {
+            this.send_event_to_client(msg);
+        } else {
+            console.error(`Unable to send message to '${this.name}/${this.role}' because it was neither an action nor an event.`, msg);
+        }
     }
 
     send_action_to_client({ action, data, dataType }) {

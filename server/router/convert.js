@@ -7,12 +7,12 @@ const converters = {
             return Promise.resolve(data);
         },
         'text/turtle': function (data) {
-            return sonld.toRDF(data, {format: 'application/n-quads'});
+            return jsonld.toRDF(data, {format: 'application/n-quads'});
         }
     },
     'text/turtle': {
         'application/ld+json': function (data) {
-            return sonld.fromRDF(data, {format: 'application/n-quads'});
+            return jsonld.fromRDF(data, {format: 'application/n-quads'});
         },
         'text/turtle': function (data) {
             return Promise.resolve(data);

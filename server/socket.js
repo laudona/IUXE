@@ -14,7 +14,7 @@ module.exports = function ({port, users}, ip_address, router) {
     wss.on('connection', function connection(ws) {
         ws.isAlive = true;
         ws.on('pong', heartbeat);
-        connect(ws);
+        connect(ws, router);
     });
 
     const interval = setInterval(function ping() {
