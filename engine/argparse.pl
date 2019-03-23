@@ -9,7 +9,7 @@
 :- setting(ip_address, atom,   'localhost', 'The ip address of the server').
 
 
-arg(key, Value) :- setting(key, Value).
+arg(Name, Value) :- setting(Name, Value).
  
 
 args :-
