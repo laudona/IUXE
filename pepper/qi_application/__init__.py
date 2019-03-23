@@ -1,6 +1,7 @@
 import qi
 import audio
 import vision
+import touch
 
 
 class QiApplication:
@@ -14,9 +15,11 @@ class QiApplication:
 
         self.audio = audio.Audio(self.session)
         self.vision = vision.Vision(self.session)
+        self.touch = touch.Touch(self.session)
 
         self.audio.set_callback(self.send)
         self.vision.set_callback(self.send)
+        self.touch.set_callback(self.send)
 
         # self.session.registerService(self.audio.module_name, self.audio)
         # self.session.registerService(self.vision.module_name, self.vision)
@@ -27,6 +30,11 @@ class QiApplication:
         print(message['data'])
         print("=" * 20)
         # self.send_callback({ 'event': event, 'data':data, 'dataType': data_type})
+
+    def set_send_callback(self, callback):
+        self.audio.set_callback(callback)
+        self.vision.set_callback(callback)
+        self.touch.set_callback(callback)
 
     def run_forever(self):
         self.app.run()

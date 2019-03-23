@@ -6,7 +6,7 @@ class PepperClient(WebSocketClient):
 
     def opened(self):
         print("Connection to established.")
-        self.send_json({'name': 'pepper-client', 'role': 'audio-stream'})
+        self.send_json({"type":"login", "name": "yangqin",  "code": "arOVtlLyNywncMEPdRBE"})
 
     def link_to_qi(self, application):
         print("Starting qi application")

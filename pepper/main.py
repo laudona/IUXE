@@ -26,17 +26,17 @@ if __name__ == '__main__':
         print("Connection to nao-qi at tcp://{0}:{1}/ established!".format(args.pepper_ip, args.pepper_port))
 
         print("Creating to server client fot {0} ...".format(server_url))
-        # ws = client.PepperClient(server_url)
+        ws = client.PepperClient(server_url)
         print("linking nao-qi client and server client...")
-        # ws.link_to_qi(app)
+        ws.link_to_qi(app)
         print("nao-qi client and server client linked!")
 
         print("Connecting to server at {0} ...".format(server_url))
-        # ws.connect()
+        ws.connect()
         print("Connection to server at {0} established!".format(server_url))
 
         print('Client is up and running! Ready to process messages...')
-        # ws.run_forever()
+        ws.run_forever()
         app.run_forever()
     except KeyboardInterrupt:
         ws.close()
