@@ -1,0 +1,113 @@
+@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix owl:   <http://www.w3.org/2002/07/owl#> .
+@prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix iuxe:  <http://www.tudelft.nl/ewi/iuxe#> .
+
+iuxe:5cjXFtQAc2ZRyWuEFEG06v iuxe:id "5cjXFtQAc2ZRyWuEFEG06v" .
+iuxe:5cjXFtQAc2ZRyWuEFEG06v iuxe:uri "spotify:track:5cjXFtQAc2ZRyWuEFEG06v" . 
+iuxe:5cjXFtQAc2ZRyWuEFEG06v iuxe:type iuxe:track . 
+iuxe:5cjXFtQAc2ZRyWuEFEG06v iuxe:name "I'm a Believer" . 
+iuxe:5cjXFtQAc2ZRyWuEFEG06v iuxe:artist "The Monkees" . 
+iuxe:5cjXFtQAc2ZRyWuEFEG06v iuxe:img "https://i.scdn.co/image/03b9c72684f277f974b15f706b8e9529eb743203" . 
+iuxe:5cjXFtQAc2ZRyWuEFEG06v iuxe:preview_url "https://p.scdn.co/mp3-preview/21d3ddc0aea9b09592a7381d8f269a8c7c3641ec?cid=3848d012f506457997ebde1cb526ebcf" . 
+iuxe:5cjXFtQAc2ZRyWuEFEG06v iuxe:duration_ms "166906"^^<http://www.w3.org/2001/XMLSchema#integer> . 
+
+iuxe:pepper iuxe:heard iuxe:word_01212 .
+iuxe:word_01212 iuxe:word "Yes" .
+iuxe:word_01212 iuxe:confidence "0.345"^^xsd:decimal .
+
+iuxe:agent iuxe:desires iuxe:to_play_music .
+iuxe:agent iuxe:desires iuxe:to_engage_people .
+
+
+
+ing:Accountholder  ing:can_be       ing:AuthorisedRepresentative ;
+        ing:can_initiate            ing:PaymentTransaction ;
+        ing:can_grant               ing:PowerOfAttorney ;
+        ing:does_have                     ing:CreditCard , ing:DebitCard ;
+        ing:does_hold                   ing:BusinessAccount ;
+        ing:is                    ing:NaturalPerson ;
+        ing:is_allowed_to_do        ing:Transactions ;
+        ing:is_allowed_to_execute   ing:PaymentService ;
+        ing:is_allowed_to_receive   ing:Funds ;
+        ing:is_allowed_to_transfer  ing:Funds ;
+        ing:is_allowed_to_use       ing:CreditCard , ing:DebitCard , ing:BusinessAccount ;
+        ing:is_allowed_to_use        ing:BusinessAccount ;
+        ing:can_transfer             "Euro", "US Dollar", "Japanese Yen", "Bulgarian Lev", "Czech Republic Koruna", "Danish Krone", "Estonian Kroon", "British Pound", "Hungarian Forint", "Lithuanian Lita", "Latvian Lat", "Polish Zloty", "Romanian Leu", "Swedish Krona", "Slovak Koruna", "Swiss Franc", "Icelandic Króna", "Norwegian Krone", "Croatian Kuna", "Russian Ruble", "Turkish Lira", "Australian Dollar", "Brazilian Real", "Canadian Dollar", "Chinese Yuan", "Hong Kong Dollar", "Indonesian Rupiah", "South Korean Won", "Mexican Peso", "Malaysian Ringgit", "New Zealand Dollar", "Philippine Peso", "Singapore Dollar", "Thai Baht", "South African Rand" .
+
+ing:AuthorisedRepresentative
+        ing:can_initiate        ing:PaymentTransaction ;
+        ing:can_not_substitute  ing:Accountholder ;
+        ing:does_have           ing:PowerOfAttorney ;
+        ing:is                ing:ThirdParty .
+
+ing:CreditCard  ing:can_be_used_at  "Dutch ATM" , "Foreign ATM" , "Payment Terminal" , "Internet" , "Telephone" ;
+        ing:can_execute     ing:PaymentTransaction .
+
+ing:DebitCard  ing:can_be_used_at  "Dutch ATM" , "Foreign ATM" , "Payment Terminal" ;
+        ing:can_execute     ing:PaymentTransaction .
+
+ing:BusinessAccount  ing:does_belong_to  ing:Accountholder ;
+        ing:can_be_credited_with     "Euro", "US Dollar", "Japanese Yen", "Bulgarian Lev", "Czech Republic Koruna", "Danish Krone", "Estonian Kroon", "British Pound", "Hungarian Forint", "Lithuanian Lita", "Latvian Lat", "Polish Zloty", "Romanian Leu", "Swedish Krona", "Slovak Koruna", "Swiss Franc", "Icelandic Króna", "Norwegian Krone", "Croatian Kuna", "Russian Ruble", "Turkish Lira", "Australian Dollar", "Brazilian Real", "Canadian Dollar", "Chinese Yuan", "Hong Kong Dollar", "Indonesian Rupiah", "South Korean Won", "Mexican Peso", "Malaysian Ringgit", "New Zealand Dollar", "Philippine Peso", "Singapore Dollar", "Thai Baht", "South African Rand" ;
+        ing:can_deposit              ing:Funds ;
+        ing:can_receive              ing:Funds ;
+        ing:can_transfer             ing:Funds ;
+        ing:can_withdraw             ing:Funds ;
+        ing:does_have                ing:AccountNumber , ing:Agreement , ing:Balance ;
+        ing:is                     ing:Account ;
+        ing:is_intended_to_deposit   ing:Funds ;
+        ing:is_intended_to_receipt   ing:Funds ;
+        ing:is_intended_to_transfer  ing:Funds ;
+        ing:is_intended_to_withdraw  ing:Funds .
+
+ing:NaturalPerson  ing:does_have  ing:Name .
+
+ing:AccountNumber  ing:does_indicate  ing:BusinessAccount ;
+        ing:is_linked_to      ing:BusinessAccount ;
+        ing:is_received_by    ing:Accountholder ;
+        ing:is_received_from  ing:Bank .
+
+ing:Balance  ing:is_calculated_on  ing:BusinessDay .
+
+ing:PowerOfAttorney  ing:can_be_granted_by
+                ing:Accountholder ;
+        ing:can_be_granted_to  ing:ThirdParty .
+
+ing:Bank  ing:can_approve  ing:Application ;
+        ing:can_open     ing:BusinessAccount ;
+        ing:does_execute     ing:PaymentTransaction ;
+        ing:does_have_a_name           "ING Bank N.V." .
+
+ing:BusinessDay  ing:not_include  "Saturday" , "Sunday" , "1 of January" , "Good Friday" , "Easter Monday" , "1 of May" , "25 of December" , "26 of December" .
+
+ing:Application  ing:is_submitted_by  ing:Accountholder ;
+        ing:is_for  ing:BusinessAccount .
+
+ing:PaymentTransaction
+        ing:does_deposit_in     ing:BusinessAccount ;
+        ing:is_initiated_by   ing:ThirdParty , ing:Accountholder , ing:Beneficiary ;
+        ing:does_transfer_to    ing:BusinessAccount ;
+        ing:does_withdraw_from  ing:BusinessAccount .
+
+ing:BankCard  ing:is  ing:CreditCard , ing:DebitCard .
+
+ing:Beneficiary  ing:is  ing:NaturalPerson , ing:LegalEntity ;
+        ing:does_receive  ing:Funds .
+
+ing:LegalEntity  ing:does_have  ing:Name .
+
+ing:CardHolder  ing:is  ing:AuthorisedRepresentative , ing:Accountholder .
+
+ing:CreditBalance  ing:can_be_claimed_by
+                ing:Accountholder ;
+        ing:can_be_claimed_from  ing:Bank ;
+        ing:is                 "Positive balance" .
+
+ing:DebitBalance  ing:is  "Negative Balance" ;
+        ing:is_owed_by  ing:Accountholder ;
+        ing:is_owed_to  ing:Bank .
+
+ing:PaymentInstruction
+        ing:is_given_by  ing:Accountholder , ing:Beneficiary ;
+        ing:is_given_to  ing:Bank .

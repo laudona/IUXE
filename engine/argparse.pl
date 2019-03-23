@@ -8,6 +8,10 @@
 :- setting(port, atom,   '3001', 'The port of the server').
 :- setting(ip_address, atom,   'localhost', 'The ip address of the server').
 
+
+arg(key, Value) :- setting(key, Value).
+ 
+
 args :-
     current_prolog_flag(argv, Argv),
     args(Argv).
@@ -50,3 +54,5 @@ args(['-i', IpAddress | Tail ]) :-
     debug(info, 'Using ip-address \'~w\'.', [IpAddress]),
     set_setting(ip_address, IpAddress),
     args(Tail).
+
+
