@@ -65,7 +65,7 @@ read_rdf(G, S, P, O) :-
     debug(info, 'read believe \'~w\' - \'~w\' - \'~w\'.', [S, P, O]).
 read_rdf(G, S, P, O) :- 
     debug(info, 'reading literal string believe \'~w\' - \'~w\' - \'~w\'...', [S, P, O]),
-    rdf(S, P, @(String, Lang), G),
+    rdf(S, P, @(O, _Lang), G),
     debug(info, 'read believe \'~w\' - \'~w\' - \'~w\'.', [S, P, O]).
 read_rdf(G, S, P, O) :- 
     debug(info, 'reading believe \'~w\' - \'~w\' - \'~w\'...', [S, P, O]),

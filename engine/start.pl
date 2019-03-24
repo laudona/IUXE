@@ -39,7 +39,7 @@ test(load_ontology_1, []) :-
     ontology_reader:load_ontology_file(believes, '../data/ontology.ttl'),
     ontology_reader:read_rdf('http://www.tudelft.nl/ewi/iuxe#5cjXFtQAc2ZRyWuEFEG06v', 'http://www.tudelft.nl/ewi/iuxe#name', Name),
     debug(info, 'reading name \'~w\'...', [Name]),
-    ontology_reader:read_rdf(WordId, 'http://www.tudelft.nl/ewi/iuxe#confidence', ^^(Confidence, Type)),
+    ontology_reader:read_rdf(WordId, 'http://www.tudelft.nl/ewi/iuxe#confidence', ^^(Confidence, _Type)),
     Confidence2 is Confidence + 1,
     debug(info, 'reading the confidence of \'~w\' is ~w...', [WordId, Confidence2]).   
 
