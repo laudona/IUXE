@@ -5,8 +5,6 @@
 :- use_module(library(semweb/rdf11)).
 
 
-read_rdf(S, P, O) :- rdf(S, P, O).
-
 %%
 %% Load ontology from specified file.
 %%
@@ -57,6 +55,47 @@ load_triples(Graph, [ rdf(S, P, O, G ) | Rest ]) :-
     !,
     debug(load_triples/info, 'loading quad as triple discarding graph \'~w\'...', [G]),
     load_triples(Graph, [ rdf(S, P, O) | Rest ]).
+
+%%
+%% Reads a triple from the database
+%%
+read_rdf(G, S, P, O) :- 
+    debug(info, 'reading literal believe \'~w\' - \'~w\' - \'~w\'...', [S, P, O]),
+    rdf(S, P, ^^(O, _Type), G),
+    debug(info, 'read believe \'~w\' - \'~w\' - \'~w\'.', [S, P, O]).
+read_rdf(G, S, P, O) :- 
+    debug(info, 'reading literal string believe \'~w\' - \'~w\' - \'~w\'...', [S, P, O]),
+    rdf(S, P, @(String, Lang), G),
+    debug(info, 'read believe \'~w\' - \'~w\' - \'~w\'.', [S, P, O]).
+read_rdf(G, S, P, O) :- 
+    debug(info, 'reading believe \'~w\' - \'~w\' - \'~w\'...', [S, P, O]),
+    rdf(S, P, O, G),
+    debug(info, 'read believe \'~w\' - \'~w\' - \'~w\'.', [S, P, O]).
+
+%%
+%% Writes a triple to the database
+%%
+write_rdf(G, S, P, O) :-
+    rdf_assert(S, P, O, G),
+    debug(info, 'wrote believe \'~w\' - \'~w\' - \'~w\'.', [S, P, O]).
+
+%%
+%% Reads a triple from the database from the relevant graph
+%%
+read_believe(S, P, O) :- read_rdf(believes, S, P, O).
+read_event(S, P, O) :- read_rdf(events, S, P, O).
+read_action(S, P, O) :- read_rdf(actions, S, P, O).
+read_intermediate(S, P, O) :- read_rdf(intermediate, S, P, O).
+
+%%
+%% Writes a triple to the database in the relevant graph
+%%
+write_believe(S, P, O) :- write_rdf(believes, S, P, O).
+write_event(S, P, O) :- write_rdf(events, S, P, O).
+write_event(S, P, O) :- write_rdf(actions, S, P, O).
+write_intermediate(S, P, O) :- write_rdf(intermediate, S, P, O).
+
+
 
 %%
 %% Tests
