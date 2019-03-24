@@ -23,14 +23,14 @@ default_prefix(iuxe).
 valid_goal(action(_S-_P-_O)) :- !.
 valid_goal(believe(_S-_P-_O)) :- !.
 valid_goal(unbelieve(_S-_P-_O)) :- !.
-valid_goal(itermediate(_S-_P-_O)) :- !.
+valid_goal(intermediate(_S-_P-_O)) :- !.
 
 %%
 %% Valid terms in a condition.
 %%
 valid_condition_term(event(_S-_P-_O)) :- !.
 valid_condition_term(believe(_S-_P-_O)) :- !.
-valid_condition_term(itermediate(_S-_P-_O)) :- !.
+valid_condition_term(intermediate(_S-_P-_O)) :- !.
 
 %%
 %% Valid operators in a condition.

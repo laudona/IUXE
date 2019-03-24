@@ -15,7 +15,7 @@ class Interface {
 
         _.forEach(user.subscribes, subscribe => {
             console.log(`Client '${this.name}/${this.role}' subscribed to '${subscribe}'.`);
-            this.router.on(`subscribe`, msg => this.send_message_to_client(msg));
+            this.router.on(subscribe, msg => this.send_message_to_client(msg));
         });
     }
 
@@ -29,7 +29,7 @@ class Interface {
         const actionName = `${this.role}.action.${action}`;
         console.log(`Client '${this.name}' emits ${actionName} action.`);
         this.router.emit(actionName, { action, data, dataType });
-        console.log(`Clients of type '${this.type}' are not allowed to send actions.`);
+        // console.log(`Clients of type '${this.type}' are not allowed to send actions.`);
     }
 
     binary (data) {

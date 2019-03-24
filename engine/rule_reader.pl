@@ -41,6 +41,7 @@ load_rules_term(rule(Name, Rule), Stream) :- !,
     debug(rule_reader/load/info, 'parsing rule definition \'~w\'.', [rule(Name, Rule)]),
     rule_transformer:transform(rule(Name, Rule), ExpandedRule),
     assertz(ExpandedRule),
+    debug(info, 'loaded rule \'~w\'.', [Name]),
     read(Stream, Term),
     debug(rule_reader/load/debug, 'reading term ~w...', [Term]),
     load_rules_term(Term, Stream).

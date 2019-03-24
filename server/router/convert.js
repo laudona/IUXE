@@ -22,7 +22,7 @@ const converters = {
 
 const convert = function (desiredFDataType, data, dataType) {
     if (converters[dataType] && converters[dataType][desiredFDataType]) {
-        return converters[desiredFormat][dataType](data);
+        return converters[dataType][desiredFDataType](data);
     } else {
         return Promise.reject({ message: `Convert: Unable to convert from ${dataType} to ${desiredFDataType}.` });
     }

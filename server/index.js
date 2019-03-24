@@ -30,6 +30,7 @@ try {
     const config = require(args['config']);
     const Router = require('./router');
     const router = new Router(config);
+    const timer = require('./timer')(config['timer'], args['ip_address'], router);
     const spotify = require('./spotify')(config['spotify'], args['ip_address'], router);
     const server = require('./server')(config['server'], args['ip_address'], router, spotify);
     const socket = require('./socket')(config['socket'], args['ip_address'], router);
