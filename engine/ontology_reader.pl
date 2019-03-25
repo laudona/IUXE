@@ -73,27 +73,28 @@ read_rdf(G, S, P, Value) :-
     rdf(S, P, Object, G),
     Object = ^^(Value, Type),
     debug(ontology_reader/info, '[ONTOLOGY] Read rdf literal \'~w\' of typen <~w>.', [Value, Type]),
-    debug(ontology_reader/info, 'read rdf \'~w\' - \'~w\' - \'~w\'.', [S, P, O]).
+    debug(ontology_reader/info, 'read rdf \'~w\' - \'~w\' - \'~w\'.', [S, P, Value]).
 read_rdf(G, S, P, Value) :- 
     rdf(S, P, Object, G),
     Object = @(Value, Lang),
     debug(ontology_reader/info, '[ONTOLOGY] Read rdf string \'~w\' of language <~w>.', [Value, Lang]),
-    debug(ontology_reader/info, 'read rdf \'~w\' - \'~w\' - \'~w\'.', [S, P, O]).
+    debug(ontology_reader/info, 'read rdf \'~w\' - \'~w\' - \'~w\'.', [S, P, Value]).
 read_rdf(G, S, P, Value) :- 
     rdf(S, P, Object, G),
     Object \= ^^(_Value1, _Type),
     Object \= @(_Value2, _Lang),
+    Object = Value,
     debug(ontology_reader/info, '[ONTOLOGY] Read rdf which was not a literal so probably an iri? - <~w>.', [Object]),
-    debug(ontology_reader/info, 'read rdf \'~w\' - \'~w\' - \'~w\'.', [S, P, O]).
+    debug(ontology_reader/info, 'read rdf \'~w\' - \'~w\' - \'~w\'.', [S, P, Value]).
 
 %%
 %% Writes a triple to the database
 %%
-write_rdf(G, S, P, ^^(Value, Type)) :-
+write_rdf(G, S, P, ^^(Value, _Type)) :-
     debug(ontology_reader/info, 'writing believe \'~w\' with \'~w\'...', [S, Value]),
     read_rdf(G, S, P, Value),
-    debug(ontology_reader/info, 'skipped believe \'~w\' because it already existed.', [S, P, O]).
-write_rdf(G, S, P, ^^(Value, Type)) :-
+    debug(ontology_reader/info, 'skipped believe \'~w\' because it already existed.', [P]).
+write_rdf(G, S, P, ^^(Value, _Type)) :-
     debug(ontology_reader/info, 'writing believe \'~w\' - \'~w\' - \'~w\'...', [S, P, Value]),
     rdf_assert(S, P, Value, G),
     debug(ontology_reader/info, 'wrote believe \'~w\' - \'~w\' - \'~w\'.', [S, P, Value]).
@@ -143,7 +144,7 @@ write_unbelieves([]).
 write_unbelieves([ unbelieve(S, P, O) | Unbelieves ]) :- 
     delete_rdf(believe, S, P, O),
     write_unbelieves(Unbelieves).
-write_unbelieves([ unbelieve(S, P, O) | Unbelieves ]) :- 
+write_unbelieves([ _U | Unbelieves ]) :- 
     write_unbelieves(Unbelieves).
 
 write_believes([]).
@@ -151,16 +152,16 @@ write_believes([ believe(S, P, O) | Believes ]) :-
     debug(ontology_reader/info, 'Writing believe about \'~w\' ...', [S]),
     write_rdf(believe, S, P, O),
     write_believes(Believes).
-write_believes([ unbelieve(S, P, O) | Believes ]) :- 
+write_believes([ believe(S, _P, _O) | Believes ]) :- 
     debug(ontology_reader/info, 'Skipping believe about \'~w\' ...', [S]),
     write_believes(Believes).
 
 write_actions([]).
-write_actions([ action(S, P, O) | Action ]) :- 
+write_actions([ action(S, P, O) | Actions ]) :- 
     write_rdf(action, S, P, O),
-    write_actions(Action).
-write_actions([ action(S, P, O) | Action ]) :- 
-    write_actions(Action).
+    write_actions(Actions).
+write_actions([ _Action | Actions ]) :- 
+    write_actions(Actions).
 
 
 %%

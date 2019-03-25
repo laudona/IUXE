@@ -1,87 +1,90 @@
 {
-    "users": [
-      {
-        "name": "biwa",
-        "code": "Wm7Wi3MoSlwc9HpZOp5s",
-        "role": "user",
-        "preferedDataType": "application/ld+json",
-        "subscribes": [ "user.action.*" ],
-        "permissions": [ "event" ]
-      },
-      {
-        "name": "lur",
-        "code": "SfMnwiiTjZ",
-        "role": "simulator",
-        "preferedDataType": "application/ld+json",
-        "subscribes": [ "*.action.*", "*.event.*" ],
-        "allowed": [ "events" ],
-        "permissions": [ "event", "action" ]
-      },
-      {
-        "name": "janzi",
-        "code": "lRkCA2Gaq83mlGxgkpgy",
-        "role": "engine",
-        "preferedDataType": "text/turtle",
-        "subscribes": [ "*.event.*" ],
-        "permissions": [ "action" ]
-      },
-      {
-        "name": "yangqin",
-        "code": "arOVtlLyNywncMEPdRBE",
-        "role": "pepper",
-        "type": "interface",
-        "preferedDataType": "application/ld+json",
-        "subscribes": [ "pepper.action.*" ],
-        "permissions": [ "event" ]
-      },
-      {
-        "name": "tro",
-        "code": "fhJV40NPPLBX4lPr2gRj",
-        "role": "tablet",
-        "type": "interface",
-        "preferedDataType": "application/ld+json",
-        "subscribes": [ "tablet.action.*", "pepper.action.*" ],
-        "permissions": [ "event" ]
-      },
-      {
-        "name": "santoor",
-        "code": "Vqg59q3cHCRwmMlSX7X7",
-        "role": "web",
-        "type": "interface",
-        "preferedDataType": "application/ld+json",
-        "subscribes": [ "web.action.*" ],
-        "permissions": [ "event" ]
-      },
-      {
-        "name": "siku",
-        "code": "omPfnB0MH3nhMrOEwLN7",
-        "role": "spotify",
-        "type": "interface",
-        "preferedDataType": "application/ld+json",
-        "subscribes": [ "spotify.action.*" ],
-        "permissions": [ "event" ]
-      }
-    ],
-    "socket": {
-      "port": 3001
+  "users": [
+    {
+      "name": "biwa",
+      "code": "Wm7Wi3MoSlwc9HpZOp5s",
+      "role": "user",
+      "preferedDataType": "application/ld+json",
+      "subscribes": [ "user.action.*" ],
+      "permissions": [ "event" ]
     },
-    "server": {
-      "port": 3000,
-      "webDirectory": "../data/www"
+    {
+      "name": "lur",
+      "code": "SfMnwiiTjZ",
+      "role": "simulator",
+      "preferedDataType": "application/ld+json",
+      "subscribes": [ "*.action.*", "*.event.*" ],
+      "allowed": [ "events" ],
+      "permissions": [ "event", "action" ]
     },
-    "spotify": {
-      "clientId": "<your-spotify-client-id>",
-      "clientSecret": "<your-spotify-client-secret>",
-      "redirectUri": "http://localhost:3000/spotify/callback"
+    {
+      "name": "janzi",
+      "code": "lRkCA2Gaq83mlGxgkpgy",
+      "role": "engine",
+      "preferedDataType": "text/turtle",
+      "subscribes": [ "*.event.*" ],
+      "permissions": [ "action" ]
     },
-    "engine": {
-      "rules": "../data/rules.pl",
-      "ontology": "../data/ontology.ttl"
+    {
+      "name": "yangqin",
+      "code": "arOVtlLyNywncMEPdRBE",
+      "role": "pepper",
+      "type": "interface",
+      "preferedDataType": "application/ld+json",
+      "subscribes": [ "pepper.action.*" ],
+      "permissions": [ "event" ]
     },
-    "pepper": {
-      "loadTablet": "http://192.168.0.152:3000/public/tablet.html",
-      "streamAudio": false
+    {
+      "name": "tro",
+      "code": "fhJV40NPPLBX4lPr2gRj",
+      "role": "tablet",
+      "type": "interface",
+      "preferedDataType": "application/ld+json",
+      "subscribes": [ "tablet.action.*", "pepper.action.*" ],
+      "permissions": [ "event" ]
     },
-    "web": {},
-    "tablet": {}
-  }
+    {
+      "name": "santoor",
+      "code": "Vqg59q3cHCRwmMlSX7X7",
+      "role": "web",
+      "type": "interface",
+      "preferedDataType": "application/ld+json",
+      "subscribes": [ "web.action.*" ],
+      "permissions": [ "event" ]
+    },
+    {
+      "name": "siku",
+      "code": "omPfnB0MH3nhMrOEwLN7",
+      "role": "spotify",
+      "type": "interface",
+      "preferedDataType": "application/ld+json",
+      "subscribes": [ "spotify.action.*" ],
+      "permissions": [ "event" ]
+    }
+  ],
+  "socket": {
+    "port": 3001
+  },
+  "server": {
+    "port": 3000,
+    "webDirectory": "/../data/www"
+  },
+  "spotify": {
+    "clientId": "<your-client-id>",
+    "clientSecret": "<your-client-secret>",
+    "redirectUri": "http://localhost:3000/spotify/callback"
+  },
+  "engine": {
+    "rules": "../data/rules.pl",
+    "ontology": "../data/ontology.ttl"
+  },
+  "pepper": {
+    "loadTablet": "http://192.168.0.152:3000/public/tablet.html",
+    "streamAudio": false
+  },
+  "timer": { 
+    "interval": 2000 
+  },
+  "web": {},
+  "tablet": {}
+}

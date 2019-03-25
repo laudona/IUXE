@@ -26,7 +26,12 @@ class Interface {
     }
 
     action ({ action, data, dataType }) {
-        const actionName = `${this.role}.action.${action}`;
+        let actionName = '';
+        if (action && action.split('.').length > 0){
+            actionName = action      
+        } else {
+            actionName = `${this.role}.action.${action}`;
+        }
         console.log(`Client '${this.name}' emits ${actionName} action.`);
         this.router.emit(actionName, { action, data, dataType });
         // console.log(`Clients of type '${this.type}' are not allowed to send actions.`);
