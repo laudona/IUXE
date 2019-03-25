@@ -1,3 +1,8 @@
+BASE = 'http://www.tudelft.nl/ewi/iuxe#'
+DECIMAL = 'http://www.w3.org/2001/XMLSchema#decimal'
+INTEGER = 'http://www.w3.org/2001/XMLSchema#integer'
+
+
 class Motion:
 
     def __init__(self, session):
