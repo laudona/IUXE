@@ -46,17 +46,7 @@ shirt_color_HSV [324.0, 0.43529412150382996, 0.11764705926179886]
 Sending event 'just_arrived' as text/turtle
 ====================
 
-        @prefix iuxe:  <http://www.tudelft.nl/ewi/iuxe#> .
-        @prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
         
-        iuxe:pepper iuxe:just_arrived iuxe:person_90562 .
-        iuxe:person_90562 iuxe:distance "1.36600005627"^^xsd:decimal .
-iuxe:person_90562 iuxe:face_detected "0"^^xsd:boolean .
-iuxe:person_90562 iuxe:is_visible "1"^^xsd:decimal .
-iuxe:person_90562 iuxe:not_seen_since "0"^^xsd:integer .
-iuxe:person_90562 iuxe:present_since "4"^^xsd:integer .
-iuxe:person_90562 iuxe:height "1.6529815197"^^xsd:decimal .
-iuxe:person_90562 iuxe:shirt_color "Black" .
 
         
 ====================
