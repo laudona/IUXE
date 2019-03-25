@@ -18,6 +18,16 @@ load_ontology_file(Graph, File) :-
     load_triples(Graph, Triples).
 
 %%
+%% Load ontology from a string.
+%%
+load_ontology_string(Graph, String) :-
+    debug(info, 'loading ontology from string...', [String]),
+    open_string(String, Stream),
+    call_cleanup(rdf_read_turtle(stream(Stream), Triples, [ prefixes(Prefixes) ]), close(Stream)),
+    load_prefixes(Prefixes),
+    load_triples(Graph, Triples).
+
+%%
 %% Presist prefixes
 %%
 load_prefixes([]).
@@ -59,42 +69,98 @@ load_triples(Graph, [ rdf(S, P, O, G ) | Rest ]) :-
 %%
 %% Reads a triple from the database
 %%
-read_rdf(G, S, P, O) :- 
-    debug(info, 'reading literal believe \'~w\' - \'~w\' - \'~w\'...', [S, P, O]),
-    rdf(S, P, ^^(O, _Type), G),
-    debug(info, 'read believe \'~w\' - \'~w\' - \'~w\'.', [S, P, O]).
-read_rdf(G, S, P, O) :- 
-    debug(info, 'reading literal string believe \'~w\' - \'~w\' - \'~w\'...', [S, P, O]),
-    rdf(S, P, @(O, _Lang), G),
-    debug(info, 'read believe \'~w\' - \'~w\' - \'~w\'.', [S, P, O]).
-read_rdf(G, S, P, O) :- 
-    debug(info, 'reading believe \'~w\' - \'~w\' - \'~w\'...', [S, P, O]),
-    rdf(S, P, O, G),
-    debug(info, 'read believe \'~w\' - \'~w\' - \'~w\'.', [S, P, O]).
+read_rdf(G, S, P, Value) :- 
+    rdf(S, P, Object, G),
+    Object = ^^(Value, Type),
+    debug(ontology_reader/info, '[ONTOLOGY] Read rdf literal \'~w\' of typen <~w>.', [Value, Type]),
+    debug(ontology_reader/info, 'read rdf \'~w\' - \'~w\' - \'~w\'.', [S, P, O]).
+read_rdf(G, S, P, Value) :- 
+    rdf(S, P, Object, G),
+    Object = @(Value, Lang),
+    debug(ontology_reader/info, '[ONTOLOGY] Read rdf string \'~w\' of language <~w>.', [Value, Lang]),
+    debug(ontology_reader/info, 'read rdf \'~w\' - \'~w\' - \'~w\'.', [S, P, O]).
+read_rdf(G, S, P, Value) :- 
+    rdf(S, P, Object, G),
+    Object \= ^^(_Value1, _Type),
+    Object \= @(_Value2, _Lang),
+    debug(ontology_reader/info, '[ONTOLOGY] Read rdf which was not a literal so probably an iri? - <~w>.', [Object]),
+    debug(ontology_reader/info, 'read rdf \'~w\' - \'~w\' - \'~w\'.', [S, P, O]).
 
 %%
 %% Writes a triple to the database
 %%
+write_rdf(G, S, P, ^^(Value, Type)) :-
+    debug(ontology_reader/info, 'writing believe \'~w\' with \'~w\'...', [S, Value]),
+    read_rdf(G, S, P, Value),
+    debug(ontology_reader/info, 'skipped believe \'~w\' because it already existed.', [S, P, O]).
+write_rdf(G, S, P, ^^(Value, Type)) :-
+    debug(ontology_reader/info, 'writing believe \'~w\' - \'~w\' - \'~w\'...', [S, P, Value]),
+    rdf_assert(S, P, Value, G),
+    debug(ontology_reader/info, 'wrote believe \'~w\' - \'~w\' - \'~w\'.', [S, P, Value]).
 write_rdf(G, S, P, O) :-
+    debug(ontology_reader/info, 'writing believe \'~w\' - \'~w\' - \'~w\'...', [S, P, O]),
+    read_rdf(G, S, P, O),
+    debug(ontology_reader/info, 'skipped believe \'~w\' because it already existed.', [S, P, O]).
+write_rdf(G, S, P, O) :-
+    debug(ontology_reader/info, 'writing believe \'~w\' - \'~w\' - \'~w\'...', [S, P, O]),
     rdf_assert(S, P, O, G),
-    debug(info, 'wrote believe \'~w\' - \'~w\' - \'~w\'.', [S, P, O]).
+    debug(ontology_reader/info, 'wrote believe \'~w\' - \'~w\' - \'~w\'.', [S, P, O]).
+
+%%
+%% Writes a triple to the database
+%%
+delete_rdf(G, S, P, O) :- 
+    debug(ontology_reader/info, 'retracting rdf \'~w\' - \'~w\' - \'~w\'...', [S, P, O]),
+    rdf_retractall(S, P, O, G),
+    debug(ontology_reader/info, 'retracted rdf \'~w\' - \'~w\' - \'~w\'.', [S, P, O]).
+delete_rdf(G, S, P, O) :- 
+    debug(ontology_reader/info, 'retracting literal rdf \'~w\' - \'~w\' - \'~w\'...', [S, P, O]),
+    rdf_retractall(S, P, ^^(O, _Type), G),
+    debug(ontology_reader/info, 'retracted rdf \'~w\' - \'~w\' - \'~w\'.', [S, P, O]).
+delete_rdf(G, S, P, O) :- 
+    debug(ontology_reader/info, 'retracting literal string rdf \'~w\' - \'~w\' - \'~w\'...', [S, P, O]),
+    rdf_retractall(S, P, @(O, _Lang), G),
+    debug(ontology_reader/info, 'retracted rdf \'~w\' - \'~w\' - \'~w\'.', [S, P, O]).
+
 
 %%
 %% Reads a triple from the database from the relevant graph
 %%
-read_believe(S, P, O) :- read_rdf(believes, S, P, O).
-read_event(S, P, O) :- read_rdf(events, S, P, O).
-read_action(S, P, O) :- read_rdf(actions, S, P, O).
+read_believe(S, P, O) :- read_rdf(believe, S, P, O).
+read_event(S, P, O) :- read_rdf(event, S, P, O).
+read_action(S, P, O) :- read_rdf(action, S, P, O).
 read_intermediate(S, P, O) :- read_rdf(intermediate, S, P, O).
 
 %%
 %% Writes a triple to the database in the relevant graph
 %%
-write_believe(S, P, O) :- write_rdf(believes, S, P, O).
-write_event(S, P, O) :- write_rdf(events, S, P, O).
-write_event(S, P, O) :- write_rdf(actions, S, P, O).
+write_believe(S, P, O) :- write_rdf(believe, S, P, O).
+write_event(S, P, O) :- write_rdf(event, S, P, O).
+write_action(S, P, O) :- write_rdf(action, S, P, O).
 write_intermediate(S, P, O) :- write_rdf(intermediate, S, P, O).
 
+write_unbelieves([]).
+write_unbelieves([ unbelieve(S, P, O) | Unbelieves ]) :- 
+    delete_rdf(believe, S, P, O),
+    write_unbelieves(Unbelieves).
+write_unbelieves([ unbelieve(S, P, O) | Unbelieves ]) :- 
+    write_unbelieves(Unbelieves).
+
+write_believes([]).
+write_believes([ believe(S, P, O) | Believes ]) :- 
+    debug(ontology_reader/info, 'Writing believe about \'~w\' ...', [S]),
+    write_rdf(believe, S, P, O),
+    write_believes(Believes).
+write_believes([ unbelieve(S, P, O) | Believes ]) :- 
+    debug(ontology_reader/info, 'Skipping believe about \'~w\' ...', [S]),
+    write_believes(Believes).
+
+write_actions([]).
+write_actions([ action(S, P, O) | Action ]) :- 
+    write_rdf(action, S, P, O),
+    write_actions(Action).
+write_actions([ action(S, P, O) | Action ]) :- 
+    write_actions(Action).
 
 
 %%

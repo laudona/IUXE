@@ -3,6 +3,8 @@
 :- use_module(library(http/websocket)).
 :- use_module(library(debug)).
 
+:- use_module(solver, []).
+
 
 open_connection(IpAddress, Port) :-
     debug(info/connection, '[CONNECTION] Opening "ws://~w:~w/"...', [IpAddress, Port]),
@@ -42,7 +44,7 @@ loop(WS, Status, State) :-
 %% predicate throws an execption.
 %%
 loop_error(Error, State, State) :- 
-    debug(warn/connection, '[CONNECTION] Error occured evaluating "receive". ~w', [Error]).
+    debug(warn/connection, '[ERROR][CONNECTION] Error occured evaluating "receive". ~w', [Error]).
 
 
 %%
@@ -61,7 +63,7 @@ receive(_WS, State, State) :-
 %% Handle message based on the opcode.
 %%
 receive_opcode(text, Message, Result) :- 
-    debug(debug/connection, '[CONNECTION] received message with opcode "text"...', []),
+    % debug(debug/connection, '[CONNECTION] received message with opcode "text"...', []),
     receive_text(Message, Result).
 receive_opcode(close, in(_Payload, State), out(none, NewState)) :-
     debug(info/connection, '[CONNECTION] connection closed by server!', []),
@@ -75,9 +77,13 @@ receive_opcode(Other, in(_Payload, S), out(none, S)) :-
 %%
 %% Handle a message with the text opcode. 
 %%
+receive_text(in(Payload, State), out(none, State)) :- 
+    string(Payload),
+    debug(info/connection, '[CONNECTION][WARN] message received is string instead of dict "~w" ...', [Payload]).
 receive_text(in(Payload, State), out(Response, State)) :- 
+    is_dict(Payload),
     _Key{ event: Event, dataType: DataType, data: Data } :< Payload,
-    debug(info/connection, '[CONNECTION] handling event message "~w"...', [Event]),
+    % debug(info/connection, '[CONNECTION] handling event message "~w"...', [Event]),
     receive_event(Event, Data, DataType, Response).
 receive_text(in(Payload, State), out(Response, State)) :- 
     _Key{ action: Action, dataType: DataType, data: Data } :< Payload,
@@ -88,26 +94,12 @@ receive_text(in(Payload, S), out(none, S)) :-
 
 
 %%
-%% Handle an event. 
-%%
-receive_event(Event, Data, DataType, Response) :-
-    debug(info/connection, '[CONNECTION] Event "~w"!', [Event]),
-    debug(info/connection, '[CONNECTION] DataType "~w".', [DataType]),
-    debug(info/connection, '[CONNECTION] Data "~w".', [Data]),
-    Response = action("all.action.nothing", "", "text/turtle").
-
-%%
-%% Handle an event. 
-%%
-receive_action(Action, Data, DataType, nothing) :-
-    debug(info/connection, '[CONNECTION] Action "~w"!', [Action]),
-    debug(info/connection, '[CONNECTION] DataType "~w".', [DataType]),
-    debug(info/connection, '[CONNECTION] Data "~w".', [Data]).
-    
-
-%%
 %% Send a response back to the server.
 %%
+send_response(_WS, actions( [] )).
+send_response(WS, actions( Action | Actions )) :- 
+    send_response(WS, Action),
+    send_response(WS, actions( Actions )).
 send_response(_WS, none).
 send_response(WS, event(Event, Data, DataType)) :- 
     debug(info/connection, '[CONNECTION] sending event ( ~w )...', [Event]),
@@ -117,6 +109,28 @@ send_response(WS, action(Action, Data, DataType)) :-
     ws_send(WS, json(event{ type:action, action:Action, data:Data, dataType:DataType })).
 send_response(_WS, Resp) :- 
     debug(warn/connection, '[CONNECTION] send_response: Unknown response format "~w"!', [Resp]).
+
+
+%%
+%% Handle an event. 
+%%
+receive_event(Event, EventData, EventDataType, Response) :-
+    % debug(info/connection, '[CONNECTION] Event "~w"!', [Event]),
+    % debug(info/connection, '[CONNECTION] DataType "~w".', [EventDataType]),
+    % debug(info/connection, '[CONNECTION] Data "~w".', [EventData]),
+    solver:solve_event(Event, EventData, EventDataType, Actions),
+    %% Actions >> [ action(Action, ActionData, ActionDataType) ]...
+    Response = actions(Actions).
+
+
+%%
+%% Handle an event. 
+%%
+receive_action(Action, Data, DataType, nothing) :-
+    debug(info/connection, '[CONNECTION] Action "~w"!', [Action]),
+    debug(info/connection, '[CONNECTION] DataType "~w".', [DataType]),
+    debug(info/connection, '[CONNECTION] Data "~w".', [Data]).
+
 
 %%
 %% Util predicate to test the type of a variable.
