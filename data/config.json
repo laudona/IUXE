@@ -83,7 +83,7 @@
     "streamAudio": false
   },
   "timer": { 
-    "interval": 2000 
+    "interval": 60000 
   },
   "web": {},
   "tablet": {}

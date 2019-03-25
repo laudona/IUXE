@@ -97,29 +97,31 @@ receive_text(in(Payload, S), out(none, S)) :-
 %% Send a response back to the server.
 %%
 send_response(_WS, actions( [] )).
-send_response(WS, actions( Action | Actions )) :- 
+send_response(WS, actions( [ Action | Actions ] )) :- 
+    debug(info, '[CONNECTION] send_response: list of actions, now "~w"!', [Action]),
     send_response(WS, Action),
     send_response(WS, actions( Actions )).
 send_response(_WS, none).
 send_response(WS, event(Event, Data, DataType)) :- 
-    debug(info/connection, '[CONNECTION] sending event ( ~w )...', [Event]),
+    debug(info, '[CONNECTION] sending event ( ~w )...', [Event]),
     ws_send(WS, json(event{ type:event, event:Event, data:Data, dataType:DataType })).
 send_response(WS, action(Action, Data, DataType)) :- 
-    debug(info/connection, '[CONNECTION] sending action ( ~w )...', [Action]),
-    ws_send(WS, json(event{ type:action, action:Action, data:Data, dataType:DataType })).
+    debug(info, '[CONNECTION] sending action ( ~w )...', [Action]),
+    ActionDict = action{ type:action, action:Action, data:Data, dataType:DataType },
+    debug(info, '[CONNECTION] sending action ( ~w )...', [ActionDict]),
+    ws_send(WS, json(ActionDict)).
 send_response(_WS, Resp) :- 
-    debug(warn/connection, '[CONNECTION] send_response: Unknown response format "~w"!', [Resp]).
+    debug(info, '[CONNECTION] send_response: Unknown response format "~w"!', [Resp]).
 
 
 %%
 %% Handle an event. 
 %%
 receive_event(Event, EventData, EventDataType, Response) :-
-    % debug(info/connection, '[CONNECTION] Event "~w"!', [Event]),
-    % debug(info/connection, '[CONNECTION] DataType "~w".', [EventDataType]),
-    % debug(info/connection, '[CONNECTION] Data "~w".', [EventData]),
+    debug(info, '[CONNECTION] Calling solver for event "~w" .', [Event]),
     solver:solve_event(Event, EventData, EventDataType, Actions),
     %% Actions >> [ action(Action, ActionData, ActionDataType) ]...
+    debug(info, '[CONNECTION] Event "~w" resulted in following actions: ~w.', [Event, Actions]),
     Response = actions(Actions).
 
 

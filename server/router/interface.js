@@ -13,6 +13,17 @@ class Interface {
 
         console.log(`Client '${this.name}/${this.role}' joined.`);
 
+        this.send_message_to_client({
+            type: 'event',
+            event: 'server.event.ready',
+            dataType: 'text/turtle',
+            data: '' +
+            `@prefix iuxe:  <http://www.tudelft.nl/ewi/iuxe#> . ` +
+            `@prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .` +
+            ` ` +
+            `iuxe:agent iuxe:is iuxe:ready . `
+        });
+
         _.forEach(user.subscribes, subscribe => {
             console.log(`Client '${this.name}/${this.role}' subscribed to '${subscribe}'.`);
             this.router.on(subscribe, msg => this.send_message_to_client(msg));
