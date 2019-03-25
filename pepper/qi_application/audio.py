@@ -69,9 +69,9 @@ class Audio:
 
     def say(self, text):
         self.speech_service.say(text)
-        
+
     def send(self, event, data, data_type):
-        self.send_callback({ 'event': event, 'data':data, 'dataType': data_type})
+        self.send_callback({ 'type':'event', event': event, 'data':data, 'dataType': data_type})
 
     def set_callback(self, callback):
         self.send_callback = callback
