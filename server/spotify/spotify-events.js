@@ -25,230 +25,160 @@ uri - string
 
  */
 
-const base_iri = 'http://www.tudelft.nl/ewi/iuxe#';
-
-/**
- * Takes a basic name and turns it into an iri-resource
- * @param name
- * @returns {string}
- */
-const resource = function (name) {
-    return base_iri + name;
-};
-
-/**
- * Takes a basic name and turns it into an iri-resource
- * @param name
- * @returns {string}
- */
-const type = function () {
-    return 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type';
-};
-
-/**
- * Takes a number value and return a json-ld type
- * @param i
- * @returns {{"@value": string, "@type": string}}
- */
-const integer = function (i) {
-    i = i || 0;
-    return {
-        "@value": t.toString(),
-        "@type": "http://www.w3.org/2001/XMLSchema#integer"
-    };
-};
-
-/**
- * Takes a number value and return a json-ld type
- * @param d
- * @returns {{"@value": string, "@type": string}}
- */
-const decimal = function (d) {
-    d = d || 0;
-    return {
-        "@value": d.toString(),
-        "@type": "http://www.w3.org/2001/XMLSchema#decimal"
-    };
-};
-
-/**
- * Takes a track json object and transforms it into json-ld format.
- * @param json
- */
-const track = function (json) {
-    const obj = {
-        "@id": resource(json['id'])
-    };
-    if (!_.isUndefined(json['type'])) obj[type] = obj[type] = resource(json['type']);
-
-    obj[resource('album')] = resource(json['album']['name']);
-
-    if (!_.isUndefined(json['duration_ms'])) obj[resource('duration_ms')] = integer(json['duration_ms']);
-    if (!_.isUndefined(json['name'])) obj[resource('name')] = json['name'];
-    if (!_.isUndefined(json['popularity'])) obj[resource('popularity')] = integer(json['popularity']);
-    if (!_.isUndefined(json['track_number'])) obj[resource('track_number')] = integer(json['track_number']);
-    if (!_.isUndefined(json['uri'])) obj[resource('uri')] = json['uri'];
-
-    return obj; // track_number
-};
-
-class EventHandler {
-
-    constructor () {
-        spotify.on('spotify.granted.access', (client) => this.on_granted(client));
-    }
-
-    on_granted(client) {
-        this.stop_polling();
-        this.client = client;
-        this.client.me().then(me => {
-            this.me = me;
-            console.log("Me updated:");
-            console.log(me);
-            Bus.publish("spotify.updated.me", me, 'json-ld', 'spotify', 'music_provider');
-        });
-        this.client.devices().then(devices => { this.devices = devices; });
-        this.client.current().then(current => { this.current = current; });
-        this.start_polling();
-    }
-
-    stop_polling() {
-        if (!this.pollId) {
-            clearInterval(this.pollId);
-        }
-    }
-
-    start_polling() {
-        this.pollId = setInterval(() => this.poll(), 5000)
-    }
-
-    poll() {
-        this.client.devices().then(devices => {
-            this.devices = devices;
-            console.log("Devices updated:");
-            console.log(devices);
-
-            const ld = {
-                "@context": {
-                    "s": "http://www.tudelft.nl/2019/ewi/iuxe/spotify#",
-                    "w": "http://www.tudelft.nl/2019/ewi/iuxe/web#",
-                    "i": "http://www.tudelft.nl/2019/ewi/iuxe/initial#",
-                    "p": "http://www.tudelft.nl/2019/ewi/iuxe/epal#",
-                    "l": "http://www.tudelft.nl/2019/ewi/iuxe/local#",
-                    "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
-                    "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
-                    "xsd": "http://www.w3.org/2001/XMLSchema#"
-                },
-                "@id": "http://www.tudelft.nl/2019/ewi/iuxe/spotify",
-                "@graph": {
-                    "s:spotify": {
-                        "s:device": { "@id": "s:${id}"}
-                    }
-                }
-            };
-
-            const id_list = [];
-            const de_list = [];
-            devices['devices'].forEach(device => {
-                id_list.push({ "@id": "s:" + device.id });
-                de_list.push({
-                    "@id": "s:" + device.id,
-                    "s:id": device.id,
-                    "s:status": (device.is_active ? "active" : "non_active"),
-                    "s:session": (device.is_private_session ? "private" : "public"),
-                    "s:access": (device.is_restricted ? "restricted" : "not_restricted"),
-                    "s:name": device.name,
-                    "s:type": device.type,
-                    "s:volume": {
-                        "@type": "xsd:decimal",
-                        "@value": (device.volume ? device.volume.toString() : '0')
-                    }
-                });
-            });
-
-            Bus.publish("spotify.updated.devices", devices, 'json-ld', 'spotify', 'music_provider');
-        });
-        this.client.current().then(current => {
-            this.current = current;
-            console.log("Current updated:");
-            console.log(current);
-            Bus.publish("spotify.updated.current", current, 'json-ld', 'spotify', 'music_provider');
-        });
-    }
-}
-
-let handler = null;
-
-/**
- * action(spotify-play-"spotify:track:5cjXFtQAc2ZRyWuEFEG06v"). %% Start action(spotify-play-current). %% Resume a User's Playback
- * action(spotify-play-next). %% Skip User’s Playback To Next Track
- * action(spotify-play-previous). %%  Skip User’s Playback To Previous Track
- * actions(action(spotify-seek-5000). %%  Seek To Position in msec
- * actions(action(spotify-playback-pause). %% Pause a User's Playback
- * actions(action(spotify-playback_on-"device_uri")). %% Transfer Playback
- */
-const actions = {
-    'spotify.action.get': function({action, data, dataType}) {
-        console.log('Spotify received action', action);
-        const args = data[0]['http://www.tudelft.nl/ewi/iuxe#get'][0];
-        if (args['@id']) {
-            console.log('sotify get', args['@id']);   
-        } else {
-            console.log('sotify get unknown argument', args);    
-        }
-    },
-    'spotify.action.play': function({action, data, dataType}) {
-        console.log('Spotify received action', action);
-        const args = data[0]['http://www.tudelft.nl/ewi/iuxe#play'][0];
-        if (args['@id']) {
-            console.log('sotify play', args['@id']);   
-        } else {
-            console.log('sotify play unknown argument', args);    
-        }
-    },
-    'spotify.action.seek': function({action, data, dataType}) {
-        console.log('Spotify received action', action);
-        const args = data[0]['http://www.tudelft.nl/ewi/iuxe#seek'][0];
-        if (args['@id']) {
-            console.log('sotify seek', args['@id']);   
-        } else {
-            console.log('sotify seek unknown argument', args);    
-        }
-    },
-    'spotify.action.playback': function({action, data, dataType}) {
-        console.log('Spotify received action', action);
-        const args = data[0]['http://www.tudelft.nl/ewi/iuxe#playback'][0];
-        if (args['@id']) {
-            console.log('sotify playback', args['@id']);   
-        } else {
-            console.log('sotify playback unknown argument', args);    
-        }
-    },
-    'spotify.action.playback_on': function({action, data, dataType}) {
-        console.log('Spotify received action', action);
-        console.log('Argument: ', data['http://www.tudelft.nl/ewi/iuxe#playback_on']); 
-    },
-    'server.event.ready': function({event, data, dataType}) {
-        console.log('Spotify is ready to receive actions from router.');
-        console.log('server is', data[0]['http://www.tudelft.nl/ewi/iuxe#is'][0]['@id']);
-    },
-};
-
-const ws = {
-    readyState: 1,
-    send(message) {
-        const data = JSON.parse(message);
-        if (data.action && actions[data.action]) {
-            console.log(`spotify received action: `, data.action);
-            actions[data.action](data);
-        } else if (data.event && actions[data.event]) {
-            console.log(`spotify received event: `, data.event);
-            actions[data.event](data);
-        }
-    }
-}
-
 const bind = function(client, router) {
+    let handler = router.guest();
+
+    const xsd_integer = 'http://www.w3.org/2001/XMLSchema#nteger';
+    const xsd_decimal = 'http://www.w3.org/2001/XMLSchema#decimal';
+    const base = 'http://www.tudelft.nl/ewi/iuxe#';
+
+    const me = function (myself) {
+        console.log('Spotify data from myself ', myself);
+        const data = `
+        `;
+        return data;
+    };
+
+    const device = function (device) {
+        const data = `
+        <${base}spotify> <${base}has_device> <${base}${device.id}> .
+        <${base}${device.id}> <${base}id> "${device.id}" .
+        <${base}${device.id}> <${base}status> <${base}${device.is_active ? "active" : "non_active"}> .
+        <${base}${device.id}> <${base}session> <${base}${device.is_private_session ? "private" : "public"}> .
+        <${base}${device.id}> <${base}access> <${base}${device.is_restricted ? "restricted" : "not_restricted"}> .
+        <${base}${device.id}> <${base}name> "${device.name}" .
+        <${base}${device.id}> <${base}type> "${device.type}" .
+        <${base}${device.id}> <${base}volume> "${device.name}"^^<${xsd_decimal}> .
+        `
+        return data;
+    }
+
+    const devices = function(devices) {
+        let data = '';
+        devices['devices'].forEach(dev => {
+            data += device(dev);
+        });
+        return data;
+    };
+
+    /**
+     * action(spotify-play-"spotify:track:5cjXFtQAc2ZRyWuEFEG06v"). %% Start action(spotify-play-current). %% Resume a User's Playback
+     * action(spotify-play-next). %% Skip User’s Playback To Next Track
+     * action(spotify-play-previous). %%  Skip User’s Playback To Previous Track
+     * actions(action(spotify-seek-5000). %%  Seek To Position in msec
+     * actions(action(spotify-playback-pause). %% Pause a User's Playback
+     * actions(action(spotify-playback_on-"device_uri")). %% Transfer Playback
+     */
+    const actions = {
+        'spotify.action.get': function({action, data, dataType}) {
+            console.log('Spotify received action', action);
+            const args = data[0]['http://www.tudelft.nl/ewi/iuxe#get'][0];
+            if (args['@id'] && args['@id'] === 'http://www.tudelft.nl/ewi/iuxe#devices') {
+                console.log('spotify get', args['@id']); 
+                client.devices().then(body => { 
+                    event = 'spotify.event.devices';
+                    data = devices(body['devices']);
+                    dataType = 'text/turtle';
+                    handler.event({ event, data, dataType });
+                }).catch(err => console.log("Error receiving spotify devices:", err));
+            } else if (args['@id'] &&  args['@id'] === 'http://www.tudelft.nl/ewi/iuxe#me') {
+                console.log('spotify get', args['@id']); 
+                client.me().then(body => { 
+                    event = 'spotify.event.me';
+                    data = me(body['devices']);
+                    dataType = 'text/turtle';
+                    handler.event({ event, data, dataType });
+                }).catch(err => console.log("Error receiving spotify devices:", err));
+            } else {
+                console.log('sotify get unknown argument', args);    
+            }
+        },
+        'spotify.action.play': function({action, data, dataType}) {
+            console.log('Spotify received action', action);
+            const args = data[0]['http://www.tudelft.nl/ewi/iuxe#play'][0];
+            if (args['@id'] && args['@id'] === 'http://www.tudelft.nl/ewi/iuxe#next') {
+                console.log('spotify play', args['@id']);
+                client.resume().then(body => { 
+                    event = 'spotify.event.playing';
+                    data = `<${base}spotify> <${base}playing> <${base}next> .`;
+                    dataType = 'text/turtle';
+                    handler.event({ event, data, dataType });
+                }).catch(err => console.log("Error spotify playing:", err));   
+            } else if (args['@id'] && args['@id'] === 'http://www.tudelft.nl/ewi/iuxe#previous') {
+                console.log('spotify play', args['@id']);   
+            }else if (args['@value']) {
+                console.log('spotify plays', args['@value']);
+                client.play(args['@value']).then(body => { 
+                    event = 'spotify.event.playing';
+                    data = `<${base}spotify> <${base}playing> "${args['@value']}" .`;
+                    dataType = 'text/turtle';
+                    handler.event({ event, data, dataType });
+                }).catch(err => console.log("Error spotify playing:", err));   
+            } else { 
+                console.log('spotify play has unknown argument type', args);    
+            }
+        },
+        'spotify.action.seek': function({action, data, dataType}) {
+            console.log('Spotify received action', action);
+            const args = data[0]['http://www.tudelft.nl/ewi/iuxe#seek'][0];
+            if (args['@id']) {
+                console.log('sotify seek', args['@id']);   
+            } else {
+                console.log('sotify seek unknown argument', args);    
+            }
+        },
+        'spotify.action.playback': function({action, data, dataType}) {
+            console.log('Spotify received action', action);
+            const args = data[0]['http://www.tudelft.nl/ewi/iuxe#playback'][0];
+            if (args['@id']  && args['@id'] === 'http://www.tudelft.nl/ewi/iuxe#pause') {
+                console.log('sotify playback', args['@id']); 
+                client.resume().then(body => { 
+                    event = 'spotify.event.playback';
+                    data = `<${base}spotify> <${base}playback> <${base}paused> .`;
+                    dataType = 'text/turtle';
+                    handler.event({ event, data, dataType });
+                }).catch(err => console.log("Error spotify playing:", err));  
+            } else {
+                console.log('sotify playback unknown argument', args);    
+            }
+        },
+        'spotify.action.playback_on': function({action, data, dataType}) {
+            console.log('Spotify received action', action);
+            console.log('Argument: ', data['http://www.tudelft.nl/ewi/iuxe#playback_on']); 
+            const args = data[0]['http://www.tudelft.nl/ewi/iuxe#playback'][0];
+            if (args['@value']) {
+                console.log('spotify playback on device', args['@@value']); 
+                client.device(args['@value']).then(body => { 
+                    event = 'spotify.event.playback_on';
+                    data = `<${base}spotify> <${base}playback_on> "${args['@value']}" .`;
+                    dataType = 'text/turtle';
+                    handler.event({ event, data, dataType });
+                }).catch(err => console.log("Error spotify playing:", err));  
+            } else {
+                console.log('sotify playback unknown argument', args);    
+            }
+        },
+        'server.event.ready': function({event, data, dataType}) {
+            console.log('Spotify is ready to receive actions from router.');
+            console.log('server is', data[0]['http://www.tudelft.nl/ewi/iuxe#is'][0]['@id']);
+        },
+    };
+
+    const ws = {
+        readyState: 1,
+        send(message) {
+            const data = JSON.parse(message);
+            if (data.action && actions[data.action]) {
+                console.log(`spotify received action: `, data.action);
+                actions[data.action](data);
+            } else if (data.event && actions[data.event]) {
+                console.log(`spotify received event: `, data.event);
+                actions[data.event](data);
+            }
+        }
+    }
+
+
     handler = router.login(ws, 'siku', 'omPfnB0MH3nhMrOEwLN7');
 }
 
