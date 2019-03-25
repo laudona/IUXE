@@ -39,6 +39,10 @@ Sending event 'heard' as text/turtle
 ====================
 """
 
+BASE = 'http://www.tudelft.nl/ewi/iuxe#'
+DECIMAL = 'http://www.w3.org/2001/XMLSchema#decimal'
+INTEGER = 'http://www.w3.org/2001/XMLSchema#integer'
+
 class Audio:
 
     def __init__( self, session):
@@ -46,6 +50,7 @@ class Audio:
         self.speech_recognition_service = session.service("ALSpeechRecognition")
         self.speech_service = session.service("ALAnimatedSpeech")
         self.text_to_speech_service = session.service("ALTextToSpeech")
+        self.player_service = session.service("ALAudioPlayer")
         
         self.counter = 273
         self.module_name = "PURRING_BUTTER_Vision"
@@ -69,6 +74,19 @@ class Audio:
 
     def say(self, text):
         self.speech_service.say(text)
+        self.send('said', "<{0}pepper> <{0}said> \"{1}\" .".format(BASE, text), 'text/turtle')
+
+    def listen(self, text):
+        self.listen_to(text)
+        self.send('listening', "<{0}pepper> <{0}listening> \"{1}\" .".format(BASE, text), 'text/turtle')
+
+    def play(self, file):
+        """
+        file: *absolute* path to audio file. wav and ogg prefered
+        see: http://doc.aldebaran.com/2-5/naoqi/audio/alaudioplayer.html
+        """
+        self.player_service.playFile(file)
+        self.send('playing', "<{0}pepper> <{0}playing> \"{1}\" .".format(BASE, file), 'text/turtle')
 
     def send(self, event, data, data_type):
         self.send_callback({ 'type':'event', 'event': event, 'data':data, 'dataType': data_type})
