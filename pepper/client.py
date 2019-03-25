@@ -20,6 +20,13 @@ class PepperClient(WebSocketClient):
         data = json.loads(message.data)
 
         if 'action' in data:
+            """
+            Action 'pepper.action.say' was not defined in QiApplication. 
+            '[
+                {u'@id': u'http://www.tudelft.nl/ewi/iuxe#pepper', 
+                u'http://www.tudelft.nl/ewi/iuxe#say': [
+                    {u'@value': u'Hallo, laten we muziek maken.'}]}]' is not a valid action
+            """
             print("Received action '{0}'.".format(data['action']))
             self.received_action(data)
         elif 'event' in data:
@@ -33,12 +40,18 @@ class PepperClient(WebSocketClient):
         action = message.get('action', 'unknown')
         data = message.get('data', {})
 
+        mapping = {
+            'pepper.action.say': 'say'
+        }
+
+        action_method = mapping[action];
+
         def create_fallback(action):
             def fallback(data):
                 print("Action '{0}' was not defined in QiApplication. '{1}' is not a valid action".format(action, data))
             return fallback
 
-        func = getattr(self.application, action, create_fallback(action))
+        func = getattr(self.application, action_method, create_fallback(action))
         func(data)
 
     def received_event(self, data):

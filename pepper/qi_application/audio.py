@@ -67,6 +67,9 @@ class Audio:
 
         print("Audio Service initialized.")
 
+    def say(self, text):
+        self.speech_service.say(text)
+        
     def send(self, event, data, data_type):
         self.send_callback({ 'event': event, 'data':data, 'dataType': data_type})
 

@@ -38,3 +38,15 @@ class QiApplication:
 
     def run_forever(self):
         self.app.run()
+
+    def say(self, data):
+        """
+        Action 'pepper.action.say' was not defined in QiApplication. 
+        '[
+            {u'@id': u'http://www.tudelft.nl/ewi/iuxe#pepper', 
+            u'http://www.tudelft.nl/ewi/iuxe#say': [
+                {u'@value': u'Hallo, laten we muziek maken.'}]}]' is not a valid action
+        """
+        text = data[0]['http://www.tudelft.nl/ewi/iuxe#say'][0]['@value']
+        self.audio.say(text)
+
