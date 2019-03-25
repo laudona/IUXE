@@ -1,5 +1,3 @@
-const Bus = require('../../bus');
-const spotify = require('./spotify-client');
 const _ = require('lodash');
 
 
@@ -179,6 +177,79 @@ class EventHandler {
     }
 }
 
-const handler = new EventHandler();
+let handler = null;
 
-module.exports = handler;
+/**
+ * action(spotify-play-"spotify:track:5cjXFtQAc2ZRyWuEFEG06v"). %% Start action(spotify-play-current). %% Resume a User's Playback
+ * action(spotify-play-next). %% Skip User’s Playback To Next Track
+ * action(spotify-play-previous). %%  Skip User’s Playback To Previous Track
+ * actions(action(spotify-seek-5000). %%  Seek To Position in msec
+ * actions(action(spotify-playback-pause). %% Pause a User's Playback
+ * actions(action(spotify-playback_on-"device_uri")). %% Transfer Playback
+ */
+const actions = {
+    'spotify.action.get': function({action, data, dataType}) {
+        console.log('Spotify received action', action);
+        const args = data[0]['http://www.tudelft.nl/ewi/iuxe#get'][0];
+        if (args['@id']) {
+            console.log('sotify get', args['@id']);   
+        } else {
+            console.log('sotify get unknown argument', args);    
+        }
+    },
+    'spotify.action.play': function({action, data, dataType}) {
+        console.log('Spotify received action', action);
+        const args = data[0]['http://www.tudelft.nl/ewi/iuxe#play'][0];
+        if (args['@id']) {
+            console.log('sotify play', args['@id']);   
+        } else {
+            console.log('sotify play unknown argument', args);    
+        }
+    },
+    'spotify.action.seek': function({action, data, dataType}) {
+        console.log('Spotify received action', action);
+        const args = data[0]['http://www.tudelft.nl/ewi/iuxe#seek'][0];
+        if (args['@id']) {
+            console.log('sotify seek', args['@id']);   
+        } else {
+            console.log('sotify seek unknown argument', args);    
+        }
+    },
+    'spotify.action.playback': function({action, data, dataType}) {
+        console.log('Spotify received action', action);
+        const args = data[0]['http://www.tudelft.nl/ewi/iuxe#playback'][0];
+        if (args['@id']) {
+            console.log('sotify playback', args['@id']);   
+        } else {
+            console.log('sotify playback unknown argument', args);    
+        }
+    },
+    'spotify.action.playback_on': function({action, data, dataType}) {
+        console.log('Spotify received action', action);
+        console.log('Argument: ', data['http://www.tudelft.nl/ewi/iuxe#playback_on']); 
+    },
+    'server.event.ready': function({event, data, dataType}) {
+        console.log('Spotify is ready to receive actions from router.');
+        console.log('server is', data[0]['http://www.tudelft.nl/ewi/iuxe#is'][0]['@id']);
+    },
+};
+
+const ws = {
+    readyState: 1,
+    send(message) {
+        const data = JSON.parse(message);
+        if (data.action && actions[data.action]) {
+            console.log(`spotify received action: `, data.action);
+            actions[data.action](data);
+        } else if (data.event && actions[data.event]) {
+            console.log(`spotify received event: `, data.event);
+            actions[data.event](data);
+        }
+    }
+}
+
+const bind = function(client, router) {
+    handler = router.login(ws, 'siku', 'omPfnB0MH3nhMrOEwLN7');
+}
+
+module.exports = bind;

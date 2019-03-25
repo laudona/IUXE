@@ -4,11 +4,13 @@ const route = require('koa-route');
 
 const Spotify = require('./spotify-client');
 const cookies = require('./cookies');
+const spotifyEvents = require('./spotify-events');
 
 
-module.exports = function ({ redirectUri, clientId, clientSecret }, router) {
+module.exports = function ({ redirectUri, clientId, clientSecret }, ipAddress, router) {
     const app = new Koa();
     const spotify = new Spotify({ redirectUri, clientId, clientSecret });
+    const bind = spotifyEvents(spotify, router);
 
     app.use(route.post('/start',
         async function (ctx) {
@@ -52,7 +54,7 @@ module.exports = function ({ redirectUri, clientId, clientSecret }, router) {
                 ctx.body = err;
             });
         }));
-
+    
     return app;
 };
 

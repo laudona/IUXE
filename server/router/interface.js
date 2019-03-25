@@ -12,17 +12,15 @@ class Interface {
         this.preferedDataType = user.preferedDataType;
 
         console.log(`Client '${this.name}/${this.role}' joined.`);
-
+    
+        const base = 'http://www.tudelft.nl/ewi/iuxe#'
         this.send_message_to_client({
             type: 'event',
             event: 'server.event.ready',
             dataType: 'text/turtle',
-            data: '' +
-            `@prefix iuxe:  <http://www.tudelft.nl/ewi/iuxe#> . ` +
-            `@prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .` +
-            ` ` +
-            `iuxe:agent iuxe:is iuxe:ready . `
+            data: `<${base}agent> <${base}is> <${base}ready>  .`
         });
+
 
         _.forEach(user.subscribes, subscribe => {
             console.log(`Client '${this.name}/${this.role}' subscribed to '${subscribe}'.`);
@@ -61,6 +59,7 @@ class Interface {
     }
 
     send_message_to_client(msg) {
+        console.log(`Client '${this.name}/${this.role}' send_message_to_client (${msg}).`);
         if (msg['action']) {
             this.send_action_to_client(msg);
         } else if (msg['event']) {
@@ -71,18 +70,23 @@ class Interface {
     }
 
     send_action_to_client({ action, data, dataType }) {
+        console.log(`Sending action to client ${this.name}/${this.role}...`);
         convert(this.preferedDataType, data, dataType).then((convertedData) => {
+            console.log(`Converted action data into client ${this.name}/${this.role} prefered format...`);
             this.send_to_client({ action, data: convertedData, dataType: this.preferedDataType });
         }).catch(err => console.error(`Unable to send action '${action}' to '${this.name}/${this.role}' because ${err.message}`, err));
     }
 
     send_event_to_client({ event, data, dataType }) {
+        console.log(`Sending event to client ${this.name}/${this.role}...`);
         convert(this.preferedDataType, data, dataType).then((convertedData) => {
-            this.send_to_client({ event, data: convertedData, dataType: this.preferedDataType });
+            console.log(`Converted event data into client ${this.name}/${this.role} prefered format...`);
+            return this.send_to_client({ event, data: convertedData, dataType: this.preferedDataType });
         }).catch(err => console.error(`Unable to send event '${action}' to '${this.name}/${this.role}' because ${err.message}`, err));
     }
 
     send_to_client (data) {
+        console.log(`Sending data to ${this.name} as ${this.role}...`);
         if (this.ws && this.ws.readyState === 1) {
             const message = JSON.stringify(data);
             console.log(`Sending data '${message}' to ${this.name} as ${this.role}.`);
