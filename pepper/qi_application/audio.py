@@ -125,13 +125,10 @@ class Audio:
         print("Detected '{0}' with a confidence of {1}.".format(word, confidence))
         
         data = """
-        @prefix iuxe:  <http://www.tudelft.nl/ewi/iuxe#> .
-        @prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
-
-        iuxe:pepper iuxe:heard iuxe:word_{0} .
-        iuxe:word_{0} iuxe:word "{1}" .
-        iuxe:word_{0} iuxe:confidence "{2}"^^xsd:decimal .
-        """.format(self.counter, word, confidence)
+        <{0}pepper> <{0}heard> <{0}word_{1}> .
+        <{0}word_{1}> <{0}word> "{2}" .
+        <{0}word_{1}> <{0}confidence> "{3}"^^xsd:decimal .
+        """.format(BASE, self.counter, word, confidence)
 
         self.counter += 1
 

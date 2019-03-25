@@ -36,7 +36,11 @@ class PepperClient(WebSocketClient):
         mapping = {
             'pepper.action.say': 'say',
             'pepper.action.listen': 'listen',
-            'pepper.action.play': 'play'
+            'pepper.action.play': 'play',
+            'pepper.action.navigate_to': 'navigate_to',
+            'pepper.action.move_to': 'move_to',
+            'pepper.action.run': 'run',
+            'pepper.action.start': 'start'
         }
 
         action_method = mapping[action]

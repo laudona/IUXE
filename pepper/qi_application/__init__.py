@@ -2,6 +2,7 @@ import qi
 import audio
 import vision
 import touch
+import motion
 
 
 class QiApplication:
@@ -16,10 +17,12 @@ class QiApplication:
         self.audio = audio.Audio(self.session)
         self.vision = vision.Vision(self.session)
         self.touch = touch.Touch(self.session)
+        self.motion = motion.Motion(self.session)
 
         self.audio.set_callback(self.send)
         self.vision.set_callback(self.send)
         self.touch.set_callback(self.send)
+        self.motion.set_callback(self.send)
 
         # self.session.registerService(self.audio.module_name, self.audio)
         # self.session.registerService(self.vision.module_name, self.vision)
@@ -51,3 +54,10 @@ class QiApplication:
         text = data[0]['http://www.tudelft.nl/ewi/iuxe#play'][0]['@value']
         self.audio.play(text)
 
+    def navigate_to(self, data):
+        text = data[0]['http://www.tudelft.nl/ewi/iuxe#navigate_to'][0]['@value']
+        self.motion.navigate_to(text)
+
+    def move_to(self, data):
+        text = data[0]['http://www.tudelft.nl/ewi/iuxe#move_to'][0]['@value']
+        self.motion.move_to(text)
