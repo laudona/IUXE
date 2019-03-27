@@ -57,8 +57,17 @@
       "code": "omPfnB0MH3nhMrOEwLN7",
       "role": "spotify",
       "type": "interface",
-      "preferedDataType": "application/ld+json",
+      "preferedDataType": "raw",
       "subscribes": [ "spotify.action.*" ],
+      "permissions": [ "event" ]
+    },
+    {
+      "name": "mbira",
+      "code": "LkUItXeMGmjADbAdLOBp",
+      "role": "timer",
+      "type": "interface",
+      "preferedDataType": "raw",
+      "subscribes": [ "timer.action.*" ],
       "permissions": [ "event" ]
     }
   ],
@@ -69,9 +78,15 @@
     "port": 3000,
     "webDirectory": "/../data/www"
   },
+  "convert": {
+    "xsdString": "http://www.w3.org/2001/XMLSchema#string",
+    "xsdInteger": "http://www.w3.org/2001/XMLSchema#integer",
+    "xsdDecimal": "http://www.w3.org/2001/XMLSchema#decimal",
+    "baseIri": "http://www.tudelft.nl/ewi/iuxe#"
+  },
   "spotify": {
-    "clientId": "<your-client-id>",
-    "clientSecret": "<your-client-secret>",
+    "clientId": "<my-client-id>",
+    "clientSecret": "<my-client-secret>",
     "redirectUri": "http://localhost:3000/spotify/callback"
   },
   "engine": {
