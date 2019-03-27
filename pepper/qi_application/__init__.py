@@ -3,6 +3,8 @@ import audio
 import vision
 import touch
 import motion
+import behavior
+import tablet
 
 
 class QiApplication:
@@ -18,26 +20,31 @@ class QiApplication:
         self.vision = vision.Vision(self.session)
         self.touch = touch.Touch(self.session)
         self.motion = motion.Motion(self.session)
+        self.behavior = behavior.Behavior(self.session)
+        self.tablet = tablet.Tablet(self.session)
 
-        self.audio.set_callback(self.send)
-        self.vision.set_callback(self.send)
-        self.touch.set_callback(self.send)
-        self.motion.set_callback(self.send)
-
-        # self.session.registerService(self.audio.module_name, self.audio)
-        # self.session.registerService(self.vision.module_name, self.vision)
+        self.audio.set_callback(self.send)  # Set send fallback
+        self.vision.set_callback(self.send)  # Set send fallback
+        self.touch.set_callback(self.send)  # Set send fallback
+        self.motion.set_callback(self.send)  # Set send fallback
+        self.behavior.set_callback(self.send)  # Set send fallback
 
     def send(self, message):
+        """
+        I am a fallback method. I do not send anything to the server, but make sure 
+        callbacks arrive at a method even if no other fallback is set.
+        """
         print("Sending event '{0}' as {1}".format(message['event'], message['dataType']))
         print("=" * 20)
         print(message['data'])
         print("=" * 20)
-        # self.send_callback({ 'event': event, 'data':data, 'dataType': data_type})
 
     def set_send_callback(self, callback):
         self.audio.set_callback(callback)
         self.vision.set_callback(callback)
         self.touch.set_callback(callback)
+        self.motion.set_callback(callback)
+        self.behavior.set_callback(callback)
 
     def run_forever(self):
         self.app.run()
@@ -61,3 +68,7 @@ class QiApplication:
     def move_to(self, data):
         text = data[0]['http://www.tudelft.nl/ewi/iuxe#move_to'][0]['@value']
         self.motion.move_to(text)
+
+    def show(self, data):
+        text = data[0]['http://www.tudelft.nl/ewi/iuxe#show'][0]['@value']
+        self.tablet.show(text)

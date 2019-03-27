@@ -1,5 +1,6 @@
 const _ = require('lodash');
 const EventEmitter = require('eventemitter2').EventEmitter2;
+const convert = require('./convert');
 const Interface = require('./interface');
 
 
@@ -29,6 +30,7 @@ class Router extends EventEmitter {
         super({ wildcard: true });
         this.configuration = configuration;
         this.users = this.configuration['users'];
+        convert.configure(configuration['convert']);
     }
 
     login (ws, name, code) {
@@ -44,6 +46,27 @@ class Router extends EventEmitter {
 
     guest () {
         return dummyInterface;      
+    }
+
+    dummyWs (name, received_action, received_event) {
+        return {
+            readyState: 1,
+            send(message) {
+                // console.log(`[ROUTER/${name}] received message: `, message);
+                try {
+                    const data = JSON.parse(message);
+                    if (data.action) {
+                        console.log(`[ROUTER/${name}] sending action ${data.action} to ${name}.`);
+                        received_action(data);
+                    } else if (data.event) {
+                        console.log(`[ROUTER/${name}] sending event ${data.event} to ${name}.`);
+                        received_event(data);
+                    }
+                } catch (e) {
+                    console.error(`[ROUTER/${name}] an error handling message.`, e);
+                }
+            }
+        }
     }
 }
 

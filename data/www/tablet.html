@@ -1,10 +1,74 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Tablet Page</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="A simple tablet page based on pure-css.">
+    <title>Purring Butter</title>
+    
+    <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css" integrity="sha384-" crossorigin="anonymous">
+    
+    <!--[if lte IE 8]>
+        <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/grids-responsive-old-ie-min.css">
+    <![endif]-->
+    <!--[if gt IE 8]><!-->
+        <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/grids-responsive-min.css">
+    <!--<![endif]-->
+    
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
+    
+        <!--[if lte IE 8]>
+            <link rel="stylesheet" href="css/layouts/marketing-old-ie.css">
+        <![endif]-->
+        <!--[if gt IE 8]><!-->
+            <link rel="stylesheet" href="/public/css/layouts/marketing.css">
+        <!--<![endif]-->
 </head>
 <body>
-<h1>Pepper Tablet Page</h1>
+
+<div class="header">
+    <div class="home-menu pure-menu pure-menu-horizontal pure-menu-fixed">
+        <a class="pure-menu-heading" href="">Purring Butter</a>
+    </div>
+</div>
+
+<div class="splash-container">
+    <div class="splash">
+        <h1 class="splash-head show-html">Do you want to ask me a question?</h1>
+        <p class="splash-subhead show-listening">
+            Press the button below to start a conversation with me.
+        </p>
+        <p>
+            <a href="#" class="pure-button pure-button-primary start-button">Start a Conversation</a>
+        </p>
+    </div>
+</div>
+
+<script src="/public/js/jquery-3.3.1.slim.min.js"></script>
+<script src="/public/js/client.js"></script>
+<script>
+    Spotless.actions.show = function(html) {
+        $('.show-html').html(html);
+    };
+
+    Spotless.events.started_listening = function() {
+        $('.start-button').hide();
+        $('.show-listening').html("I am listening...");
+    };
+
+    Spotless.events.stopped_listening = function() {
+        $('.start-button').show();
+        $('.show-listening').html("Press the button below to start a conversation with me.");
+    };
+
+    Spotless.connect();
+
+    $('.start-button').on('click', function (event) {
+        event.preventDefault();
+        Spotless.send({ 'action': 'conversation_start', 'args': [] })
+    });
+
+    Spotless.onshow = function (html) { $('.show-html').html(html); }
+</script>
 </body>
 </html>

@@ -29,7 +29,7 @@ class Interface {
     }
 
     event ({ event, data, dataType }) {
-        const eventName = `${this.role}.event.${event}`;
+        const eventName = (event.indexOf('.') < 0 ? `${this.role}.event.${event}` : event);
         console.log(`Client '${this.name}' emits ${eventName} event.`);
         this.router.emit(eventName, { event, data, dataType });
     }

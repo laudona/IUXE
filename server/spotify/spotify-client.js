@@ -116,6 +116,18 @@ class SpotifyClient extends EventEmitter2 {
     resume() {
         return this.spotifyApi.play({ device_id: this.device_id }).then((d) => d.body);
     }
+
+    seek(positionMs) {
+        return this.spotifyApi.seek(positionMs).then((d) => d.body);
+    }
+
+    next () {
+        return this.spotifyApi.skipToNext().then((d) => d.body);
+    }
+
+    previous () {
+        return this.spotifyApi.skipToPrevious().then((d) => d.body);
+    }
 }
 
 module.exports = SpotifyClient;
