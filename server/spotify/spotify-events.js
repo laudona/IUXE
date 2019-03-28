@@ -30,9 +30,9 @@ const bind = function (client, router) {
     };
 
     const send_event = function (event, data, dataType) {
-        const event = { type: 'event', event, data, dataType }
-        handler.event(event);
-        return event;
+        const message = { type: 'event', event, data, dataType }
+        handler.event(message);
+        return message;
     };
 
     /**

@@ -112,3 +112,7 @@ TODO
 ### Spotify
 
 TODO
+
+### Mock Event Generator
+
+The Mock Event Generator can be used to simulate events and actions. The simulator should run on
