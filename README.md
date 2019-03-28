@@ -118,6 +118,16 @@ The rule above rule will never trigger because the two events will never exist i
 
 ## Ontology
 
+The ontology is a turtle file ( https://en.wikipedia.org/wiki/Turtle_(syntax) ). It is loaded when the rules engine starts. Facts in the ontology can be accessed in rules with the `believe` condition. 
+
+```prolog
+rule(rule51,
+       believe('1xEV45D5xMSXSHxs7X27Zj'-name-Name)
+   then
+       action(pepepr-say-Name)).
+```
+
+The believe `'1xEV45D5xMSXSHxs7X27Zj'-name-SongUri` condition from the rule above wil refer to the ontology below and `Name` wil be bound to `"Son Of A Preacher Man"` if that ontology is loaded. `iuxe` is the default prefix and can be ommited in this case.
 
 ```ttl
 @prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
@@ -178,6 +188,33 @@ iuxe:5cjXFtQAc2ZRyWuEFEG06v iuxe:is_followed_by iuxe:39yWVJ9ENz4FB4v5mZffj4 .
 
 ```
 
+Example of two rules that can play the song in sequence (if the `event(spotify-played-LastSongUri)` event works...).
+
+```prolog
+:- module(rules, [rule/2]).
+
+:- op(1200,	xfy	, then).
+:- op(1100,	xfy	, or).
+:- op(1000, xfy , and).
+:- op(900, fy , not).
+
+rule(play_first_song,
+       event(agent-is-ready) and
+       believe(playlist-starts_with-Song) and
+       believe(Song-uri-SongUri)
+   then
+       action(spotify-play-SongUri)).
+
+rule(play_next_rule,
+       event(spotify-played-LastSongUri) and
+       believe(LastSong-uri-LastSongUri) and
+       believe(LastSong-is_followed_by-Song) and
+       believe(Song-uri-SongUri)
+   then
+       action(spotify-play-SongUri)).
+
+```
+
 ## Interfaces
 
 Most interfaces will define serveral events and actions.
@@ -225,11 +262,82 @@ rule(rule3,
 
 ### Pepper
 
-TODO
+```prolog
+action(pepper-say-”Hello, how are you.”).
+action(pepper-listen-”Yes, No, Maybe”).
+action(pepper-play-”~/music/evil_laugh.ogg”).
+
+event(pepper-heard-WordId) and
+event(WordId-word-Word) and
+event(WordId-heard-Confidence)
+
+event(pepper-was_touched-rightBumper)
+event(pepper-was_touched-headFront)
+
+action(pepper-navigate_to-”1.0, 2.0”).
+action(pepper-move_to-”0.0, 0.0, 1.0702”).
+action(pepper-run-”/animation/Stand/Hey_01”).
+action(pepper-start-”/animation/Stand/Hey_01”).
+action(pepper-show-”https://html5test.com/”).
+```
+
+```ttl
+@prefix iuxe:  <http://www.tudelft.nl/ewi/iuxe#> .
+@prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
+      
+iuxe:pepper iuxe:just_arrived iuxe:person_90562 .
+iuxe:person_90562 iuxe:distance "1.36600005627"^^xsd:decimal .
+iuxe:person_90562 iuxe:face_detected "0"^^xsd:boolean .
+iuxe:person_90562 iuxe:is_visible "1"^^xsd:decimal .
+iuxe:person_90562 iuxe:not_seen_since "0"^^xsd:integer .
+iuxe:person_90562 iuxe:present_since "4"^^xsd:integer .
+iuxe:person_90562 iuxe:height "1.6529815197"^^xsd:decimal .
+iuxe:person_90562 iuxe:shirt_color "Black" .
+```
+
+```prolog
+rule(complain_when_touched,
+       event(pepper-was_touched-front_head) or
+       event(pepper-was_touched-middle_head) or 
+		event(pepper-was_touched-back_head)
+   then
+       action(pepper-say-”Hey, that tickles!”)).
+```
 
 ### Spotify
 
-TODO
+To start with the spotify interface some preparations are required.
+
+- Create a (free) spotify account at www.spotify.com
+- Go to developer dashboard at https://developer.spotify.com/dashboard/applications and create an application.
+- In the settings add ‘http://localhost:3000/spotify/callback’ to under Redirect URIs.
+- In the configuration of the agent note the clientId and clientSecret from your spotify application.
+
+When starting the interface we need to login to spotify to enable access and playback.
+
+- Start the server
+- Go to http://localhost:3000/public/spotify/login.html and click the link.
+- Login with any spotify account, though playback requires a premium account.
+
+The following actions and events are defined:
+
+```prolog
+action(spotify-play-"spotify:track:5cjXFtQAc2ZRyWuEFEG06v"). %% Start action(spotify-play-current). %% Resume a User's Playback
+action(spotify-play-next). %% Skip User’s Playback To Next Track
+action(spotify-play-previous). %%  Skip User’s Playback To Previous Track
+actions(action(spotify-seek-5000). %%  Seek To Position in msec
+actions(action(spotify-playback-pause). %% Pause a User's Playback
+actions(action(spotify-playback_on-"device_uri")). %% Transfer Playback
+
+event(spotify-played-SongUri).
+event(spotify-playing-SongUri).
+event(spotify-activated_device-DeviceUri).
+```
+
+##### Search
+
+At http://localhost:3000/public/spotify/search.html this is a simple search page to look up songs on spotify and to see a suggested set of triples for a song. 
+
 
 ### Mock Event Generator
 
