@@ -115,4 +115,4 @@ TODO
 
 ### Mock Event Generator
 
-The Mock Event Generator can be used to simulate events and actions. The simulator should run on
+The Mock Event Generator can be used to simulate events and actions. The simulator should run on the server at http://localhost:3000/public/simulator/index.html .
