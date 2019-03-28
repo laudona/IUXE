@@ -116,6 +116,30 @@ rule(agent_starts,
 
 The rule above rule will never trigger because the two events will never exist in the same pass of the engine.
 
+## Ontology
+
+
+```ttl
+@prefix iuxe:  <http://www.tudelft.nl/ewi/iuxe#> .
+@prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
+
+iuxe:5cjXFtQAc2ZRyWuEFEG06v iuxe:uri "spotify:track:5cjXFt..." .
+iuxe:5cjXFtQAc2ZRyWuEFEG06v iuxe:name "I'm a Believer" .
+iuxe:5cjXFtQAc2ZRyWuEFEG06v iuxe:artist "The Monkees" .
+iuxe:5cjXFtQAc2ZRyWuEFEG06v iuxe:play_index "1"^^xsd:integer .
+
+iuxe:5cjXFtQAc2ZRyWuEFEG06v iuxe:uri "spotify:track:39yWVJ9ENz4FB4v..." .
+iuxe:5cjXFtQAc2ZRyWuEFEG06v iuxe:name "Oh, Pretty Woman" .
+iuxe:5cjXFtQAc2ZRyWuEFEG06v iuxe:artist "Roy Orbison" .
+iuxe:5cjXFtQAc2ZRyWuEFEG06v iuxe:play_index "2"^^xsd:integer .
+
+iuxe:playlist iuxe:starts_with iuxe:1xEV45D5xMSXSHxs7X27Zj .
+iuxe:1xEV45D5xMSXSHxs7X27Zj iuxe:is_followed_by iuxe:3mJYXkGxOS2CM5ayWqY3SM .
+iuxe:3mJYXkGxOS2CM5ayWqY3SM iuxe:is_followed_by iuxe:5cjXFtQAc2ZRyWuEFEG06v .
+iuxe:5cjXFtQAc2ZRyWuEFEG06v iuxe:is_followed_by iuxe:39yWVJ9ENz4FB4v5mZffj4 .
+
+```
+
 ## Interfaces
 
 Most interfaces will define serveral events and actions.
