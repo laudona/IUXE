@@ -9,11 +9,11 @@
 %% Load ontology from specified file.
 %%
 load_ontology_file(Graph, File) :-
-    debug(info, 'loading ontology \'~w\'...', [File]),
+    debug(debug/ontology_reader/load_ontology_file, 'loading ontology \'~w\'...', [File]),
     open(File, read, Stream),
-    debug(info, '~w file opened', [File]),
+    debug(debug/ontology_reader/load_ontology_file, '~w file opened', [File]),
     call_cleanup(rdf_read_turtle(stream(Stream), Triples, [ prefixes(Prefixes) ]), close(Stream)),
-    debug(info, '~w file closed.', [File]),
+    debug(debug/ontology_reader/load_ontology_file, '~w file closed.', [File]),
     load_prefixes(Prefixes),
     load_triples(Graph, Triples).
 
@@ -111,17 +111,17 @@ write_rdf(G, S, P, O) :-
 %% Writes a triple to the database
 %%
 delete_rdf(G, S, P, O) :- 
-    debug(ontology_reader/info, 'retracting rdf \'~w\' - \'~w\' - \'~w\'...', [S, P, O]),
+    debug(debug/ontology_reader/delete_rdf, 'retracting rdf \'~w\' - \'~w\' - \'~w\' from ~w...', [S, P, O, G]),
     rdf_retractall(S, P, O, G),
-    debug(ontology_reader/info, 'retracted rdf \'~w\' - \'~w\' - \'~w\'.', [S, P, O]).
+    debug(debug/ontology_reader/delete_rdf, 'retracted rdf \'~w\' - \'~w\' - \'~w\'.', [S, P, O]).
 delete_rdf(G, S, P, O) :- 
-    debug(ontology_reader/info, 'retracting literal rdf \'~w\' - \'~w\' - \'~w\'...', [S, P, O]),
+    debug(debug/ontology_reader/delete_rdf, 'retracting literal rdf \'~w\' - \'~w\' - \'~w\'...', [S, P, O]),
     rdf_retractall(S, P, ^^(O, _Type), G),
-    debug(ontology_reader/info, 'retracted rdf \'~w\' - \'~w\' - \'~w\'.', [S, P, O]).
+    debug(debug/ontology_reader/delete_rdf, 'retracted rdf \'~w\' - \'~w\' - \'~w\'.', [S, P, O]).
 delete_rdf(G, S, P, O) :- 
-    debug(ontology_reader/info, 'retracting literal string rdf \'~w\' - \'~w\' - \'~w\'...', [S, P, O]),
+    debug(debug/ontology_reader/delete_rdf, 'retracting literal string rdf \'~w\' - \'~w\' - \'~w\'...', [S, P, O]),
     rdf_retractall(S, P, @(O, _Lang), G),
-    debug(ontology_reader/info, 'retracted rdf \'~w\' - \'~w\' - \'~w\'.', [S, P, O]).
+    debug(debug/ontology_reader/delete_rdf, 'retracted rdf \'~w\' - \'~w\' - \'~w\'.', [S, P, O]).
 
 
 %%
@@ -163,14 +163,19 @@ write_actions([ action(S, P, O) | Actions ]) :-
 write_actions([ _Action | Actions ]) :- 
     write_actions(Actions).
 
+%%
+%% Deletes all triples of teh specified graph.
+%%
+reset_graph(Graph) :-
+    delete_rdf(Graph, _S, _P, _O).
 
 %%
 %% Tests
 %%
 :- begin_tests(ontology_reader).
 
-test(load_ontology_1, []) :-
+test(load_ontology_1, [ nondet, cleanup(reset_graph(believe))]) :-
     debug(ontology_reader/load/info),
-    load_ontology_file('../data/ontology.ttl').    
+    ontology_reader:load_ontology_file(believe, '../data/ontology.ttl').    
 
 :- end_tests(ontology_reader).

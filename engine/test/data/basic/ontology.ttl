@@ -1,0 +1,14 @@
+@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix owl:   <http://www.w3.org/2002/07/owl#> .
+@prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix iuxe:  <http://www.tudelft.nl/ewi/iuxe#> .
+
+iuxe:1xEV45D5xMSXSHxs7X27Zj iuxe:id "1xEV45D5xMSXSHxs7X27Zj" .
+iuxe:1xEV45D5xMSXSHxs7X27Zj iuxe:uri "spotify:track:1xEV45D5xMSXSHxs7X27Zj" . 
+iuxe:1xEV45D5xMSXSHxs7X27Zj iuxe:type iuxe:track . 
+iuxe:1xEV45D5xMSXSHxs7X27Zj iuxe:name "Son Of A Preacher Man" . 
+iuxe:1xEV45D5xMSXSHxs7X27Zj iuxe:artist "Dusty Springfield" . 
+iuxe:1xEV45D5xMSXSHxs7X27Zj iuxe:img "https://i.scdn.co/image/a642ba3cde5ea1dc5307397eeb1d16adee2acb64" . 
+iuxe:1xEV45D5xMSXSHxs7X27Zj iuxe:preview_url "null" . 
+iuxe:1xEV45D5xMSXSHxs7X27Zj iuxe:duration_ms "145946"^^<http://www.w3.org/2001/XMLSchema#integer> . 

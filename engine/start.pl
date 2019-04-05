@@ -11,7 +11,8 @@
 
 go :-
     debug(info),
-    debug(_Level/connection),
+    debug(warn/_Mod),
+    debug(warn/_Mod/_Pred),
     debug(info, 'parsing arguments...', []),
     argparse:args,
 
@@ -36,6 +37,8 @@ go :-
 
 test(load_ontology_1, []) :-
     debug(info),
+    debug(warn/_Mod),
+    debug(warn/_Mod/_Pred),
     ontology_reader:load_ontology_file(believe, '../data/ontology.ttl'),
     ontology_reader:read_rdf('http://www.tudelft.nl/ewi/iuxe#5cjXFtQAc2ZRyWuEFEG06v', 'http://www.tudelft.nl/ewi/iuxe#name', Name),
     debug(info, 'reading name \'~w\'...', [Name]),

@@ -65,6 +65,13 @@ load_rules_term(Term, _Stream) :-
 %%
 find_rule(Name, Cond, Goal) :- rule(Name, Cond, Goal).
 
+
+%%
+%% Deletes all currently known rules.
+%%
+reset_rules :-
+    retractall(rule(_Name,_Cond,_Goal)).
+
 %%
 %% Tests
 %%
