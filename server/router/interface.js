@@ -88,7 +88,7 @@ class Interface {
     send_to_client (data) {
         console.log(`Sending data to ${this.name} as ${this.role}...`);
         if (this.ws && this.ws.readyState === 1) {
-            const message = JSON.stringify(data);
+            const message = _.isString(data) ? data : JSON.stringify(data);
             console.log(`Sending data '${message}' to ${this.name} as ${this.role}.`);
             this.ws.send(message);
         }

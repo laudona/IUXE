@@ -223,38 +223,47 @@ Most interfaces will define serveral events and actions.
 
 The timer interface allows for the ability to trigger events at certain times. The interface is based on the javascript setTimeout and setInterface functions.
 
+
 The timer interface defines four actions:
 
-* timer set_timeout `<timeout-in-ms>` 
-* timer set_interval `<interval-in-ms>`
-* timer clear_interval `<id>`
-* timer clear_timeout `<id>` 
+* timer set_timeout `<timeout-in-ms>/<labe>` 
+* timer set_interval `<interval-in-ms>/<label>`
+* timer clear_interval `<label>`
+* timer clear_timeout `<label>` 
 
-The actions can trigger six events:
+A `<timeout-in-ms>/<labe>` is a string consisting of a integer for the tmeout and a string label used
+in the events. This should be formated in action like shown below:
 
-* timer timeout_set `<id>` 
-* timer timeout_triggered `<id>` 
-* timer timeout_cleared `<id>` 
-* timer interval_set `<id>` 
-* timer interval_triggered `<id>` 
-* timer interval_cleared `<id>` 
+```
+action(timer-set_timeout-"5000/stop_music")
+```
 
-Example
+The four actions can trigger three events:
+
+* timer set `<label>` 
+* timer triggered `<label>` 
+* timer cleared `<label>` 
+
+The label will always be a string.
+
+the example below show how a timer can be set and reacted upon. Interval work the same
+except `set_timeout` becomes `set_interval`.
+
 ```prolog
 rule(rule1,
         event(agent-is-ready)
     then
-        action(time-timeout_set-10000)
+        action(time-set_timeout-"10000/wait_10")
 ).
 
 rule(rule3,
-        event(timer-interval_set-Id)
+        event(timer-set-"wait_10")
     then
         action(pepper-say-"I have set a timeout for 10 seconds.")
 ).
 
 rule(rule3,
-        event(timer-timeout_triggered-Id)
+        event(timer-triggered-"wait_10")
     then
         action(pepper-say-"The time is now!")
 ).

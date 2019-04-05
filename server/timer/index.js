@@ -3,6 +3,8 @@ const { tri, res, int, str, dec } = require('../router/convert');
 
 
 const bind = function ({ interval }, ipAddress, router) {
+  const labels = {};
+  let labelCount = 1;
   let handler = router.guest();
 
   const send_error = function (err, action, data, dataType) {
@@ -22,41 +24,71 @@ const bind = function ({ interval }, ipAddress, router) {
     return event;
   };
 
+  const set_id = function (id, label) {
+    labels[label] = id;
+  }
+
+  const get_id = function (label) {
+    return labels[label] || label;
+  }
+
+  const send_label_triggered = function(label) {
+    return send_event('triggered', tri(res, 'timer', res, 'triggered', str, label), 'text/turtle');
+  }
+
+  const send_label_set = function(label) {
+    return send_event('set', tri(res, 'timer', res, 'set', str, label), 'text/turtle');
+  }
+
+  const send_label_cleared = function(label) {
+    return send_event('cleared', tri(res, 'timer', res, 'cleared', str, label), 'text/turtle');
+  }
+
+  const set_label = function(func, timeInMs, label) {
+    const id = func(() => send_label_triggered(label), timeInMs);
+    set_id(id, label);
+    return send_label_set(label);
+  }
+
+  const clear_label = function(func, label) {
+    const id = get_id(label);
+    const id = func(timeInMs);
+    return send_label_cleared(label);
+  }
+
+
   /**
-   * action(timer-set_timeout-5000). %% Activate 'timeout_triggered' event in 5000 ms.
-   * action(timer-set_interval-5000). %% Activate 'interval_triggered' event every 5000 ms.
-   * action(timer-clear_interval-<id>). %% clears the interval with the id.
-   * action(timer-clear_timeout-<id>). %% clears the timeout with the id.
+   * action(timer-set_timeout-"5000/my_label"). 
+   * action(timer-set_interval-"5000/my_label").
+   * action(timer-clear_interval-<label>). 
+   * action(timer-clear_timeout-<label>). 
+   * 
+   * for the events is does not matter wether it was a timeout or an interval, the events are
+   * the same for both.
+   * 
+   *  events(timer-triggered-<label>).
+   *  events(timer-set-<label>).
+   *  events(timer-cleared-<label>).
    */
   const actions = {
     'timer': {
       'set_timeout': function (subject, predicate, object, triples) {
         console.log(`[TIMER] set timeout at ${object} ms`);
-          const id = setTimeout(() =>
-            send_event('timeout_triggered',
-              tri(res, 'timer', res, 'timeout_triggered', int, id), 'text/turtle'), object);
-          return send_event('timeout_set',
-            tri(res, 'timer', res, 'timeout_set', int, id), 'text/turtle')
+        const [time, label] = _.isString(object) ? object.split('/') : [ object, "" + labelCount++ ];
+        return set_label(setTimeout, parseInt(time), label);
       },
       'set_interval': function (subject, predicate, object, triples) {
-        console.log(`[TIMER] set interval every ${object} ms`);
-          const id = setInterval(() =>
-            send_event('interval_triggered',
-              tri(res, 'timer', res, 'interval_triggered', int, id), 'text/turtle'), object);
-          return send_event('interval_set',
-            tri(res, 'timer', res, 'interval_set', int, id), 'text/turtle')
+        console.log(`[TIMER] set timeout at ${object} ms`);
+        const [time, label] = _.isString(object) ? object.split('/') : [ object, "" + labelCount++ ];
+        return set_label(setInterval, parseInt(time), label);
       },
       'clear_interval': function (subject, predicate, object, triples) {
         console.log(`[TIMER] clear interval with id ${object}.`);
-          clearInterval(object)
-          return send_event('interval_cleared',
-            tri(res, 'timer', res, 'interval_cleared', int, object), 'text/turtle')
+        return clear_label(clearInterval, object);
       },
       'clear_timeout': function (subject, predicate, object, triples) {
         console.log(`[TIMER] clear timeout with id ${object}.`);
-          clearTimeout(object)
-          return send_event('timeout_cleared',
-            tri(res, 'timer', res, 'timeout_cleared', int, object), 'text/turtle')
+        return clear_label(clearTimeout, object);
       },
     }
   };
@@ -99,9 +131,7 @@ const bind = function ({ interval }, ipAddress, router) {
 
   const received_action = function ({ action, data, dataType }) {
     console.log(`[TIMER] received action: `, action);
-    extractTriples(data, dataType)
-      .then(handle_actions)
-      .catch(err => send_error(err, action, data, dataType));
+    return handle_actions(data).catch(err => send_error(err, action, data, dataType));
   };
 
   const received_event = function ({ event, data, dataType }) {
