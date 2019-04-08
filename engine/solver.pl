@@ -41,9 +41,13 @@ solve(CompoundTerm, Explanation) :-
     Functor \= expression,
     debug(debug/solver/solve, '[SOLVER] pack type ~w in goal format.', [Functor]),
     solve(goal(Functor, S, P, O), Explanation).
+solve(condition(believe, S, P, O), believe) :-
+    debug(debug/solver/solve, '[SOLVER] considering believe(\'~w\' - \'~w\' - \'~w\').', [S, P, O]),
+    ontology_reader:read_rdf(believe, S, P, O).
 solve(condition(Type, S, P, O), Explanation) :-
     Type \= action,
     Type \= unbelieve,
+    Type \= believe,
     debug(debug/solver/solve, '[SOLVER] convert type ~w in from condition to goal.', [Type]),
     solve(goal(Type, S, P, O), Explanation).
 
@@ -61,7 +65,7 @@ solve_event(Event, EventData, _EventDataType, Response) :-
     debug(info/solver/solve_event, '[SOLVER] Running solver with event ~w .', [Event]),
     debug(debug/solver/solve_event, '[SOLVER] Running solver with event data: ~w', [EventData]),
     replace_events(string(EventData)),
-    run(Response),
+    run(Response), !,
     debug(info/solver/solve_event, 'Actions concluded: ~w', [Response]).
 solve_event(Event, _EventData, _EventDataType, []) :-
     debug(warn/solver/solve_event, '[SOLVER][WARN] solver failed for event ~w, no conclusions submitted.', [Event]).
@@ -137,7 +141,7 @@ run(Response) :-
     handle_unbelieves(Unbelieves), !,
     handle_believes(Believes), !,
     handle_actions(Actions), !,
-    build_response(Actions, Response).
+    build_response(Actions, Response), !.
 run([]) :-
     debug(warn/solve/run, 'Solver run failed, no conclusions drawn!', []).    
 

@@ -1,0 +1,114 @@
+@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix owl:   <http://www.w3.org/2002/07/owl#> .
+@prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix iuxe:  <http://www.tudelft.nl/ewi/iuxe#> .
+
+
+iuxe:quiz iuxe:state iuxe:waiting_to_start .
+iuxe:quiz iuxe:current iuxe:no_question .
+
+iuxe:waiting iuxe:is_followed_by iuxe:moeilijkheid .
+iuxe:moeilijkheid iuxe:is_followed_by iuxe:question_01 .
+iuxe:question_01 iuxe:is_followed_by iuxe:question_02 .
+iuxe:question_02 iuxe:is_followed_by iuxe:question_03 .
+iuxe:question_03 iuxe:is_followed_by iuxe:question_04 .
+iuxe:question_04 iuxe:is_followed_by iuxe:scoring .
+iuxe:scoring iuxe:is_followed_by iuxe:waiting .
+
+iuxe:setup iuxe:is_followed_by iuxe:playing_fragment .
+iuxe:playing_fragment iuxe:is_followed_by iuxe:after_fragment .
+iuxe:after_fragment iuxe:is_followed_by iuxe:finishing_topic .
+
+iuxe:waiting iuxe:title "Muziek spelletje" .
+iuxe:waiting iuxe:main "Zullen we een muziek spelletje spelen?" .
+iuxe:waiting iuxe:support "Roep 'Beginnen' om een nieuw muziek quiz spelletje te starten." .
+iuxe:waiting iuxe:say_during_setup "Zullen we een muziek spelletje spelen?" .
+iuxe:waiting iuxe:button_a_text "Beginnen" .
+iuxe:waiting iuxe:show_page "http://192.168.0.152:3000/www/index.html" .
+iuxe:waiting iuxe:answer iuxe:start .
+iuxe:waiting iuxe:type iuxe:waiting .
+
+
+iuxe:moeilijkheid iuxe:title "Moeilijkheidsgraad" .
+iuxe:moeilijkheid iuxe:main "Hoe moeilijk zou je het graag willen hebben?, 'Moeilijk', 'Normaal' of 'Eenvoudig'?" .
+iuxe:moeilijkheid iuxe:support "Roep 'Moeilijk', 'Normaal' of 'Eenvoudig'." .
+iuxe:moeilijkheid iuxe:say_during_setup "Hoe moeilijk zou je het graag willen hebben?, 'Moeilijk', 'Normaal' of 'Eenvoudig'?" .
+iuxe:moeilijkheid iuxe:say_during_finishing "En we gaan verder met een moeilijkheidsgraad." .
+iuxe:moeilijkheid iuxe:button_a_text "Moeilijk" .
+iuxe:moeilijkheid iuxe:button_b_text "Normaal" .
+iuxe:moeilijkheid iuxe:button_c_text "Eenvoudig" .
+iuxe:moeilijkheid iuxe:moeilijk "10000/fragment_stop" .
+iuxe:moeilijkheid iuxe:normaal "20000/fragment_stop" .
+iuxe:moeilijkheid iuxe:eenvoudig "30000/fragment_stop" .
+iuxe:moeilijkheid iuxe:current "20000/fragment_stop" .
+iuxe:moeilijkheid iuxe:answer iuxe:moeilijk .
+iuxe:moeilijkheid iuxe:answer iuxe:normaal .
+iuxe:moeilijkheid iuxe:answer iuxe:eenvoudig .
+iuxe:moeilijkheid iuxe:type iuxe:moeilijkheid .
+
+
+
+iuxe:question_01 iuxe:title "Vraag 1" .
+iuxe:question_01 iuxe:main "Welke artiest zong dit liedje?" .
+iuxe:question_01 iuxe:support "Luister naar het fragment en geef het antwoord door A, B of C te roepen tegen mij." .
+iuxe:question_01 iuxe:button_a_text "A. Elvis Presley" .
+iuxe:question_01 iuxe:button_b_text "B. Roy Orbison" .
+iuxe:question_01 iuxe:button_c_text "C. The Monkees" .
+iuxe:question_01 iuxe:correct iuxe:a .
+iuxe:question_01 iuxe:song_name "Jailhouse Rock" .
+iuxe:question_01 iuxe:song_artist "Elvis Presley" .
+iuxe:question_01 iuxe:song_uri "spotify:track:4gphxUgq0JSFv2BCLhNDiE" .
+iuxe:question_01 iuxe:song_duration_ms "146480"^^<http://www.w3.org/2001/XMLSchema#integer> . 
+iuxe:question_01 iuxe:answer iuxe:a .
+iuxe:question_01 iuxe:answer iuxe:b .
+iuxe:question_01 iuxe:answer iuxe:c .
+iuxe:question_01 iuxe:type iuxe:question .
+
+iuxe:question_02 iuxe:title "Vraag 2" .
+iuxe:question_02 iuxe:main "Welke artiest zong dit liedje?" .
+iuxe:question_02 iuxe:support "Luister naar het fragment en geef het antwoord door A, B of C te roepen tegen mij." .
+iuxe:question_02 iuxe:button_a_text "A. Elvis Presley" .
+iuxe:question_02 iuxe:button_b_text "B. Roy Orbison" .
+iuxe:question_02 iuxe:button_c_text "C. The Byrds" .
+iuxe:question_02 iuxe:correct iuxe:c .
+iuxe:question_02 iuxe:song_name "Mr. Tambourine Man" .
+iuxe:question_02 iuxe:song_artist "The Byrds" .
+iuxe:question_02 iuxe:song_uri "spotify:track:3mJYXkGxOS2CM5ayWqY3SM" .
+iuxe:question_02 iuxe:song_duration_ms "137746"^^<http://www.w3.org/2001/XMLSchema#integer> . 
+iuxe:question_02 iuxe:answer iuxe:a .
+iuxe:question_02 iuxe:answer iuxe:b .
+iuxe:question_02 iuxe:answer iuxe:c .
+iuxe:question_02 iuxe:type iuxe:question .
+
+iuxe:question_03 iuxe:title "Vraag 3" .
+iuxe:question_03 iuxe:main "Welke artiest zong dit liedje?" .
+iuxe:question_03 iuxe:support "Luister naar het fragment en geef het antwoord door A, B of C te roepen tegen mij." .
+iuxe:question_03 iuxe:button_a_text "A. Elvis Presley" .
+iuxe:question_03 iuxe:button_b_text "B. Roy Orbison" .
+iuxe:question_03 iuxe:button_c_text "C. The Monkees" .
+iuxe:question_03 iuxe:correct iuxe:c .
+iuxe:question_03 iuxe:song_name "I'm a Believer" .
+iuxe:question_03 iuxe:song_artist "The Monkees" .
+iuxe:question_03 iuxe:song_uri "spotify:track:5cjXFtQAc2ZRyWuEFEG06v" .
+iuxe:question_03 iuxe:song_duration_ms "166906"^^<http://www.w3.org/2001/XMLSchema#integer> . 
+iuxe:question_03 iuxe:answer iuxe:a .
+iuxe:question_03 iuxe:answer iuxe:b .
+iuxe:question_03 iuxe:answer iuxe:c .
+iuxe:question_03 iuxe:type iuxe:question .
+
+iuxe:question_04 iuxe:title "Vraag 4" .
+iuxe:question_04 iuxe:main "Welke artiest zong dit liedje?" .
+iuxe:question_04 iuxe:support "Luister naar het fragment en geef het antwoord door A, B of C te roepen tegen mij." .
+iuxe:question_04 iuxe:button_a_text "A. Elvis Presley" .
+iuxe:question_04 iuxe:button_b_text "B. Roy Orbison" .
+iuxe:question_04 iuxe:button_c_text "C. The Monkees" .
+iuxe:question_04 iuxe:correct iuxe:b .
+iuxe:question_04 iuxe:song_name "Oh, Pretty Woman" .
+iuxe:question_04 iuxe:song_artist "Roy Orbison" .
+iuxe:question_04 iuxe:song_uri "spotify:track:39yWVJ9ENz4FB4v5mZffj4" .
+iuxe:question_04 iuxe:song_duration_ms "176213"^^<http://www.w3.org/2001/XMLSchema#integer> . 
+iuxe:question_04 iuxe:answer iuxe:a .
+iuxe:question_04 iuxe:answer iuxe:b .
+iuxe:question_04 iuxe:answer iuxe:c .
+iuxe:question_04 iuxe:type iuxe:question .

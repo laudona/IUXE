@@ -52,6 +52,7 @@ expression(_X =\= _Y). %% True if expression Expr1 evaluates to a larger or equa
 expression(_X =:= _Y). %% True if expression Expr1 evaluates to a number non-equal to Expr2.
 expression(_X is _Y). %% True if expression Expr1 evaluates to a number equal to Expr2.
 expression(_X = _Y).  %% True if expression Expr1 *unifies* witho Expr2.
+expression(format(_Out, _Format, _Args)). %% as format/3: http://www.swi-prolog.org/pldoc/man?predicate=format/3
 
 %%
 %% Test if a Term is a valid literal

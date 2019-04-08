@@ -52,7 +52,7 @@ const bind = function ({ interval }, ipAddress, router) {
 
   const clear_label = function(func, label) {
     const id = get_id(label);
-    const id = func(timeInMs);
+    func(id);
     return send_label_cleared(label);
   }
 
@@ -83,7 +83,7 @@ const bind = function ({ interval }, ipAddress, router) {
         return set_label(setInterval, parseInt(time), label);
       },
       'clear_interval': function (subject, predicate, object, triples) {
-        console.log(`[TIMER] clear interval with id ${object}.`);
+        console.log(`[TIMER] clear interval with label '${object}'.`);
         return clear_label(clearInterval, object);
       },
       'clear_timeout': function (subject, predicate, object, triples) {

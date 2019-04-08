@@ -1,0 +1,12 @@
+@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix owl:   <http://www.w3.org/2002/07/owl#> .
+@prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix iuxe:  <http://www.tudelft.nl/ewi/iuxe#> .
+
+iuxe:agent iuxe:counted_to "0"^^<http://www.w3.org/2001/XMLSchema#integer> .
+iuxe:agent iuxe:should_count_to "10"^^<http://www.w3.org/2001/XMLSchema#integer> .
+
+iuxe:formats iuxe:interval_set "I zal nu elke 10 seconden tellen" .
+iuxe:formats iuxe:next_number "Het volgende getal is ~w." .
+iuxe:formats iuxe:last_number "En ~w was het laatste getal." .

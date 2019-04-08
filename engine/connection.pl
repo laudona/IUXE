@@ -27,17 +27,17 @@ send_login(WS) :-
 %% Enter message loop: wait for message, send response, wait for message again.
 %%
 loop(_WS, closing, _State) :-
-    debug(warn/connection, '[CONNECTION] connection closed by server!', []).
+    !, debug(warn/connection, '[CONNECTION] connection closed by server!', []).
 loop(WS, exit, _State) :-
-    debug(warn/connection, '[CONNECTION] closing connection...', []),
+    !, debug(warn/connection, '[CONNECTION] closing connection...', []),
     ws_close(WS),
     debug(warn/connection, '[CONNECTION] connection closed by client!', []).
 loop(WS, _Status, State) :-
     catch(receive(WS, State, NewState), Error, loop_error(Error, State, NewState)),
-    loop(WS, NewState.status, NewState).
+    !, loop(WS, NewState.status, NewState).
 loop(WS, Status, State) :-
     debug(warn/connection, '[CONNECTION] "receive" failed!', []),
-    loop(WS, Status, State).
+    !, loop(WS, Status, State).
 
 %%
 %% Error trap from the loop. Ensures the loop still active even if a message handling
@@ -64,14 +64,14 @@ receive(_WS, State, State) :-
 %%
 receive_opcode(text, Message, Result) :- 
     debug(debug/connection, '[CONNECTION] received message with opcode "text"...', []),
-    receive_text(Message, Result).
+    !, receive_text(Message, Result).
 receive_opcode(close, in(_Payload, State), out(none, NewState)) :-
     debug(debug/connection, '[CONNECTION] connection closed by server!', []),
-    NewState = State.put([status=closed]).
+    !, NewState = State.put([status=closed]).
 receive_opcode(binary, in(_Payload, S), out(none, S)) :-
-    debug(warn/connection, '[CONNECTION] received binary message, but no handlers defined for binary messages!', []).
+    !, debug(warn/connection, '[CONNECTION] received binary message, but no handlers defined for binary messages!', []).
 receive_opcode(Other, in(_Payload, S), out(none, S)) :-
-    debug(warn/connection, '[CONNECTION] received unknown opcode "~w", ignoring...', [Other]).
+    !, debug(warn/connection, '[CONNECTION] received unknown opcode "~w", ignoring...', [Other]).
 
 
 %%
@@ -79,18 +79,18 @@ receive_opcode(Other, in(_Payload, S), out(none, S)) :-
 %%
 receive_text(in(Payload, State), out(none, State)) :- 
     string(Payload),
-    debug(warn/connection, '[CONNECTION][WARN] message received is string instead of dict "~w" ...', [Payload]).
+    !, debug(warn/connection, '[CONNECTION][WARN] message received is string instead of dict "~w" ...', [Payload]).
 receive_text(in(Payload, State), out(Response, State)) :- 
     is_dict(Payload),
     _Key{ event: Event, dataType: DataType, data: Data } :< Payload,
     debug(debug/connection, '[CONNECTION] handling event message "~w"...', [Event]),
-    receive_event(Event, Data, DataType, Response).
+    !, receive_event(Event, Data, DataType, Response).
 receive_text(in(Payload, State), out(Response, State)) :- 
     _Key{ action: Action, dataType: DataType, data: Data } :< Payload,
     debug(debug/connection, '[CONNECTION] handling action message "~w"...', [Action]),
-    receive_action(Action, Data, DataType, Response).
+    !, receive_action(Action, Data, DataType, Response).
 receive_text(in(Payload, S), out(none, S)) :- 
-    debug(warn/connection, '[CONNECTION] Received message of unknown format "~w"!', [Payload]).
+    !, debug(warn/connection, '[CONNECTION] Received message of unknown format "~w"!', [Payload]).
 
 
 %%
@@ -98,31 +98,32 @@ receive_text(in(Payload, S), out(none, S)) :-
 %%
 send_response(_WS, actions( [] )).
 send_response(WS, actions( [ Action | Actions ] )) :- 
-    debug(debug/send, '[CONNECTION] send_response: list of actions, now "~w"!', [Action]),
+    debug(info/connection/send_response, '[CONNECTION] send_response: list of actions, now "~w"!', [Action]),
     send_response(WS, Action),
     send_response(WS, actions( Actions )).
 send_response(_WS, none).
 send_response(WS, event(Event, Data, DataType)) :- 
-    debug(debug/send, '[CONNECTION] sending event ( ~w )...', [Event]),
+    debug(info/connection/send_response, '[CONNECTION] sending event ( ~w )...', [Event]),
     ws_send(WS, json(event{ type:event, event:Event, data:Data, dataType:DataType })).
 send_response(WS, action(Action, Data, DataType)) :- 
-    debug(debug/send, '[CONNECTION] sending action ( ~w )...', [Action]),
+    debug(info/connection/send_response, '[CONNECTION] sending action ( ~w )...', [Action]),
     ActionDict = action{ type:action, action:Action, data:Data, dataType:DataType },
-    debug(debug/send, '[CONNECTION] sending action ( ~w )...', [ActionDict]),
+    debug(info/connection/send_response, '[CONNECTION] sending action ( ~w )...', [ActionDict]),
     ws_send(WS, json(ActionDict)).
 send_response(_WS, Resp) :- 
-    debug(warn/send, '[CONNECTION] send_response: Unknown response format "~w"!', [Resp]).
+    debug(warn/connection/send_response, '[CONNECTION] send_response: Unknown response format "~w"!', [Resp]).
 
 
 %%
 %% Handle an event. 
 %%
 receive_event(Event, EventData, EventDataType, Response) :-
-    debug(info, '[CONNECTION] Calling solver for event "~w" .', [Event]),
+    debug(info/connection/receive_event, '[CONNECTION] Calling solver for event "~w" .', [Event]),
     solver:solve_event(Event, EventData, EventDataType, Actions),
     %% Actions >> [ action(Action, ActionData, ActionDataType) ]...
-    debug(info, '[CONNECTION] Event "~w" resulted in following actions: ~w.', [Event, Actions]),
-    Response = actions(Actions).
+    debug(info/connection/receive_event, '[CONNECTION] Event "~w" resulted in following actions: ~w.', [Event, Actions]),
+    Response = actions(Actions), !.
+receive_event(_Event, _EventData, _EventDataType, nothing).
 
 
 %%
