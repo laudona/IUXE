@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <link rel="apple-touch-icon" sizes="57x57" href="icons/apple-icon-57x57.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="icons/apple-icon-60x60.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="icons/apple-icon-72x72.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="icons/apple-icon-76x76.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="icons/apple-icon-114x114.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="icons/apple-icon-120x120.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="icons/apple-icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="icons/apple-icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-icon-180x180.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/android-icon-192x192.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="96x96" href="icons/favicon-96x96.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="icons/favicon-16x16.png">
+  <link rel="manifest" href="icons/manifest.json">
+  <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="msapplication-TileImage" content="icons/ms-icon-144x144.png">
+  <meta name="theme-color" content="#ffffff">
+
+  <title>Purring Butter Tablet</title>
+
+  <!-- Bootstrap core CSS -->
+  <link href="bootstrap.min.css" rel="stylesheet">
+
+  <!-- Custom styles for this template -->
+  <link href="tablet.css" rel="stylesheet">
+</head>
+
+<body class="text-center">
+  <div class="card tablet-card">
+    <h5 class="card-header card_title">Vraag 1</h5>
+    <div class="card-body">
+      <p class="h3 mb-3 font-weight-normal card_main">Welke artiest zong dit liedje?</p>
+      <p class="card-text card_support">Geef het antwoord door A, B of C te roepen tegen mij.</p>
+      <button class="btn btn-lg btn-primary btn-block button_a">A. Elvis Presley</button>
+      <button class="btn btn-lg btn-primary btn-block button_b">B. Roy Orbison</button>
+      <button class="btn btn-lg btn-primary btn-block button_c">C. The Monkees</button>
+    </div>
+  </div>
+  <script src="/public/js/vendor/jquery-3.3.1.slim.min.js"></script>
+  <script src="/public/js/tablet.js"></script>
+  <script>
+
+    var xsd_integer = 'http://www.w3.org/2001/XMLSchema#nteger';
+    var xsd_decimal = 'http://www.w3.org/2001/XMLSchema#decimal';
+    var xsd_boolean = 'http://www.w3.org/2001/XMLSchema#boolean';
+    var base = 'http://www.tudelft.nl/ewi/iuxe#';
+
+    var click_start = '<http://www.tudelft.nl/ewi/iuxe#tablet> <http://www.tudelft.nl/ewi/iuxe#clicked> <http://www.tudelft.nl/ewi/iuxe#';
+    var click_end = '> . ';
+
+    $(".button_a").on('click', function () {
+      Spotless.send_event('clicked', click_start + 'button_a' + click_end, 'text/turtle');
+    });
+
+    $(".button_b").on('click', function () {
+      Spotless.send_event('clicked', click_start + 'button_b' + click_end, 'text/turtle');
+    });
+
+    $(".button_c").on('click', function () {
+      Spotless.send_event('clicked', click_start + 'button_c' + click_end, 'text/turtle');
+    });
+
+    Spotless.actions['tablet'] = {
+      'hide': function(cls) {
+        $("." + cls).hide();
+      },
+      'show': function(cls) {
+        $("." + cls).show();
+      },
+      'title': function(text) {
+        $('.card_title').text(text);
+      },
+      'main': function(text) {
+        $('.card_main').text(text);
+      },
+      'support': function(text) {
+        $('.card_support').text(text);
+      },
+      'button_a_text': function(text) {
+        $('.button_a').text(text);
+      },
+      'button_b_text': function(text) {
+        $('.button_b').text(text);
+      },
+      'button_c_text': function(text) {
+        $('.button_c').text(text);
+      }
+    };
+
+    Spotless.connect();
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,105 @@
+{
+  "users": [
+    {
+      "name": "biwa",
+      "code": "Wm7Wi3MoSlwc9HpZOp5s",
+      "role": "user",
+      "preferedDataType": "application/ld+json",
+      "subscribes": [ "user.action.*" ],
+      "permissions": [ "event" ]
+    },
+    {
+      "name": "lur",
+      "code": "SfMnwiiTjZ",
+      "role": "simulator",
+      "preferedDataType": "application/ld+json",
+      "subscribes": [ "*.action.*", "*.event.*" ],
+      "allowed": [ "events" ],
+      "permissions": [ "event", "action" ]
+    },
+    {
+      "name": "janzi",
+      "code": "lRkCA2Gaq83mlGxgkpgy",
+      "role": "engine",
+      "preferedDataType": "text/turtle",
+      "subscribes": [ "*.event.*" ],
+      "permissions": [ "action" ]
+    },
+    {
+      "name": "yangqin",
+      "code": "arOVtlLyNywncMEPdRBE",
+      "role": "pepper",
+      "type": "interface",
+      "preferedDataType": "application/ld+json",
+      "subscribes": [ "pepper.action.*" ],
+      "permissions": [ "event" ]
+    },
+    {
+      "name": "tro",
+      "code": "fhJV40NPPLBX4lPr2gRj",
+      "role": "tablet",
+      "type": "interface",
+      "preferedDataType": "application/ld+json",
+      "subscribes": [ "tablet.action.*", "pepper.action.*" ],
+      "permissions": [ "event" ]
+    },
+    {
+      "name": "santoor",
+      "code": "Vqg59q3cHCRwmMlSX7X7",
+      "role": "web",
+      "type": "interface",
+      "preferedDataType": "application/ld+json",
+      "subscribes": [ "web.action.*" ],
+      "permissions": [ "event" ]
+    },
+    {
+      "name": "siku",
+      "code": "omPfnB0MH3nhMrOEwLN7",
+      "role": "spotify",
+      "type": "interface",
+      "preferedDataType": "raw",
+      "subscribes": [ "spotify.action.*" ],
+      "permissions": [ "event" ]
+    },
+    {
+      "name": "mbira",
+      "code": "LkUItXeMGmjADbAdLOBp",
+      "role": "timer",
+      "type": "interface",
+      "preferedDataType": "raw",
+      "subscribes": [ "timer.action.*" ],
+      "permissions": [ "event" ]
+    }
+  ],
+  "socket": {
+    "port": 3001
+  },
+  "server": {
+    "port": 3000,
+    "webDirectory": "/../data/www"
+  },
+  "convert": {
+    "xsdString": "http://www.w3.org/2001/XMLSchema#string",
+    "xsdInteger": "http://www.w3.org/2001/XMLSchema#integer",
+    "xsdDecimal": "http://www.w3.org/2001/XMLSchema#decimal",
+    "baseIri": "http://www.tudelft.nl/ewi/iuxe#"
+  },
+  "spotify": {
+    "clientId": "<my-client-id>",
+    "clientSecret": "<my-client-secret>",
+    "redirectUri": "http://localhost:3000/spotify/callback"
+  },
+  "engine": {
+    "rules": "../data/rules.pl",
+    "ontology": "../data/ontology.ttl"
+  },
+  "pepper": {
+    "loadTablet": "http://192.168.0.152:3000/public/tablet.html",
+    "streamAudio": false
+  },
+  "timer": { 
+    "interval": 60000 
+  },
+  "web": {},
+  "tablet": {}
+}
