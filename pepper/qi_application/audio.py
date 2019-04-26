@@ -67,8 +67,8 @@ class Audio:
         self.speech_recognition_service.subscribe("PURRING_BUTTER")
         self.word_subscription = self.memory_service.subscriber("WordRecognized")
         self.word_subscription.signal.connect(self.on_word_recognized)
-        # self.speech_subscription = self.memory_service.subscriber("SpeechDetected")
-        # self.speech_subscription.signal.connect(self.on_speech_detected)
+        self.speech_subscription = self.memory_service.subscriber("SpeechDetected")
+        self.speech_subscription.signal.connect(self.on_speech_detected)
 
         print("Audio Service initialized.")
 
@@ -135,4 +135,13 @@ class Audio:
         self.send("heard", data, "text/turtle")
 
     def on_speech_detected(self, args):
-        pass
+        print(args)
+        data = """
+        @prefix iuxe:  <http://www.tudelft.nl/ewi/iuxe#> .
+        @prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
+        
+        iuxe:pepper iuxe:speech_detected iuxe:
+                """
+
+        self.send("speech_detected", data, "text/turtle")
+        #pass
