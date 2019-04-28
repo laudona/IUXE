@@ -14,6 +14,7 @@
 $ git clone https://github.com/a-swarm-of-ralf/purring-butter.git
 $ cd purring-butter/server
 $ npm install
+$ npm run build
 $ cd ../pepper
 $ pip install -r /path/to/requirements.txt
 ```
