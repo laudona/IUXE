@@ -135,6 +135,7 @@ class Audio:
         self.send("heard", data, "text/turtle")
 
     def on_speech_detected(self, args):
+        print("SPEECH RECOGNITION:")
         print(args)
         data = """
         @prefix iuxe:  <http://www.tudelft.nl/ewi/iuxe#> .

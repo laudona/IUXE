@@ -17,7 +17,7 @@ parser.addArgument(
 parser.addArgument(
     [ '-i', '--ip-address' ],
     {
-        defaultValue: 'localhost',
+        defaultValue: '0.0.0.0',
         help: 'Own ip address.'
     }
 );

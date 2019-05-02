@@ -12,28 +12,28 @@ const configure = function (config) {
     xsd_integer = config['xsdInteger'];
     xsd_decimal = config['xsdDecimal'];
     base = config['baseIri'];
-}
+};
 
 const tri = function (...listOfTermsAndFuncs) {
     // console.log(`[CONVERT] building triple of `, listOfTermsAndFuncs);
     return _.chain(listOfTermsAndFuncs).chunk(2).map(([f, t]) => f(t)).join(' ').value() + ' . ';
-}
+};
 
 const res = function (shortTerm) {
     return `<${base}${shortTerm}>`;
-}
+};
 
 const int = function (i) {
     return `"${i}"^^<${xsd_integer}>`;
-}
+};
 
 const str = function (s) {
     return `"${s}"`;
-}
+};
 
 const dec = function (d) {
     return `"${d}"^^<${xsd_decimal}>`;
-}
+};
 
 const extractCore = function (iri) {
     return iri.replace(base, '');
@@ -120,7 +120,7 @@ const convert = function (desiredFDataType, data, dataType) {
     } else {
         return Promise.reject({ message: `Convert: Unable to convert from ${dataType} to ${desiredFDataType}.` });
     }
-}
+};
 
 _.merge(convert, { tri, res, int, str, dec, configure });
 

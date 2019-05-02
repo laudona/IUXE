@@ -1,6 +1,8 @@
 const convert = require('./convert');
 const _ = require('lodash');
-
+var zerorpc = require("zerorpc");
+var client = new zerorpc.Client();
+client.connect("tcp://127.0.0.1:4242");
 
 class Interface {
 
@@ -13,7 +15,7 @@ class Interface {
 
         console.log(`Client '${this.name}/${this.role}' joined.`);
     
-        const base = 'http://www.tudelft.nl/ewi/iuxe#'
+        const base = 'http://www.tudelft.nl/ewi/iuxe#';
         this.send_message_to_client({
             type: 'event',
             event: 'server.event.ready',
@@ -31,6 +33,13 @@ class Interface {
     event ({ event, data, dataType }) {
         const eventName = (event.indexOf('.') < 0 ? `${this.role}.event.${event}` : event);
         console.log(`Client '${this.name}' emits ${eventName} event.`);
+        if(eventName == 'pepper.event.speech_detected') {
+            client.invoke("test",function(error, res, more) {
+                console.log("testin python node connection");
+                console.log(res.toString());
+                //for some reason this doesn't work: this.send_message_to_client({action: 'say',data: 'hello',dataType: 'text/turtle'});
+            });
+        }
         this.router.emit(eventName, { event, data, dataType });
     }
 

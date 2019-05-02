@@ -4,6 +4,10 @@ const route = require('koa-route');
 const serve = require('koa-static');
 const mount = require('koa-mount');
 
+var zerorpc = require("zerorpc");
+var client = new zerorpc.Client();
+client.connect("tcp://127.0.0.1:4242");
+
 module.exports = function ({port, webDirectory}, ip_address, router, spotify) {
 
     const app = module.exports = new Koa();
@@ -13,9 +17,18 @@ module.exports = function ({port, webDirectory}, ip_address, router, spotify) {
     app.use(mount('/spotify', spotify));
 
 
+    app.use(route.post('/music',
+        function (ctx, next) {
+        console.log("test123test");
+        client.invoke("start","2",function(error, res, more) {
+            console.log("lets go");
+        });
+        ctx.redirect('public/js/tablet.html');
+    }));
+
     app.use(route.get('/',
         async function (ctx) {
-            ctx.redirect('public/index.html');
+            ctx.redirect('public/js/tablet.html');
         }));
 
     app.use(route.get('/public',
