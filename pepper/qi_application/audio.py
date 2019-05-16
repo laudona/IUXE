@@ -137,12 +137,12 @@ class Audio:
     def on_speech_detected(self, args):
         print("SPEECH RECOGNITION:")
         print(args)
-        data = """
-        @prefix iuxe:  <http://www.tudelft.nl/ewi/iuxe#> .
-        @prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
-        
-        iuxe:pepper iuxe:speech_detected iuxe:
-                """
-
-        self.send("speech_detected", data, "text/turtle")
+        # data = """
+        # @prefix iuxe:  <http://www.tudelft.nl/ewi/iuxe#> .
+        # @prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
+        #
+        # iuxe:pepper iuxe:speech_detected iuxe:
+        #         """
+        if args == 1:
+            self.send("speech_detected", "<{0}pepper> <{0}detected> <{0}speech>".format(BASE), "text/turtle")
         #pass
