@@ -15,6 +15,10 @@ if __name__ == '__main__':
                         help="Naoqi port number")
     parser.add_argument("--server_port", type=str, default='3001',
                         help="Server port number")
+    parser.add_argument("--wifi_ssid", type=str, default="OpenWlan",
+                        help="Wifi SSID for tablet to connect.")
+    parser.add_argument("--wifi_key", type=str, default="",
+                        help="Wifi Key for tablet to connect.")
 
     args = parser.parse_args()
 
@@ -36,6 +40,8 @@ if __name__ == '__main__':
         print("Connection to server at {0} established!".format(server_url))
 
         print('Client is up and running! Ready to process messages...')
+        app.tablet.configureWifi("wpa", args.wifi_ssid, args.wifi_key);
+        app.tablet.loadUrl("https://tudelft.nl")
         ws.run_forever()
         # app.run_forever()
     except KeyboardInterrupt:

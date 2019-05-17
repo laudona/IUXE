@@ -13,6 +13,13 @@ class Tablet:
 
         print("Behavior Service initialized.")
 
+    def configureWifi(self, security, ssid, key):
+        self.tablet_service.enableWifi()
+        self.tablet_service.configureWifi(security, ssid, key)
+
+    def loadUrl(self, url):
+        self.tablet_service.showWebview(url)
+
     def send(self, event, data, data_type):
         self.send_callback({ 'type':'event', 'event': event, 'data':data, 'dataType': data_type})
 
