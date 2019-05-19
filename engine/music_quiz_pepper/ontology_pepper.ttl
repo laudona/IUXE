@@ -8,59 +8,33 @@
 iuxe:quiz iuxe:state iuxe:waiting_to_start .
 iuxe:quiz iuxe:current iuxe:no_question .
 
-iuxe:waiting iuxe:is_followed_by iuxe:moeilijkheid .
-iuxe:moeilijkheid iuxe:is_followed_by iuxe:question_01 .
-iuxe:question_01 iuxe:is_followed_by iuxe:question_02 .
-iuxe:question_02 iuxe:is_followed_by iuxe:question_03 .
-iuxe:question_03 iuxe:is_followed_by iuxe:question_04 .
-iuxe:question_04 iuxe:is_followed_by iuxe:scoring .
-iuxe:scoring iuxe:is_followed_by iuxe:waiting .
+iuxe:setup iuxe:is_followed_by iuxe:rules .
+iuxe:rules iuxe:is_followed_by iuxe:game .
+iuxe:game iuxe:is_followed_by iuxe:setup .
 
-iuxe:setup iuxe:is_followed_by iuxe:playing_fragment .
-iuxe:playing_fragment iuxe:is_followed_by iuxe:after_fragment .
-iuxe:after_fragment iuxe:is_followed_by iuxe:finishing_topic .
+iuxe:setup iuxe:title "Muziek Bingo" .
+iuxe:setup iuxe:main "Zullen we een muziek spelletje spelen?" .
+iuxe:setup iuxe:support "Roep 'Beginnen' om een nieuw muziek quiz spelletje te starten." .
+iuxe:setup iuxe:say_during_setup "Zullen we een muziek spelletje spelen?" .
+iuxe:setup iuxe:button_a_text "Beginnen" .
+iuxe:setup iuxe:show_page "http://192.168.0.152:3000/www/index.html" .
+iuxe:setup iuxe:answer iuxe:start .
+iuxe:setup iuxe:type iuxe:setup .
 
-iuxe:waiting iuxe:title "Muziek spelletje" .
-iuxe:waiting iuxe:main "Zullen we een muziek spelletje spelen?" .
-iuxe:waiting iuxe:support "Roep 'Beginnen' om een nieuw muziek quiz spelletje te starten." .
-iuxe:waiting iuxe:say_during_setup "Pepper" .
-iuxe:waiting iuxe:button_a_text "Beginnen" .
-iuxe:waiting iuxe:show_page "http://192.168.0.152:3000/www/index.html" .
-iuxe:waiting iuxe:answer iuxe:start .
-iuxe:waiting iuxe:type iuxe:waiting .
+iuxe:rules iuxe:title "Muziek Bingo" .
+iuxe:rules iuxe:main "Zullen we een muziek spelletje spelen?" .
+iuxe:rules iuxe:support "Roep 'Beginnen' om een nieuw muziek quiz spelletje te starten." .
+iuxe:rules iuxe:say_during_setup "Mark the box with the artist of the song. Who has all the boxes marked, wins." .
+iuxe:rules iuxe:button_a_text "Beginnen" .
+iuxe:rules iuxe:show_page "http://192.168.0.152:3000/www/index.html" .
+iuxe:rules iuxe:answer iuxe:start .
+iuxe:rules iuxe:type iuxe:rules .
 
-iuxe:moeilijkheid iuxe:title "Moeilijkheidsgraad" .
-iuxe:moeilijkheid iuxe:main "Hoe moeilijk zou je het graag willen hebben?, 'Moeilijk', 'Normaal' of 'Eenvoudig'?" .
-iuxe:moeilijkheid iuxe:support "Roep 'Moeilijk', 'Normaal' of 'Eenvoudig'." .
-iuxe:moeilijkheid iuxe:say_during_setup "Hoe moeilijk zou je het graag willen hebben?, 'Moeilijk', 'Normaal' of 'Eenvoudig'?" .
-iuxe:moeilijkheid iuxe:say_during_finishing "En we gaan verder met een moeilijkheidsgraad." .
-iuxe:moeilijkheid iuxe:button_a_text "Moeilijk" .
-iuxe:moeilijkheid iuxe:button_b_text "Normaal" .
-iuxe:moeilijkheid iuxe:button_c_text "Eenvoudig" .
-iuxe:moeilijkheid iuxe:moeilijk "10000/fragment_stop" .
-iuxe:moeilijkheid iuxe:normaal "20000/fragment_stop" .
-iuxe:moeilijkheid iuxe:eenvoudig "30000/fragment_stop" .
-iuxe:moeilijkheid iuxe:current "20000/fragment_stop" .
-iuxe:moeilijkheid iuxe:answer iuxe:moeilijk .
-iuxe:moeilijkheid iuxe:answer iuxe:normaal .
-iuxe:moeilijkheid iuxe:answer iuxe:eenvoudig .
-iuxe:moeilijkheid iuxe:type iuxe:moeilijkheid .
-
-iuxe:question_01 iuxe:title "Vraag 1" .
-iuxe:question_01 iuxe:main "Welke artiest zong dit liedje?" .
-iuxe:question_01 iuxe:support "Luister naar het fragment en geef het antwoord door A, B of C te roepen tegen mij." .
-iuxe:question_01 iuxe:button_a_text "A. Elvis Presley" .
-iuxe:question_01 iuxe:button_b_text "B. Roy Orbison" .
-iuxe:question_01 iuxe:button_c_text "C. The Monkees" .
-iuxe:question_01 iuxe:correct iuxe:a .
-iuxe:question_01 iuxe:song_name "Jailhouse Rock" .
-iuxe:question_01 iuxe:song_artist "Elvis Presley" .
-iuxe:question_01 iuxe:song_uri "spotify:track:4gphxUgq0JSFv2BCLhNDiE" .
-iuxe:question_01 iuxe:song_duration_ms "146480"^^<http://www.w3.org/2001/XMLSchema#integer> .
-iuxe:question_01 iuxe:answer iuxe:a .
-iuxe:question_01 iuxe:answer iuxe:b .
-iuxe:question_01 iuxe:answer iuxe:c .
-iuxe:question_01 iuxe:type iuxe:question .
-
-
-
+iuxe:game iuxe:title "Muziek Bingo" .
+iuxe:game iuxe:main "Zullen we een muziek spelletje spelen?" .
+iuxe:game iuxe:support "Roep 'Beginnen' om een nieuw muziek quiz spelletje te starten." .
+iuxe:game iuxe:say_during_setup "" .
+iuxe:game iuxe:button_a_text "Beginnen" .
+iuxe:game iuxe:show_page "http://192.168.0.152:3000/www/index.html" .
+iuxe:game iuxe:answer iuxe:start .
+iuxe:game iuxe:type iuxe:game .
