@@ -23,7 +23,7 @@ iuxe:after_fragment iuxe:is_followed_by iuxe:finishing_topic .
 iuxe:waiting iuxe:title "Muziek spelletje" .
 iuxe:waiting iuxe:main "Zullen we een muziek spelletje spelen?" .
 iuxe:waiting iuxe:support "Roep 'Beginnen' om een nieuw muziek quiz spelletje te starten." .
-iuxe:waiting iuxe:say_during_setup "Zullen we een muziek spelletje spelen?" .
+iuxe:waiting iuxe:say_during_setup "Pepper" .
 iuxe:waiting iuxe:button_a_text "Beginnen" .
 iuxe:waiting iuxe:show_page "http://192.168.0.152:3000/www/index.html" .
 iuxe:waiting iuxe:answer iuxe:start .

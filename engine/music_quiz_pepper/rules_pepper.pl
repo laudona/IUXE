@@ -29,11 +29,11 @@ rule(rules_01,
 
 rule(rules_02,
     intermediate(quiz-explain-rules) then
-        action(pepper-say-"Hello, welcome to Bingo.")).
+        action(pepper-say-"Hello.")).
 
 rule(rules_03,
     intermediate(quiz-explain-rules) and
-    event(pepper-said-"Hello, welcome to Bingo.") then
+    event(pepper-said-"Hello.") then
         intermediate(quiz-explained-rules)).
 
 %%

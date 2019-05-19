@@ -47,6 +47,8 @@ class Audio:
 
     def __init__( self, session):
         self.memory_service = session.service("ALMemory")
+	self.word_subscription = self.memory_service.subscriber("WordRecognized")
+        self.word_subscription.signal.connect(self.on_word_recognized)
         self.speech_recognition_service = session.service("ALSpeechRecognition")
         self.speech_service = session.service("ALAnimatedSpeech")
         self.text_to_speech_service = session.service("ALTextToSpeech")
@@ -65,8 +67,7 @@ class Audio:
         self.listen_to('Ja, Nee, Misschien')
 
         self.speech_recognition_service.subscribe("PURRING_BUTTER")
-        self.word_subscription = self.memory_service.subscriber("WordRecognized")
-        self.word_subscription.signal.connect(self.on_word_recognized)
+        
         self.speech_subscription = self.memory_service.subscriber("SpeechDetected")
         self.speech_subscription.signal.connect(self.on_speech_detected)
 
@@ -135,14 +136,6 @@ class Audio:
         self.send("heard", data, "text/turtle")
 
     def on_speech_detected(self, args):
-        print("SPEECH RECOGNITION:")
-        print(args)
-        # data = """
-        # @prefix iuxe:  <http://www.tudelft.nl/ewi/iuxe#> .
-        # @prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
-        #
-        # iuxe:pepper iuxe:speech_detected iuxe:
-        #         """
-        if args == 1:
-            self.send("speech_detected", "<{0}pepper> <{0}detected> <{0}speech>".format(BASE), "text/turtle")
-        #pass
+        #if args == 1:
+         #   self.send("speech_detected", "<{0}pepper> <{0}detected> <{0}speech>".format(BASE), "text/turtle")
+        pass
