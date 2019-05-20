@@ -40,8 +40,11 @@ if __name__ == '__main__':
         print("Connection to server at {0} established!".format(server_url))
 
         print('Client is up and running! Ready to process messages...')
+
+        # Load Tablet UI
         app.tablet.configureWifi("wpa", args.wifi_ssid, args.wifi_key);
-        app.tablet.loadUrl("https://tudelft.nl")
+        app.tablet.show("http://{}:{}/public/index.html".format(args.server_ip, int(args.server_port) - 1))
+
         ws.run_forever()
         # app.run_forever()
     except KeyboardInterrupt:
