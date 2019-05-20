@@ -61,7 +61,7 @@ export default {
   }
   .count {
     font-family: 'Roboto';
-    font-size: 25rem;
+    font-size: 20rem;
     width: auto;
     margin: 0 auto;
   }
