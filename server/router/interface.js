@@ -33,7 +33,7 @@ class Interface {
     event ({ event, data, dataType }) {
         const eventName = (event.indexOf('.') < 0 ? `${this.role}.event.${event}` : event);
         console.log(`Client '${this.name}' emits ${eventName} event.`);
-        if(eventName == 'pepper.event.said') {
+        if(eventName == 'pepper.event.start') {
             client.invoke("start", 2,function(error, res, more) {
                 console.log("testin python node connection");
                 // console.log(res.toString());

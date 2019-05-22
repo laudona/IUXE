@@ -18,65 +18,6 @@ rule(ready_02,
         intermediate(quiz-start-setup)).
 
 %%
-%% Rules explanation
-%%
-
-rule(rules_01,
-    intermediate(quiz-finished-rules) and
-    intermediate(user-said-rules)  then
-        intermediate(quiz-explain-rules) ).
-
-rule(rules_02,
-    intermediate(quiz-explain-rules) then
-        intermediate(quiz-start-rules)).
-
-rule(rules_03,
-    intermediate(quiz-finished-rules) then
-        intermediate(quiz-explained-rules)).
-
-%%
-%% Rules start game
-%%
-
-rule(start_game,
-    event(user-said-start) then
-        intermediate(quiz-can_start-game) ).
-
-%%
-%% States
-%%
-
-rule(state_01,
-    intermediate(quiz-finished-rules)  and
-    intermediate(quiz-can_start-game) then
-        intermediate(quiz-start-game)).
-
-rule(state_02,
-    intermediate(quiz-start-game) or
-    intermediate(quiz-play-next_song) then
-        intermediate(quiz-play-song)).
-
-%%rule(state_03,
-%%    intermediate(quiz-play-song) and
-%%    intermediate(timer-has-elapsed) then
-%%        intermediate(quiz-show-info)).
-
-%%rule(state_04,
-%%    event(pepper-detected-speech) and
-%%    intermediate(quiz-play-song) then
-%%        intermediate(quiz-continue-song)).
-
-%%rule(state_05,
-%%    intermediate(quiz-show-info) and
-%%    not intermediate(quiz-continue-song) then
-%%        intermediate(quiz-play-next_song)).
-
-%%rule(state_06,
-%%    intermediate(quiz-show-info) and
-%%    intermediate(quiz-finished-song) then
-%%        intermediate(quiz-play-next_song)).
-
-%%
 %% Handle pepper word inputs
 %%
 
@@ -96,13 +37,41 @@ rule(pepper_04,
     event(pepper-heard-Wid) and
     event(Wid-word-"Stoppen") then
         intermediate(user-said-stop)).
+
 rule(pepper_05,
     event(pepper-heard-Wid) and
     event(Wid-word-"Reglement") then
         intermediate(user-said-rules)).
+
 rule(pepper_06,
     event(pepper-said-Word) then
         intermediate(pepper-said-word)).
+
+
+%%
+%% Rules explanation
+%%
+
+rule(rules_01,
+    intermediate(quiz-finished-setup) then
+        intermediate(quiz-start-rules)).
+
+
+%%
+%% Rules start game
+%%
+
+rule(start_game,
+    intermediate(quiz-finished-rules) then
+        intermediate(quiz-start-game) ).
+
+%%
+%% States
+%%
+
+rule(state_02,
+    intermediate(quiz-start-game) then
+        action(pepper-say-"start")).
 
 
 %%
@@ -112,10 +81,10 @@ rule(pepper_06,
 %%
 %% Chain topics when previous topic finsihed.
 %%
-rule(starting_01,
-    intermediate(quiz-finished-Topic) and
-    believe(Topic-is_followed_by-OtherTopic) then
-        intermediate(quiz-setup-OtherTopic)).
+%%rule(starting_01,
+%%    intermediate(quiz-finished-Topic) and
+%%    believe(Topic-is_followed_by-OtherTopic) then
+%%        intermediate(quiz-setup-OtherTopic)).
 
 rule(starting_02,
     intermediate(quiz-start-Topic) then
@@ -195,7 +164,7 @@ rule(setup_14,
 
 rule(setup_15,
     intermediate(quiz-setup-Topic) then
-        believe(quiz-state-setup)).
+        believe(quiz-state-Topic)).
 
 rule(setup_16,
     intermediate(quiz-setup-Topic) then
@@ -222,15 +191,15 @@ rule(setup_19,
     believe(quiz-state-setup) then
         intermediate(quiz-finished-setup)).
 
-rule(setup_19,
+rule(setup_20,
     intermediate(pepper-said-word) and
     believe(quiz-state-rules) then
         intermediate(quiz-finished-rules)).
 
-rule(setup_19,
-    intermediate(user-said-stop) and
-    believe(quiz-state-game) then
-        intermediate(quiz-finished-game)).
+%%rule(setup_21,
+%%    intermediate(user-said-stop) and
+%%    believe(quiz-state-game) then
+%%        intermediate(quiz-finished-game)).
 
 %%
 %% General pepper behavior
@@ -240,3 +209,11 @@ rule(greet_when_coming_close,
        event(Person-entered-zone1)
    then
        action(pepper-say-"Hallo daar")).
+
+%%
+%% Speech
+%%
+%%rule(speech,
+%%    event(pepper-detected-speech) then
+%%    action(pepper-say-"hello")).
+%%    action(pepper-say-"hello")).

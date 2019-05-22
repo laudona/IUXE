@@ -76,6 +76,8 @@ class Audio:
     def say(self, text):
         self.speech_service.say(text)
         self.send('said', "<{0}pepper> <{0}said> \"{1}\" .".format(BASE, text), 'text/turtle')
+        if text=='start':
+            self.send('start', "<{0}pepper> <{0}said> \"{1}\" .".format(BASE, text), 'text/turtle')
 
     def listen(self, text):
         self.listen_to(text)
@@ -136,6 +138,12 @@ class Audio:
         self.send("heard", data, "text/turtle")
 
     def on_speech_detected(self, args):
-        #if args == 1:
-         #   self.send("speech_detected", "<{0}pepper> <{0}detected> <{0}speech>".format(BASE), "text/turtle")
-        pass
+        if args == 1:
+            data = """
+                    @prefix iuxe:  <http://www.tudelft.nl/ewi/iuxe#> .
+                    @prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
+
+                    iuxe:pepper iuxe:detected iuxe:speech .
+                    """
+            self.send("detected", data, "text/turtle")
+        #pass
