@@ -61,30 +61,50 @@ rule(rules_01,
 %% Rules start game
 %%
 
-rule(start_game,
+rule(start_game_01,
     intermediate(quiz-finished-rules) then
         intermediate(quiz-start-game) ).
 
-%%
-%% States
-%%
-
-rule(state_02,
+rule(start_game_02,
     intermediate(quiz-start-game) then
-        action(pepper-say-"start")).
+        action(pepper-say-"Let's start the game!")).
+
+rule(start_game_02,
+    intermediate(quiz-start-game) then
+        action(spotify-start-song)).
 
 
 %%
 %% Handle tablet inputs
 %%
 
+rule(tablet_01,
+    event(tablet-clicked-start) then
+        intermediate(user-clicked-start)).
+
+rule(tablet_02,
+    event(tablet-clicked-rules) then
+        intermediate(user-clicked-rules)).
+
+rule(tablet_03,
+    event(tablet-clicked-stop) then
+        intermediate(user-clicked-stop)).
+
+rule(tablet_04,
+    event(tablet-clicked-yes) then
+        intermediate(user-clicked-yes)).
+
+rule(tablet_05,
+    event(tablet-clicked-no) then
+        intermediate(user-clicked-no)).
+
+rule(tablet_04,
+    event(tablet-show-Artistinfo) then
+        action(pepper-say-Artistinfo)).
+
 %%
 %% Chain topics when previous topic finsihed.
 %%
-%%rule(starting_01,
-%%    intermediate(quiz-finished-Topic) and
-%%    believe(Topic-is_followed_by-OtherTopic) then
-%%        intermediate(quiz-setup-OtherTopic)).
 
 rule(starting_02,
     intermediate(quiz-start-Topic) then
@@ -196,10 +216,11 @@ rule(setup_20,
     believe(quiz-state-rules) then
         intermediate(quiz-finished-rules)).
 
-%%rule(setup_21,
-%%    intermediate(user-said-stop) and
-%%    believe(quiz-state-game) then
-%%        intermediate(quiz-finished-game)).
+rule(setup_21,
+    intermediate(user-clicked-stop) or
+    event(spotify-end-game) and
+    believe(quiz-state-game) then
+        intermediate(quiz-finished-game)).
 
 %%
 %% General pepper behavior
@@ -210,10 +231,19 @@ rule(greet_when_coming_close,
    then
        action(pepper-say-"Hallo daar")).
 
+
 %%
 %% Speech
 %%
-%%rule(speech,
-%%    event(pepper-detected-speech) then
-%%    action(pepper-say-"hello")).
-%%    action(pepper-say-"hello")).
+rule(speech_01,
+    event(pepper-detected-speech) then
+        intermediate(song-played-more)).
+
+rule(speech_02,
+    intermediate(song-played-more) then
+        action(pepper-say-"Shall I play more?")).
+
+rule(speech_03,
+    intermediate(song-played-more) and
+    intermediate(user-clicked-yes) then
+        action(spotify-continue-music)).
