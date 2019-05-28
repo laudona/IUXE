@@ -32,8 +32,8 @@ try {
     const router = new Router(config);
     const spotify = require('./spotify')(config['spotify'], args['ip_address'], router);
     const timer = require('./timer')(config['timer'], args['ip_address'], router);
-    const server = require('./server')(config['server'], args['ip_address'], router, spotify);
     const socket = require('./socket')(config['socket'], args['ip_address'], router);
+    const server = require('./server')(config['server'], args['ip_address'], router, socket);
 } catch (e) {
     console.error(`Error starting server.`, e);
 }

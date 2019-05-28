@@ -5,7 +5,7 @@ const type = 'login'
 const name = 'biwa';
 const code = 'Wm7Wi3MoSlwc9HpZOp5s';
 
-const ws = new WebSocket('ws://localhost:3001/');
+const ws = new WebSocket('ws://localhost:3002/');
 
 ws.on('open', function open() {
   ws.send(JSON.stringify({ type, name, code }));

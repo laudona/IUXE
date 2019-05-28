@@ -3,37 +3,19 @@ const Koa = require('koa');
 const route = require('koa-route');
 const serve = require('koa-static');
 const mount = require('koa-mount');
-const handle = require('./handle');
+
 var zerorpc = require("zerorpc");
 var client = new zerorpc.Client();
 client.connect("tcp://127.0.0.1:4242");
 
+module.exports = function ({port, webDirectory}, ip_address, router, socket) {
 
-const WebSocket = require('ws');
-const type = 'login'
-const name = 'lurSfMnwiiTjZ';
-const code = 'Wm7Wi3MoSlwc9HpZOp5s';
-
-const ws = new WebSocket('ws://localhost:3001/');
-
-ws.on('open', function open() {
-    ws.send(JSON.stringify({ type, name, code }));
-    handle(ws);
-});
-
-ws.on('message', function incoming(data) {
-    console.log(data);
-});
-
-
-module.exports = function ({port, webDirectory}, ip_address, router, spotify) {
-
-    const interface = router.login(ws, name, code);
+    const interface = router.login(socket, "biwa" , "Wm7Wi3MoSlwc9HpZOp5s");
     const app = module.exports = new Koa();
 
     app.use(mount('/public', serve(path.join(__dirname, '/public'))));
     app.use(mount('/www', serve(path.join(__dirname, webDirectory))));
-    app.use(mount('/spotify', spotify));
+    //app.use(mount('/spotify', spotify));
 
 
     app.use(route.post('/music',
@@ -62,7 +44,8 @@ module.exports = function ({port, webDirectory}, ip_address, router, spotify) {
     app.use(route.post('/rules',
         function (ctx, next) {
             console.log("test456test");
-            interface.send_message_to_client({
+            const base = 'http://www.tudelft.nl/ewi/iuxe#';
+            interface.event({
                 type: 'event',
                 event: 'server.event.ready',
                 dataType: 'text/turtle',
