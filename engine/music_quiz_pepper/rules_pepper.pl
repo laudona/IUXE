@@ -13,9 +13,13 @@ rule(ready_01,
     event(agent-is-ready) then
     action(pepper-listen-"Ja, Nee, Beginnen, Stoppen, Eenvoudig, Reglement")).
 
-rule(ready_02,
+%% rule(ready_02,
+%%    event(agent-is-ready) then
+%%        intermediate(quiz-start-setup)).
+
+rule(ready_03,
     event(agent-is-ready) then
-        intermediate(quiz-start-setup)).
+	action(pepper-show-"http://192.168.100.175:3000")).
 
 %%
 %% Handle pepper word inputs
@@ -81,7 +85,7 @@ rule(state_02,
 %%
 %% Chain topics when previous topic finsihed.
 %%
-%%rule(starting_01,
+%% rule(starting_01,
 %%    intermediate(quiz-finished-Topic) and
 %%    believe(Topic-is_followed_by-OtherTopic) then
 %%        intermediate(quiz-setup-OtherTopic)).
@@ -196,7 +200,7 @@ rule(setup_20,
     believe(quiz-state-rules) then
         intermediate(quiz-finished-rules)).
 
-%%rule(setup_21,
+%% rule(setup_21,
 %%    intermediate(user-said-stop) and
 %%    believe(quiz-state-game) then
 %%        intermediate(quiz-finished-game)).
@@ -213,7 +217,7 @@ rule(greet_when_coming_close,
 %%
 %% Speech
 %%
-%%rule(speech,
+%% rule(speech,
 %%    event(pepper-detected-speech) then
 %%    action(pepper-say-"hello")).
 %%    action(pepper-say-"hello")).

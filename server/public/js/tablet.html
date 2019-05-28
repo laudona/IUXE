@@ -5,6 +5,7 @@
     <link rel='stylesheet' href='style.css' />
 </head>
 <body>
+
 <div class="center-div">
     <h1>Pepper Page</h1>
     <form action="/music" method="post">
@@ -14,6 +15,91 @@
     <form action="/finish" method="post">
         <input type="submit" value="Click here to finish the song">
     </form>
+    <button class="btn btn-lg btn-primary btn-block button_a">A. Elvis Presley</button>
+    <button class="btn btn-lg btn-primary btn-block button_b">B. Roy Orbison</button>
+    <button class="btn btn-lg btn-primary btn-block button_c">C. The Monkees</button>
 </div>
+
+<script src="/public/js/jquery-3.3.1.slim.min.js"></script>
+<script src="/public/js/es6/client.js"></script>
+
+<script>
+
+    var xsd_integer = 'http://www.w3.org/2001/XMLSchema#nteger';
+    var xsd_decimal = 'http://www.w3.org/2001/XMLSchema#decimal';
+    var xsd_boolean = 'http://www.w3.org/2001/XMLSchema#boolean';
+    var base = 'http://www.tudelft.nl/ewi/iuxe#';
+
+    var click_start = '<http://www.tudelft.nl/ewi/iuxe#tablet> <http://www.tudelft.nl/ewi/iuxe#clicked> <http://www.tudelft.nl/ewi/iuxe#';
+    var click_end = '> . ';
+
+    $(".button_a").on('click', function () {
+        console.log("button_a")
+        // Spotless.send_event('clicked', click_start + 'button_a' + click_end, 'text/turtle');
+    });
+
+    $(".button_b").on('click', function () {
+        Spotless.send_event('clicked', click_start + 'button_b' + click_end, 'text/turtle');
+    });
+
+    $(".button_c").on('click', function () {
+        Spotless.send_event('clicked', click_start + 'button_c' + click_end, 'text/turtle');
+    });
+
+    Spotless.actions['tablet'] = {
+        'hide': function(cls) {
+            $("." + cls).hide();
+        },
+        'show': function(cls) {
+            $("." + cls).show();
+        },
+        'title': function(text) {
+            $('.card_title').text(text);
+        },
+        'main': function(text) {
+            $('.card_main').text(text);
+        },
+        'support': function(text) {
+            $('.card_support').text(text);
+        },
+        'button_a_text': function(text) {
+            $('.button_a').text(text);
+        },
+        'button_b_text': function(text) {
+            $('.button_b').text(text);
+        },
+        'button_c_text': function(text) {
+            $('.button_c').text(text);
+        }
+    };
+
+    Spotless.connect();
+</script>
+
+<!--<script>-->
+<!--    Spotless.actions.show = function(html) {-->
+<!--        $('.show-html').html(html);-->
+<!--    };-->
+
+<!--    Spotless.events.started_listening = function() {-->
+<!--        $('.start-button').hide();-->
+<!--        $('.show-listening').html("I am listening...");-->
+<!--    };-->
+
+<!--    Spotless.events.stopped_listening = function() {-->
+<!--        $('.start-button').show();-->
+<!--        $('.show-listening').html("Press the button below to start a conversation with me.");-->
+<!--    };-->
+
+<!--    Spotless.connect();-->
+
+<!--    $('.start-button').on('click', function (event) {-->
+<!--        event.preventDefault();-->
+<!--        Spotless.send({ 'action': 'conversation_start', 'args': [] })-->
+<!--    });-->
+
+<!--    Spotless.onshow = function (html) { $('.show-html').html(html); }-->
+<!--</script>-->
+
 </body>
 </html>

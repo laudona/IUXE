@@ -15,6 +15,7 @@ Spotless.connect = function () {
     Spotless.send_event = function (event, data, dataType) {
         var message = { type: 'event', event:event, data:data, dataType:dataType }
         Spotless.send(message);
+        console.log("sending tablet");
     };
 
     Spotless.send = function (data) {
