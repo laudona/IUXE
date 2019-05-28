@@ -32,6 +32,7 @@ Spotless.connect = function () {
 
     socket.onopen = function (event) {
         console.log("Connection established.");
+        socket.send(JSON.stringify({ type: 'login', name:'tro', code:'fhJV40NPPLBX4lPr2gRj' }));
         Spotless.send({ name: 'webpage', role:'server-commands'});
     };
 
