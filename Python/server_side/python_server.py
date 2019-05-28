@@ -30,7 +30,7 @@ class Server:
         else:
             return "no active player"
 
-    def test(self):
+    def stop(self):
         print "pepper is detecting speech"
         return 'lol'
 
