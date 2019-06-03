@@ -9,6 +9,7 @@ Spotless.connect = function () {
     this.port = '3001';
     this.path = '';
     this.url = this.protocol + '://' + this.host + ':' + this.port +'/' + this.path;
+    this.base ='http://www.tudelft.nl/ewi/iuxe#';
 
     const socket = new WebSocket(this.url);
 
@@ -24,8 +25,29 @@ Spotless.connect = function () {
 
     var handle_actions = function(triples) {
         var i = 0, triple;
+        console.log(triples.length);
+        console.log(typeof (triples));
+        console.log(triples[0]['http://www.tudelft.nl/ewi/iuxe#artist_info'][0]['@id']);
+        info = triples[0]['http://www.tudelft.nl/ewi/iuxe#artist_info'][0]['@id'].split("#");
         for (i = 0; i < triples.length; i++) {
             triple = triples[i];
+            subject = (triples['@id'].split('#'))[2];
+            predicate = "artist_info";
+            object = info[1];
+            if (Spotless.actions[subject] && Spotless.actions[subject][predicate]) {
+                Spotless.actions[subject][predicate](object);
+            } else {
+                console.log('No action defined for ' + subject + "." + predicate + "( " + object + " ).");
+            }
+        }
+    };
+
+    var handle_events = function(triples) {
+        console.log('No action defined for event ', triples);
+        var i = 0, triple;
+        for (i = 0; i < triples.length; i++) {
+            triple = triples[i];
+            console.log(triple);
             subject = triple[0];
             predicate = triple[1];
             object = triple[2];
@@ -35,10 +57,6 @@ Spotless.connect = function () {
                 console.log('No action defined for ' + subject + "." + predicate + "( " + object + " ).");
             }
         }
-    };
-
-    var handle_events = function(triples) {
-        console.log('No action defined for event ', triples);
     };
 
     socket.onmessage = function (event) {

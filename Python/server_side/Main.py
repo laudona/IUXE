@@ -10,6 +10,7 @@ import python_server as Server
 import CardGenerator as Generator
 import requests
 import json
+import client
 
 class Main:
 
@@ -31,6 +32,8 @@ class Main:
         token = util.prompt_for_user_token(username, scope, client_id='e7c8d90f7d5246089e8e0e1f6274f07b',
                                            client_secret='9dfb0745d7304355b40d8e373d19c1b6',
                                            redirect_uri='http://localhost/')
+
+
 
         if token:
             spotify = spotipy.Spotify(auth=token)
@@ -54,6 +57,7 @@ class Main:
 
         else:
             print "Can't get token for", username
+
 
 if __name__ == "__main__":
     main = Main()

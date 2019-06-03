@@ -9,16 +9,25 @@
 
 <div class="center-div">
     <h1>Pepper Page</h1>
-    <form action="/music" method="post">
+    <form action="/t" method="post">
         <input name="amount" type="number" min="1" max="5" placeholder="amount of tracks" required>
-        <input type="submit" value="Click here to start the music">
+        <input type="submit" class="start_button" value="Click here to start the music">
     </form>
-    <form action="/finish" method="post">
-        <input type="submit" value="Click here to finish the song">
+    <form action="/t" method="post">
+        <input type="submit" class="finish_button" value="Click here to finish the song">
     </form>
-    <button class="btn btn-lg btn-primary btn-block button_a">A. Elvis Presley</button>
-    <button class="btn btn-lg btn-primary btn-block button_b">B. Roy Orbison</button>
-    <button class="btn btn-lg btn-primary btn-block button_c">C. The Monkees</button>
+    <form action="/t" method="post">
+        <input type="submit" class="stop_button" value="Click here to stop the player">
+    </form>
+    <button class="rules_button">Rules</button>
+</div>
+<div class="info">
+    <button class="artist_info">
+
+    </button>
+    <label class="song_info">dsg stgbrtd
+
+    </label>
 </div>
 
 <script src="client.js"></script>
@@ -34,17 +43,20 @@
     var click_start = '<http://www.tudelft.nl/ewi/iuxe#tablet> <http://www.tudelft.nl/ewi/iuxe#clicked> <http://www.tudelft.nl/ewi/iuxe#';
     var click_end = '> . ';
 
-    $(".button_a").on('click', function () {
-        console.log("button_a")
-        Spotless.send_event('clicked', click_start + 'button_a' + click_end, 'text/turtle');
+    $(".start_button").on('click', function () {
+        Spotless.send_event('clicked', click_start + 'start_button' + click_end, 'text/turtle');
     });
 
-    $(".button_b").on('click', function () {
-        Spotless.send_event('clicked', click_start + 'button_b' + click_end, 'text/turtle');
+    $(".finish_button").on('click', function () {
+        Spotless.send_event('clicked', click_start + 'finish_button' + click_end, 'text/turtle');
     });
 
-    $(".button_c").on('click', function () {
-        Spotless.send_event('clicked', click_start + 'button_c' + click_end, 'text/turtle');
+    $(".stop_button").on('click', function () {
+        Spotless.send_event('clicked', click_start + 'stop_button' + click_end, 'text/turtle');
+    });
+
+    $(".rules_button").on('click', function () {
+        Spotless.send_event('clicked', click_start + 'rules_button' + click_end, 'text/turtle');
     });
 
     Spotless.actions['tablet'] = {
@@ -63,8 +75,8 @@
         'support': function(text) {
             $('.card_support').text(text);
         },
-        'button_a_text': function(text) {
-            $('.button_a').text(text);
+        'artist_info': function(text) {
+            $('.song_info').innerHTML("hello");
         },
         'button_b_text': function(text) {
             $('.button_b').text(text);

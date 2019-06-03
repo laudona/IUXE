@@ -126,16 +126,17 @@ class Audio:
     def on_word_recognized(self, args):
         [word, confidence] = args
         print("Detected '{0}' with a confidence of {1}.".format(word, confidence))
-        
-        data = """
-        <{0}pepper> <{0}heard> <{0}word_{1}> .
-        <{0}word_{1}> <{0}word> "{2}" .
-        <{0}word_{1}> <{0}confidence> "{3}"^^xsd:decimal .
-        """.format(BASE, self.counter, word, confidence)
 
-        self.counter += 1
+        if confidence > 0.5:
+            data = """
+            <{0}pepper> <{0}heard> <{0}word_{1}> .
+            <{0}word_{1}> <{0}word> "{2}" .
+            <{0}word_{1}> <{0}confidence> "{3}"^^xsd:decimal .
+            """.format(BASE, self.counter, word, confidence)
 
-        self.send("heard", data, "text/turtle")
+            self.counter += 1
+
+            self.send("heard", data, "text/turtle")
 
     def on_speech_detected(self, args):
         if args == 1:

@@ -40,6 +40,9 @@ class Interface {
                 //for some reason this doesn't work: this.send_message_to_client({action: 'say',data: 'hello',dataType: 'text/turtle'});
             });
         }
+        else if(eventName == 'spotify.event.info'){
+            console.log(data);
+        }
         this.router.emit(eventName, { event, data, dataType });
     }
 
@@ -51,6 +54,7 @@ class Interface {
             actionName = `${this.role}.action.${action}`;
         }
         console.log(`Client '${this.name}' emits ${actionName} action.`);
+
         this.router.emit(actionName, { action, data, dataType });
         // console.log(`Clients of type '${this.type}' are not allowed to send actions.`);
     }

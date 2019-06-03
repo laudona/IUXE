@@ -17,7 +17,7 @@ module.exports = function ({port, webDirectory}, ip_address, router, spotify) {
     app.use(mount('/spotify', spotify));
 
 
-    app.use(route.post('/music',
+    app.use(route.post('/t',
         function (ctx, next) {
         console.log("test123test");
         client.invoke("start","2",function(error, res, more) {

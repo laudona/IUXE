@@ -19,6 +19,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     server_url = "ws://{0}:{1}/".format(args.server_ip, args.server_port)
+    print server_url
 
     try:
         print("Connecting to nao-qi at tcp://{0}:{1}/ ...".format(args.pepper_ip, args.pepper_port))

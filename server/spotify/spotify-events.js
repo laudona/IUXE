@@ -165,7 +165,7 @@ const bind = function (client, router) {
         // Nothing maybe? ...
       };
 
-    handler = router.login(router.dummyWs('spotify', received_action, received_event), 'siku', 'omPfnB0MH3nhMrOEwLN7');
+    handler = router.login(router.dummyWs('spotify', received_action, received_event), '', '');
 }
 
 module.exports = bind;

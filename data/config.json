@@ -5,7 +5,7 @@
       "code": "Wm7Wi3MoSlwc9HpZOp5s",
       "role": "user",
       "preferedDataType": "application/ld+json",
-      "subscribes": [ "user.action.*" ],
+      "subscribes": [ "spotify.action.*" ],
       "permissions": [ "event" ]
     },
     {
@@ -58,7 +58,7 @@
       "role": "spotify",
       "type": "interface",
       "preferedDataType": "raw",
-      "subscribes": [ "spotify.action.*" ],
+      "subscribes": [ " " ],
       "permissions": [ "event" ]
     },
     {
