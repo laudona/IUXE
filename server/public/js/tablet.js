@@ -28,10 +28,11 @@ Spotless.connect = function () {
         console.log(triples.length);
         console.log(typeof (triples));
         console.log(triples[0]['http://www.tudelft.nl/ewi/iuxe#artist_info'][0]['@id']);
+        console.log(triples[0]['@id'])
         info = triples[0]['http://www.tudelft.nl/ewi/iuxe#artist_info'][0]['@id'].split("#");
         for (i = 0; i < triples.length; i++) {
             triple = triples[i];
-            subject = (triples['@id'].split('#'))[2];
+            subject = "tablet";
             predicate = "artist_info";
             object = info[1];
             if (Spotless.actions[subject] && Spotless.actions[subject][predicate]) {

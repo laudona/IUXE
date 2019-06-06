@@ -37,7 +37,6 @@ class Player(threading.Thread):
                 event.clear()
                 time.sleep(remainder)
             self.spotify.pause_playback(self.device)
-            time.sleep(5)
             info = (track[0] + ":" + track[1]).replace(" ", "_")
             print info
             data = """
@@ -47,6 +46,15 @@ class Player(threading.Thread):
                     iuxe:spotify iuxe:info iuxe:{0} .
                     """.format(info)
             self.ws.send_json({"type":"event", "event": "info", "data": data, "dataType": "text/turtle"})
+            time.sleep(5)
+
+        data = """
+                @prefix iuxe:  <http://www.tudelft.nl/ewi/iuxe#> .
+                @prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
+
+                iuxe:spotify iuxe:end_game iuxe:end .
+                """
+        self.ws.send_json({"type":"event", "event": "end_game", "data": data, "dataType": "text/turtle"})
         self.ws.close()
 
     def finish(self):

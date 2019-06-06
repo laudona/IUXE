@@ -50,7 +50,14 @@ class QiApplication:
         self.app.run()
 
     def say(self, data):
-        text = data[0]['http://www.tudelft.nl/ewi/iuxe#say'][0]['@value']
+        print data
+        try:
+            text = data[0]['http://www.tudelft.nl/ewi/iuxe#say'][0]['@value']
+        except:
+            self.audio.text_to_speech_service.setLanguage('English')
+            text = data[0]['http://www.tudelft.nl/ewi/iuxe#say'][0]['@id']
+            text=text.split('#')[1]
+            text = text.replace("_", " ")
         self.audio.say(text)
 
     def listen(self, data):

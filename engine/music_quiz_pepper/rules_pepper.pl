@@ -61,6 +61,11 @@ rule(rules_01,
     intermediate(user-clicked-rules) then
         intermediate(quiz-start-rules)).
 
+rule(rules_02,
+    intermediate(quiz-finished-game) and
+    intermediate(user-clicked-rules) then
+        intermediate(quiz-start-rules)).
+
 
 %%
 %% Rules start game
@@ -71,17 +76,11 @@ rule(start_game_01,
     intermediate(user-clicked-start) then
         intermediate(quiz-start-game) ).
 
+
 rule(start_game_02,
     intermediate(quiz-start-game) then
         action(pepper-say-"Let's start the game!")).
 
-rule(start_game_02,
-    intermediate(quiz-start-game) then
-        action(spotify-start-song)).
-
-rule(trial,
-    intermediate(quiz-fiished-setup) then
-    action(pepper-say-"hello")).
 %%
 %% Handle tablet inputs
 %%
@@ -109,6 +108,16 @@ rule(tablet_05,
 rule(tablet_04,
     event(spotify-info-Artistinfo) then
         action(tablet-artist_info-Artistinfo)).
+
+rule(artist,
+    event(spotify-info-Artistinfo) then
+          action(pepper-say-Artistinfo)).
+
+rule(end_game,
+    event(spotify-end_game-Data) then
+        action(pepper-say-"Thanks for playing")).
+
+
 
 %%
 %% Chain topics when previous topic finsihed.
@@ -142,10 +151,6 @@ rule(setup_17,
     intermediate(quiz-setup-Topic) then
         unbelieve(quiz-state-OtherState)).
 
-rule(setup_answered,
-    intermediate(quiz-setup-Topic) then
-        unbelieve(user-answered-topic)).
-
 %%
 %% Finish setup
 %%
@@ -157,11 +162,27 @@ rule(setup_20,
     believe(quiz-state-rules) then
         intermediate(quiz-finished-rules)).
 
-rule(setup_21,
-    intermediate(user-clicked-stop) or
-    event(spotify-end-game) and
-    believe(quiz-state-game) then
+
+
+rule(setup_23,
+    intermediate(user-clicked-stop) then
         intermediate(quiz-finished-game)).
+
+rule(setup_22,
+    event(spotify-end_game-Data) then
+        intermediate(quiz-finished-game)).
+
+rule(test_1,
+intermediate(quiz-can_finish-game) then
+action(pepper-say-"almost finished")).
+
+rule(test_2,
+intermediate(quiz-finished-game) then
+action(pepper-say-"finished for sure")).
+
+%% rule(setup_21,
+%%    believe(quiz-state-game) then
+%%        intermediate(quiz-can_finish-game)).
 
 %%
 %% General pepper behavior
