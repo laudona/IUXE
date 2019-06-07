@@ -38,8 +38,8 @@ module.exports = function ({port, webDirectory}, ip_address, router, spotify) {
 
     app.use(route.post('/stop',
         function (ctx, next) {
-             client.invoke("finish", function(error, res, more) {
-                console.log("lets finish the song");
+             client.invoke("stop", function(error, res, more) {
+                console.log("lets stop the player");
             });
             ctx.redirect('public/js/tablet.html');
         }));

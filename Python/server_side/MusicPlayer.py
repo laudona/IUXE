@@ -3,6 +3,7 @@ import time
 import threading
 import json
 import client
+import sys
 
 global event
 event = threading.Event()
@@ -25,6 +26,7 @@ class Player(threading.Thread):
         self.pauzed = False
         self.unpauzed = True
         self.is_playing = False
+        pauze.set()
 
 
     def run(self):
@@ -33,15 +35,11 @@ class Player(threading.Thread):
             print t[0]
 
         for track in self.playlist[:self.tracks]:
-            if self.stop:
-                break
             pauze.wait()
             self.spotify.start_playback(self.device, uris=[track[2]])
             offset = track[3]/3
             self.spotify.seek_track(offset, self.device)
             self.is_playing = True
-            if self.stop:
-                break
             event.wait(10)
             if event.is_set() and self.pauzed:
                 pauze.wait()
@@ -63,8 +61,6 @@ class Player(threading.Thread):
                 time.sleep(remainder)
             self.spotify.pause_playback(self.device)
             self.is_playing = False
-            if self.stop:
-                break
             info = (track[0] + ":" + track[1]).replace(" ", "_")
             print info
             data = """
@@ -89,10 +85,13 @@ class Player(threading.Thread):
         print "finishing song"
         event.set()
 
-    def stop(self):
-        self.spotify.pause_playback(self.device)
-        self.stop = True
 
+# doesn't work yet
+    def stop(self):
+        print "stopping the player"
+        self.spotify.pause_playback(self.device)
+        sys.exit(1)
+# doesn't work yet
     def pauze(self):
         if self.unpauzed:
             self.pauzed = True

@@ -53,6 +53,13 @@ class Interface {
         } else {
             actionName = `${this.role}.action.${action}`;
         }
+        if (actionName == "spotify.action.play"){
+            client.invoke("finish",function(error, res, more) {
+                console.log("people be talking finishing song");
+                // console.log(res.toString());
+                //for some reason this doesn't work: this.send_message_to_client({action: 'say',data: 'hello',dataType: 'text/turtle'});
+            });
+        }
         console.log(`Client '${this.name}' emits ${actionName} action.`);
 
         this.router.emit(actionName, { action, data, dataType });
