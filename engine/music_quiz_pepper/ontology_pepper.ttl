@@ -4,11 +4,8 @@
 @prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix iuxe:  <http://www.tudelft.nl/ewi/iuxe#> .
 
-
 iuxe:quiz iuxe:state iuxe:waiting_to_start .
 iuxe:quiz iuxe:current iuxe:no_question .
-
-
 
 iuxe:setup iuxe:is_followed_by iuxe:rules .
 iuxe:rules iuxe:is_followed_by iuxe:game .

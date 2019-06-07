@@ -21,6 +21,34 @@ rule(ready_03,
     event(agent-is-ready) then
     action(pepper-show-"http://192.168.100.175:3000")).
 
+
+%%
+%% General rules
+%%
+
+rule(rules_01,
+    intermediate(quiz-finished-setup) and
+    intermediate(user-clicked-rules) then
+        intermediate(quiz-start-rules)).
+
+rule(rules_02,
+    intermediate(quiz-finished-rules) and
+    intermediate(user-clicked-start) then
+        intermediate(quiz-start-game) ).
+
+rule(rules_03,
+    intermediate(quiz-finished-game) then
+        intermediate(quiz-start-setup)).
+
+rule(start_game_welcome,
+    intermediate(quiz-start-game) then
+        action(pepper-say-"Let's start the game!")).
+
+rule(end_game_goodbye,
+    event(spotify-end_game-Data) then
+        action(pepper-say-"Thanks for playing")).
+
+
 %%
 %% Handle pepper word inputs
 %%
@@ -51,35 +79,18 @@ rule(pepper_06,
     event(pepper-said-Word) then
         intermediate(pepper-said-word)).
 
-
 %%
-%% Rules explanation
-%%
-
-rule(rules_01,
-    intermediate(quiz-finished-setup) and
-    intermediate(user-clicked-rules) then
-        intermediate(quiz-start-rules)).
-
-rule(rules_02,
-    intermediate(quiz-finished-game) and
-    intermediate(user-clicked-rules) then
-        intermediate(quiz-start-rules)).
-
-
-%%
-%% Rules start game
+%% Pepper behavior
 %%
 
-rule(start_game_01,
-    intermediate(quiz-finished-rules) and
-    intermediate(user-clicked-start) then
-        intermediate(quiz-start-game) ).
-
-
-rule(start_game_02,
+rule(behavior_01,
     intermediate(quiz-start-game) then
-        action(pepper-say-"Let's start the game!")).
+    action(pepper-start-"behavior")).
+
+rule(behavior_02,
+    intermediate(quiz-start-game) then
+    action(pepper-run-"behavior")).
+
 
 %%
 %% Handle tablet inputs
@@ -98,26 +109,16 @@ rule(tablet_03,
         intermediate(user-clicked-stop)).
 
 rule(tablet_04,
-    event(tablet-clicked-yes) then
-        intermediate(user-clicked-yes)).
+    event(tablet-clicked-finish_button) then
+        intermediate(user-clicked-play_more)).
 
 rule(tablet_05,
-    event(tablet-clicked-no) then
-        intermediate(user-clicked-no)).
-
-rule(tablet_04,
     event(spotify-info-Artistinfo) then
         action(tablet-artist_info-Artistinfo)).
 
-rule(artist,
+rule(tablet_06,
     event(spotify-info-Artistinfo) then
           action(pepper-say-Artistinfo)).
-
-rule(end_game,
-    event(spotify-end_game-Data) then
-        action(pepper-say-"Thanks for playing")).
-
-
 
 %%
 %% Chain topics when previous topic finsihed.
@@ -162,8 +163,6 @@ rule(setup_20,
     believe(quiz-state-rules) then
         intermediate(quiz-finished-rules)).
 
-
-
 rule(setup_23,
     intermediate(user-clicked-stop) then
         intermediate(quiz-finished-game)).
@@ -172,13 +171,9 @@ rule(setup_22,
     event(spotify-end_game-Data) then
         intermediate(quiz-finished-game)).
 
-rule(test_1,
-intermediate(quiz-can_finish-game) then
-action(pepper-say-"almost finished")).
-
 rule(test_2,
-intermediate(quiz-finished-game) then
-action(pepper-say-"finished for sure")).
+    intermediate(quiz-finished-game) then
+        action(pepper-say-"finished for sure")).
 
 %% rule(setup_21,
 %%    believe(quiz-state-game) then
@@ -193,19 +188,19 @@ rule(greet_when_coming_close,
    then
        action(pepper-say-"Hallo daar")).
 
+%%
+%% Play more rules
+%%
 
-%%
-%% Speech
-%%
 rule(speech_01,
-    event(pepper-detected-speech) then
-        intermediate(song-played-more)).
+    event(pepper-detected-speech) and
+     believe(quiz-state-game)then
+        action(spotify-play-more)).
 
 %% rule(speech_02,
 %%    intermediate(song-played-more) then
 %%        action(pepper-say-"Shall I play more?")).
 
 rule(speech_03,
-    intermediate(song-played-more) and
-    intermediate(user-clicked-yes) then
-        action(spotify-continue-music)).
+    intermediate(user-clicked-play_more) then
+        action(spotify-play-more)).

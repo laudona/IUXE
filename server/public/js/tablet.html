@@ -3,41 +3,38 @@
 <head>
     <title>Pepper Page</title>
     <link rel='stylesheet' href='style.css' />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
 <body>
 
-<div class="center-div">
-    <h1>Pepper Page</h1>
-    <form action="/t" method="post">
-        <input name="amount" type="number" min="1" max="5" placeholder="amount of tracks" required>
-        <input type="submit" class="start_button" value="Click here to start the music">
+<div class="container-fluid">
+    <div class="container"><h1 class="mx-auto">PEPPER ROBOT for BINGO!</h1></div>
+    <form action="/music" method="post">
+
+        <div class="form-group">
+        <label>Select the amount of songs:</label>
+        <input name="amount" type="number" min="1" max="5" placeholder="amount of tracks" classs="form-control-number" style="height:50px;font-size:14pt" required>
+        <button type="submit" class="start_button btn btn-primary btn-lg btn-block py-3 my-2" value="">Click here to start the music</button>
+        </div>
+
+    </form>
+    <form action="/finish" method="post">
+        <button type="submit" class="finish_button btn btn-primary btn-lg btn-block py-3 my-2" value="">Click here to finish the song</button>
     </form>
     <form action="/t" method="post">
-        <input type="submit" class="finish_button" value="Click here to finish the song">
+        <button type="submit" class="stop_button btn btn-primary btn-lg btn-block py-3 my-2" value="">Click here to stop the game</button>
     </form>
-    <form action="/t" method="post">
-        <input type="submit" class="stop_button" value="Click here to stop the player">
-    </form>
-    <button class="rules_button">Rules</button>
+    <button class="rules_button btn btn-primary btn-lg btn-block py-3 my-2">Click here to explain the rules</button>
 </div>
-<div class="info">
-    <button class="artist_info">
-
-    </button>
-    <label class="song_info">dsg stgbrtd
-
-    </label>
+<div class="info container-fluid">
+    <label class="song_info" style="font-size: 80px"></label>
 </div>
 
 <script src="client.js"></script>
 <script src="tablet.js"></script>
 
 <script>
-
-    var xsd_integer = 'http://www.w3.org/2001/XMLSchema#nteger';
-    var xsd_decimal = 'http://www.w3.org/2001/XMLSchema#decimal';
-    var xsd_boolean = 'http://www.w3.org/2001/XMLSchema#boolean';
     var base = 'http://www.tudelft.nl/ewi/iuxe#';
 
     var click_start = '<http://www.tudelft.nl/ewi/iuxe#tablet> <http://www.tudelft.nl/ewi/iuxe#clicked> <http://www.tudelft.nl/ewi/iuxe#';
@@ -66,53 +63,12 @@
         'show': function(cls) {
             $("." + cls).show();
         },
-        'title': function(text) {
-            $('.card_title').text(text);
-        },
-        'main': function(text) {
-            $('.card_main').text(text);
-        },
-        'support': function(text) {
-            $('.card_support').text(text);
-        },
         'artist_info': function(text) {
             $('.song_info').text(text);
-        },
-        'button_b_text': function(text) {
-            $('.button_b').text(text);
-        },
-        'button_c_text': function(text) {
-            $('.button_c').text(text);
         }
     };
 
     Spotless.connect();
 </script>
-
-<!--<script>-->
-<!--    Spotless.actions.show = function(html) {-->
-<!--        $('.show-html').html(html);-->
-<!--    };-->
-
-<!--    Spotless.events.started_listening = function() {-->
-<!--        $('.start-button').hide();-->
-<!--        $('.show-listening').html("I am listening...");-->
-<!--    };-->
-
-<!--    Spotless.events.stopped_listening = function() {-->
-<!--        $('.start-button').show();-->
-<!--        $('.show-listening').html("Press the button below to start a conversation with me.");-->
-<!--    };-->
-
-<!--    Spotless.connect();-->
-
-<!--    $('.start-button').on('click', function (event) {-->
-<!--        event.preventDefault();-->
-<!--        Spotless.send({ 'action': 'conversation_start', 'args': [] })-->
-<!--    });-->
-
-<!--    Spotless.onshow = function (html) { $('.show-html').html(html); }-->
-<!--</script>-->
-
 </body>
 </html>

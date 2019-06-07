@@ -79,3 +79,11 @@ class QiApplication:
     def show(self, data):
         text = data[0]['http://www.tudelft.nl/ewi/iuxe#show'][0]['@value']
         self.tablet.show(text)
+
+    def run(self, data):
+        text = data[0]['http://www.tudelft.nl/ewi/iuxe#run'][0]['@value']
+        self.behavior.run(text)
+
+    def start(self, data):
+        text = data[0]['http://www.tudelft.nl/ewi/iuxe#start'][0]['@value']
+        self.behavior.start(text)
