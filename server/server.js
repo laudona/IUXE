@@ -36,9 +36,11 @@ module.exports = function ({port, webDirectory}, ip_address, router, spotify) {
             ctx.redirect('public/js/tablet.html');
         }));
 
-    app.use(route.post('/t',
+    app.use(route.post('/stop',
         function (ctx, next) {
-            console.log("this button doesn't do shit");
+             client.invoke("finish", function(error, res, more) {
+                console.log("lets finish the song");
+            });
             ctx.redirect('public/js/tablet.html');
         }));
 
