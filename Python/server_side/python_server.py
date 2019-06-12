@@ -16,23 +16,32 @@ class Server:
             print "initing player"
             player = Player.Player(self.username, self.spotify, self.device, self.playlist, int(amount))
             self.thread = player
-            player.start()
+            self.thread.start()
             return "started player"
         else:
             print "player is already running"
             return "player is already running"
 
-
     def finish(self):
+        print "trying to finish song"
         if self.thread.is_alive():
             self.thread.finish()
             return "finish song"
         else:
             return "no active player"
 
-    def stop(self):
+    def playerstop(self):
+        print "trying to stop player"
         if self.thread.is_alive():
-            self.thread.stop()
+            self.thread.stopplayer()
+            return "stop player"
+        else:
+            return "no active player"
+
+    def pause(self):
+        print "trying to pause player"
+        if self.thread.is_alive():
+            self.thread.pauseplayer()
             return "stop player"
         else:
             return "no active player"

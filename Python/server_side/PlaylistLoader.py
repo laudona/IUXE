@@ -22,8 +22,9 @@ class Loader:
         for item2 in list:
             track = item2['track']
             # print track['name'] + ' - ' + track['artists'][0]['name']
-            playlist.append((track['name'],track['artists'][0]['name'],track['uri'],track['duration_ms']))
-        # print playlist
+            name = self.namefilter(track['name'])
+            playlist.append((name,track['artists'][0]['name'],track['uri'],track['duration_ms']))
+        print playlist
         return playlist
 
         # spotify.pause_playback('3c09f2803d994caea6e66ed276e55669a41963d8')
@@ -39,3 +40,13 @@ class Loader:
         # else:
         #     spotify.start_playback(device2)
         # print results
+
+
+    def namefilter(self, name):
+        if "(" in name:
+            temp = name.replace("(", " ")
+            temp2 = temp.replace(")", " ")
+            name = temp2.replace(".", " ")
+        if "-" in name:
+            name = name.replace(" -", "")
+        return name

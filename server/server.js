@@ -23,7 +23,7 @@ module.exports = function ({port, webDirectory}, ip_address, router, spotify) {
         function (ctx, next) {
             var amount = ctx.request.body.amount;
             client.invoke("start",amount,function(error, res, more) {
-                console.log("lets go");
+                console.log("---- LETS GO ----");
             });
             ctx.redirect('public/js/tablet.html');
         }));
@@ -31,15 +31,23 @@ module.exports = function ({port, webDirectory}, ip_address, router, spotify) {
     app.use(route.post('/finish',
         function (ctx, next) {
             client.invoke("finish", function(error, res, more) {
-                console.log("lets finish the song");
+                console.log("---- FINISHING THE SONG ----");
+            });
+            ctx.redirect('public/js/tablet.html');
+        }));
+
+    app.use(route.post('/pause',
+        function (ctx, next) {
+            client.invoke("pause", function(error, res, more) {
+            console.log("----   PAUSING THE GAME ----");
             });
             ctx.redirect('public/js/tablet.html');
         }));
 
     app.use(route.post('/stop',
         function (ctx, next) {
-             client.invoke("stop", function(error, res, more) {
-                console.log("lets stop the player");
+             client.invoke("playerstop", function(error, res, more) {
+                console.log("---- STOPPING THE PLAYER -----");
             });
             ctx.redirect('public/js/tablet.html');
         }));
