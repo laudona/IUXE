@@ -11,6 +11,8 @@ global pause
 pause = threading.Event()
 global stop
 stop = threading.Event()
+global skip
+skip = threading.Event()
 
 
 class Player(threading.Thread):
@@ -60,7 +62,8 @@ class Player(threading.Thread):
                         playback = self.spotify.current_playback()
                         remainder = (track[3] - playback['progress_ms'])/1000
                         event.clear()
-                        time.sleep(remainder)
+                        skip.wait(remainder)
+                        skip.clear()
                     self.paused = False
 
                 elif event.is_set():
@@ -70,7 +73,8 @@ class Player(threading.Thread):
                         playback = self.spotify.current_playback()
                         remainder = (track[3] - playback['progress_ms'])/1000
                         event.clear()
-                        time.sleep(remainder)
+                        skip.wait(remainder)
+                        skip.clear()
                 self.spotify.pause_playback(self.device)
                 self.is_playing = False
                 info = (track[0] + ":" + track[1]).replace(" ", "_")
@@ -106,7 +110,7 @@ class Player(threading.Thread):
         self.stopp = True
         event.set()
 
-# doesn't work yet
+# works partially
     def pauseplayer(self):
         if self.unpaused:
             self.spotify.pause_playback(self.device)
@@ -119,3 +123,6 @@ class Player(threading.Thread):
             self.paused = False
             self.unpaused = True
             pause.set()
+
+    def skip(self):
+        skip.set()

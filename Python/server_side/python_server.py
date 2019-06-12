@@ -46,6 +46,13 @@ class Server:
         else:
             return "no active player"
 
+    def skip(self):
+        print "trying to finish song"
+        if self.thread.is_alive():
+            self.thread.skip()
+            return "skipping song"
+        else:
+            return "no active player"
 # s = zerorpc.Server(HelloRPC())
 # s.bind("tcp://0.0.0.0:4242")
 # s.run()
