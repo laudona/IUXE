@@ -1,5 +1,5 @@
 import random, sys
-import pdfkit
+#import pdfkit
 # check for the right # of args
 #if len(sys.argv) != 4:
  #   print "USAGE: " + sys.argv[0], " [file of terms] [output file] [# of cards]"

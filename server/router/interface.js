@@ -53,9 +53,16 @@ class Interface {
         } else {
             actionName = `${this.role}.action.${action}`;
         }
-        if (actionName == "spotify.action.play"){
-            client.invoke("finish",function(error, res, more) {
+        if (actionName == "pino.action.play") {
+            client.invoke("finish", function (error, res, more) {
                 console.log("people be talking finishing song");
+                // console.log(res.toString());
+                //for some reason this doesn't work: this.send_message_to_client({action: 'say',data: 'hello',dataType: 'text/turtle'});
+            });
+        }
+        else if (actionName == "pino.action.skip"){
+            client.invoke("skip",function(error, res, more) {
+                console.log("skipping the current song");
                 // console.log(res.toString());
                 //for some reason this doesn't work: this.send_message_to_client({action: 'say',data: 'hello',dataType: 'text/turtle'});
             });

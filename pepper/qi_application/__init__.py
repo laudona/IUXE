@@ -50,6 +50,7 @@ class QiApplication:
         self.app.run()
 
     def say(self, data):
+        self.audio.text_to_speech_service.setLanguage('Dutch')
         print data
         try:
             text = data[0]['http://www.tudelft.nl/ewi/iuxe#say'][0]['@value']

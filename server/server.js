@@ -52,13 +52,13 @@ module.exports = function ({port, webDirectory}, ip_address, router, spotify) {
             ctx.redirect('public/js/tablet.html');
         }));
 
-    app.use(route.post('/skip',
-        function (ctx, next) {
-             client.invoke("skip", function(error, res, more) {
-                console.log("---- SKIPPING THE SONG -----");
-            });
-            ctx.redirect('public/js/tablet.html');
-        }));
+    // app.use(route.post('/skip',
+    //     function (ctx, next) {
+    //          client.invoke("skip", function(error, res, more) {
+    //             console.log("---- SKIPPING THE SONG -----");
+    //         });
+    //         ctx.redirect('public/js/tablet.html');
+    //     }));
 
     app.use(route.get('/',
         async function (ctx) {

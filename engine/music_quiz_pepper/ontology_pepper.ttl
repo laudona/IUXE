@@ -23,7 +23,7 @@ iuxe:setup iuxe:type iuxe:setup .
 iuxe:rules iuxe:title "Muziek Bingo" .
 iuxe:rules iuxe:main "Zullen we een muziek spelletje spelen?" .
 iuxe:rules iuxe:support "Roep 'Beginnen' om een nieuw muziek quiz spelletje te starten." .
-iuxe:rules iuxe:say_during_setup "Mark the box with the artist of the song. Who has all the boxes marked, wins." .
+iuxe:rules iuxe:say_during_setup "Vink het vakje aan van de artiest en titel van het nummer dat zich afspeeld. Wie er 3 op rij heeft afgevinkt wint." .
 iuxe:rules iuxe:button_a_text "Beginnen" .
 iuxe:rules iuxe:show_page "http://192.168.0.152:3000/www/index.html" .
 iuxe:rules iuxe:answer iuxe:start .

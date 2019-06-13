@@ -63,7 +63,6 @@ class Player(threading.Thread):
                         remainder = (track[3] - playback['progress_ms'])/1000
                         interupt.clear()
                         skip.wait(remainder)
-
                     self.paused = False
 
                 elif interupt.is_set():

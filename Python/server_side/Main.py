@@ -7,7 +7,7 @@ import zerorpc
 import PlaylistLoader as Loader
 import python_server as Server
 
-import CardGenerator as Generator
+#import CardGenerator as Generator
 import requests
 import json
 import client
@@ -50,7 +50,7 @@ class Main:
                 deviceID = devices['devices'][0]['id']
             loader = Loader.Loader(username, spotify)
             playlist = loader.load('5gGIKJ3e0uuGr7e4I0TAnY')
-            self.createBingocards(playlist)
+            #self.createBingocards(playlist)
             pserver = Server.Server(username, spotify, deviceID, playlist)
             server = zerorpc.Server(pserver)
             print "binding server to: tcp://0.0.0.0:4242"

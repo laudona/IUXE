@@ -42,11 +42,11 @@ rule(rules_03,
 
 rule(start_game_welcome,
     intermediate(quiz-start-game) then
-        action(pepper-say-"Let's start the game!")).
+        action(pepper-say-"Laten we het spel starten!")).
 
 rule(end_game_goodbye,
     event(spotify-end_game-Data) then
-        action(pepper-say-"Thanks for playing")).
+        action(pepper-say-"Bedankt voor het meespelen")).
 
 
 %%
@@ -83,13 +83,13 @@ rule(pepper_06,
 %% Pepper behavior
 %%
 
-rule(behavior_01,
-    intermediate(quiz-start-game) then
-    action(pepper-start-"behavior")).
+%% rule(behavior_01,
+%%    intermediate(quiz-start-game) then
+%%    action(pepper-start-"behavior")).
 
-rule(behavior_02,
-    intermediate(quiz-start-game) then
-    action(pepper-run-"behavior")).
+%% rule(behavior_02,
+%%    intermediate(quiz-start-game) then
+%%    action(pepper-run-"behavior")).
 
 
 %%
@@ -109,8 +109,8 @@ rule(tablet_03,
         intermediate(user-clicked-stop)).
 
 rule(tablet_04,
-    event(tablet-clicked-finish_button) then
-        intermediate(user-clicked-play_more)).
+    event(tablet-clicked-skip_button) then
+        intermediate(user-clicked-skip)).
 
 rule(tablet_05,
     event(spotify-info-Artistinfo) then
@@ -119,6 +119,10 @@ rule(tablet_05,
 rule(tablet_06,
     event(spotify-info-Artistinfo) then
           action(pepper-say-Artistinfo)).
+
+rule(tablet_07,
+    intermediate(user-clicked-skip) then
+    action(pino-skip-song)).
 
 %%
 %% Chain topics when previous topic finsihed.
@@ -171,14 +175,6 @@ rule(setup_22,
     event(spotify-end_game-Data) then
         intermediate(quiz-finished-game)).
 
-rule(test_2,
-    intermediate(quiz-finished-game) then
-        action(pepper-say-"finished for sure")).
-
-%% rule(setup_21,
-%%    believe(quiz-state-game) then
-%%        intermediate(quiz-can_finish-game)).
-
 %%
 %% General pepper behavior
 %%
@@ -192,15 +188,11 @@ rule(greet_when_coming_close,
 %% Play more rules
 %%
 
-rule(speech_01,
-    event(pepper-detected-speech) and
-     believe(quiz-state-game)then
-        action(spotify-play-more)).
+%% rule(speech_01,
+%%    event(pepper-detected-speech) and
+%%    believe(quiz-state-game)then
+%%       action(pino-play-more)).
 
 %% rule(speech_02,
 %%    intermediate(song-played-more) then
 %%        action(pepper-say-"Shall I play more?")).
-
-rule(speech_03,
-    intermediate(user-clicked-play_more) then
-        action(spotify-play-more)).
