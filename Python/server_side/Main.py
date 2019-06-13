@@ -16,6 +16,7 @@ class Main:
 
     def __init__(self):
         self.target_device = True
+        self.user = "millen"#"laura"
 
     def run(self):
 
@@ -28,12 +29,14 @@ class Main:
         # print r.history.headers
         scope = 'user-read-recently-played user-read-currently-playing user-read-playback-state app-remote-control user-modify-playback-state streaming'# playlist-read-private'
         # username = 'fazzh49d3su4s342ivmxbb74m'
-        username = '1120296237'
-        token = util.prompt_for_user_token(username, scope, client_id='e7c8d90f7d5246089e8e0e1f6274f07b',
+        if self.user == "millen":
+            username = '1120296237'
+        elif self.user == "2":
+            username = '1193855'
+
+        token = util.prompt_for_user_token('1193855', scope, client_id='e7c8d90f7d5246089e8e0e1f6274f07b',
                                            client_secret='9dfb0745d7304355b40d8e373d19c1b6',
                                            redirect_uri='http://localhost/')
-
-
 
         if token:
             spotify = spotipy.Spotify(auth=token)

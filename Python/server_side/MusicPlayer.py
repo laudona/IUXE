@@ -5,8 +5,8 @@ import json
 import client
 import sys
 
-global event
-event = threading.Event()
+global interupt
+interupt = threading.Event()
 global pause
 pause = threading.Event()
 global stop
@@ -49,32 +49,32 @@ class Player(threading.Thread):
                 self.offset = track[3]/3
                 self.spotify.seek_track(self.offset, self.device)
                 self.is_playing = True
-                event.wait(10)
-                if event.is_set() and self.paused:
+                interupt.wait(10)
+                if interupt.is_set() and self.paused:
                     pause.wait()
                     playback = self.spotify.current_playback()
                     progress = (playback['progress_ms'] - self.offset)/1000
                     remainder = 10 - progress
                     print remainder
-                    event.clear()
-                    event.wait(remainder)
-                    if event.is_set():
+                    interupt.clear()
+                    interupt.wait(remainder)
+                    if interupt.is_set():
                         playback = self.spotify.current_playback()
                         remainder = (track[3] - playback['progress_ms'])/1000
-                        event.clear()
+                        interupt.clear()
                         skip.wait(remainder)
-                        skip.clear()
+
                     self.paused = False
 
-                elif event.is_set():
+                elif interupt.is_set():
                     if self.stopp:
                         stop.set()
                     else:
                         playback = self.spotify.current_playback()
                         remainder = (track[3] - playback['progress_ms'])/1000
-                        event.clear()
+                        interupt.clear()
                         skip.wait(remainder)
-                        skip.clear()
+                skip.clear()
                 self.spotify.pause_playback(self.device)
                 self.is_playing = False
                 info = (track[0] + ":" + track[1]).replace(" ", "_")
@@ -102,13 +102,13 @@ class Player(threading.Thread):
 
     def finish(self):
         print "finishing song"
-        event.set()
+        interupt.set()
 
     def stopplayer(self):
         print "stopping the player"
         self.spotify.pause_playback(self.device)
         self.stopp = True
-        event.set()
+        interupt.set()
 
 # works partially
     def pauseplayer(self):
@@ -117,7 +117,7 @@ class Player(threading.Thread):
             self.paused = True
             self.unpaused = False
             pause.clear()
-            event.set()
+            interupt.set()
         else:
             self.spotify.start_playback(self.device)
             self.paused = False

@@ -26,25 +26,25 @@ class Generator:
             "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">\n"
             "<title>Bingo Cards</title>\n"
             "<style type=\"text/css\">\n"
-            "\tbody { font-size: 20px; }\n"
+            "\tbody { font-size: 26px; }\n"
             "\ttable { margin: 40px auto; border-spacing: 2px; }\n"
             "\t.newpage { page-break-after:always; }\n"
-            "\ttr { height: 65px; }\n"
-            "\ttd { text-align: center; border: thin black solid; padding: 10px; width: 65px; }\n"
+            "\ttr { height: 100px; }\n"
+            "\ttd { text-align: center; border: thin black solid; padding: 10px; width: 100px; }\n"
             "</style>\n</head>\n<body>\n")
 
     # Generates an HTML table representation of the bingo card for terms
     def generateTable(self, terms, pagebreak = True):
-        ts = terms[:12] + ["Muziek Bingo"] + terms[12:24]
+        ts = terms[:9]#<-for 3x3, terms[:12] + ["Muziek Bingo"] + terms[12:24] for 5x5,
         if pagebreak:
             res = "<table class=\"newpage\">\n"
         else:
             res = "<table>\n"
         for i, term in enumerate(ts):
-            if i % 5 == 0:
+            if i % 3 == 0: #<- for 3x3, 5==0 for 5x5
                 res += "\t<tr>\n"
             res += "\t\t<td>" + term + "</td>\n"
-            if i % 5 == 4:
+            if i % 3 == 2: #<- for 3x3, 5==4 for 5x5
                 res += "\t</tr>\n"
         res += "</table>\n"
         return res
