@@ -6,6 +6,7 @@ import zerorpc
 
 import PlaylistLoader as Loader
 import python_server as Server
+import check_length as Checker
 
 #import CardGenerator as Generator
 import requests
@@ -53,6 +54,8 @@ class Main:
                 deviceID = devices['devices'][0]['id']
             loader = Loader.Loader(username, spotify)
             playlist = loader.load('5gGIKJ3e0uuGr7e4I0TAnY')
+            checker = Checker.Checker()
+            print checker.check(playlist, 10)
             #self.createBingocards(playlist)
             pserver = Server.Server(username, spotify, deviceID, playlist)
             server = zerorpc.Server(pserver)
