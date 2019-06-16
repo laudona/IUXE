@@ -10,11 +10,10 @@ class Server:
         self.playlist = playlist
         self.thread = ""
 
-    def start(self, amount):
-        print amount
+    def start(self):
         if self.thread == "" or not self.thread.is_alive():
             print "initing player"
-            player = Player.Player(self.username, self.spotify, self.device, self.playlist, int(amount))
+            player = Player.Player(self.username, self.spotify, self.device, self.playlist,)
             self.thread = player
             self.thread.start()
             return "started player"

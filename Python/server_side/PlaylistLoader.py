@@ -24,22 +24,8 @@ class Loader:
             # print track['name'] + ' - ' + track['artists'][0]['name']
             name = self.namefilter(track['name'])
             playlist.append((name,track['artists'][0]['name'],track['uri'],track['duration_ms']))
-        print playlist
+        #print playlist
         return playlist
-
-        # spotify.pause_playback('3c09f2803d994caea6e66ed276e55669a41963d8')
-        device1 = '3c09f2803d994caea6e66ed276e55669a41963d8'
-        device2 = '14e30e031d0af575f97fbcb6f1732c9e2ed0a019'
-        # txt = raw_input("stop music? y/n")
-        # if txt == 'y':
-        #     stop = True
-        # else:
-        #     stop = False
-        # if stop:
-        #     spotify.pause_playback(device2)
-        # else:
-        #     spotify.start_playback(device2)
-        # print results
 
 
     def namefilter(self, name):
@@ -49,4 +35,6 @@ class Loader:
             name = temp2.replace(".", " ")
         if "-" in name:
             name = name.replace(" -", "")
+        if "'" in name:
+            name = name.replace("'","")
         return name

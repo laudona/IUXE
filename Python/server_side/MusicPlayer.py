@@ -17,13 +17,12 @@ skip = threading.Event()
 
 class Player(threading.Thread):
 
-    def __init__(self, username, spotify, device, playlist, tracks):
+    def __init__(self, username, spotify, device, playlist):
         threading.Thread.__init__(self)
         self.username = username
         self.spotify = spotify
         self.device = device
         self.playlist = playlist
-        self.tracks = tracks
         self.offset = ''
         self.server_url = "ws://localhost:3001/"
         self.ws = client.Client(self.server_url)
@@ -37,10 +36,10 @@ class Player(threading.Thread):
 
     def run(self):
         random.shuffle(self.playlist)
-        for t in self.playlist[:self.tracks]:
-            print t[0]
+        # for t in self.playlist[:self.tracks]:
+        #     print t[0]
 
-        for track in self.playlist[:self.tracks]:
+        for track in self.playlist:
             if stop.is_set():
                 print ''
             else:

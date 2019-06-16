@@ -21,8 +21,7 @@ module.exports = function ({port, webDirectory}, ip_address, router, spotify) {
 
     app.use(route.post('/music',
         function (ctx, next) {
-            var amount = ctx.request.body.amount;
-            client.invoke("start",amount,function(error, res, more) {
+            client.invoke("start",function(error, res, more) {
                 console.log("---- LETS GO ----");
             });
             ctx.redirect('public/js/tablet.html');
@@ -35,6 +34,13 @@ module.exports = function ({port, webDirectory}, ip_address, router, spotify) {
             });
             ctx.redirect('public/js/tablet.html');
         }));
+    app.use(route.post('/finishm',
+        function (ctx, next) {
+            client.invoke("finish", function(error, res, more) {
+                console.log("---- FINISHING THE SONG ----");
+            });
+            ctx.redirect('public/js/phone.html');
+        }));
 
     app.use(route.post('/pause',
         function (ctx, next) {
@@ -43,6 +49,13 @@ module.exports = function ({port, webDirectory}, ip_address, router, spotify) {
             });
             ctx.redirect('public/js/tablet.html');
         }));
+    app.use(route.post('/pausem',
+        function (ctx, next) {
+            client.invoke("pause", function(error, res, more) {
+            console.log("----   PAUSING THE GAME ----");
+            });
+            ctx.redirect('public/js/phone.html');
+        }));
 
     app.use(route.post('/stop',
         function (ctx, next) {
@@ -50,6 +63,13 @@ module.exports = function ({port, webDirectory}, ip_address, router, spotify) {
                 console.log("---- STOPPING THE PLAYER -----");
             });
             ctx.redirect('public/js/tablet.html');
+        }));
+    app.use(route.post('/stopm',
+        function (ctx, next) {
+             client.invoke("playerstop", function(error, res, more) {
+                console.log("---- STOPPING THE PLAYER -----");
+            });
+            ctx.redirect('public/js/phone.html');
         }));
 
     // app.use(route.post('/skip',
@@ -63,6 +83,10 @@ module.exports = function ({port, webDirectory}, ip_address, router, spotify) {
     app.use(route.get('/',
         async function (ctx) {
             ctx.redirect('public/js/tablet.html');
+        }));
+    app.use(route.get('/m',
+        async function (ctx) {
+            ctx.redirect('public/js/phone.html');
         }));
 
     app.use(route.get('/public',

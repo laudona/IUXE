@@ -44,8 +44,11 @@ class Main:
             print devices
             if self.target_device:
                 for device in devices['devices']:
-                    if device['name'] == "MILLENLAPTOP": #"DESKTOP-4RSNA5J":
+                    if device['name'] == "DESKTOP-4RSNA5J": #"MILLENLAPTOP"
                         deviceID = device['id']
+                    else:
+                        deviceID = devices['devices'][0]['id']
+                        print "couldn't find target, picked first found isntead"
             else:
                 deviceID = devices['devices'][0]['id']
             loader = Loader.Loader(username, spotify)
@@ -71,9 +74,11 @@ class Main:
             line = song + ":"+ artist + "\n"
             Terms.write(line)
         Terms.close()
-        generator = Generator.Generator("bingo_terms.txt" ,"bingo.html", 12)
+        generator = Generator.Generator("bingo_terms.txt", 12)
         #generator.readTerms()
-        generator.start()
+        generator.start(3)
+        generator.start(4)
+        generator.start(5)
 
 if __name__ == "__main__":
     main = Main()
