@@ -59,7 +59,8 @@ class QiApplication:
             text = data[0]['http://www.tudelft.nl/ewi/iuxe#say'][0]['@id']
             text=text.split('#')[1]
             text = text.replace("_", " ")
-        self.audio.say(text)
+            text = "This was" + text + "Next song"
+        self.audio.say("\\pau=700\\ \\rspd=80\\" + text)
 
     def listen(self, data):
         text = data[0]['http://www.tudelft.nl/ewi/iuxe#listen'][0]['@value']

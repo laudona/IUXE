@@ -41,14 +41,14 @@ class Player(threading.Thread):
 
         for track in self.playlist:
             if stop.is_set():
-                print ''
+                return ''
             else:
                 pause.wait()
                 self.spotify.start_playback(self.device, uris=[track[2]])
                 self.offset = track[3]/3
                 self.spotify.seek_track(self.offset, self.device)
                 self.is_playing = True
-                interupt.wait(10)
+                interupt.wait(30)
                 if interupt.is_set() and self.paused:
                     pause.wait()
                     playback = self.spotify.current_playback()
@@ -85,7 +85,7 @@ class Player(threading.Thread):
                         """.format(info)
                 self.ws.send_json({"type":"event", "event": "info", "data": data, "dataType": "text/turtle"})
                 if not stop.is_set():
-                    time.sleep(5)
+                    time.sleep(30)
 
         data = """
                 @prefix iuxe:  <http://www.tudelft.nl/ewi/iuxe#> .

@@ -14,7 +14,7 @@ iuxe:game iuxe:is_followed_by iuxe:setup .
 iuxe:setup iuxe:title "Muziek Bingo" .
 iuxe:setup iuxe:main "Zullen we een muziek spelletje spelen?" .
 iuxe:setup iuxe:support "Roep 'Beginnen' om een nieuw muziek quiz spelletje te starten." .
-iuxe:setup iuxe:say_during_setup "Zullen we een muziek spelletje spelen?" .
+iuxe:setup iuxe:say_during_setup "Zullen we een muziek spelletje spelen? " .
 iuxe:setup iuxe:button_a_text "Beginnen" .
 iuxe:setup iuxe:show_page "http://192.168.0.152:3000/www/index.html" .
 iuxe:setup iuxe:answer iuxe:start .
