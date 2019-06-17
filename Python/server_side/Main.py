@@ -45,7 +45,7 @@ class Main:
             print devices
             if self.target_device:
                 for device in devices['devices']:
-                    if device['name'] == "DESKTOP-4RSNA5J": #"MILLENLAPTOP"
+                    if device['name'] == "MILLENLAPTOP": #"DESKTOP-4RSNA5J"
                         deviceID = device['id']
                     else:
                         deviceID = devices['devices'][0]['id']
