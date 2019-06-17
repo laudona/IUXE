@@ -74,7 +74,6 @@ class Player(threading.Thread):
                         remainder = (track[3] - playback['progress_ms'])/1000
                         interupt.clear()
                         skip.wait(remainder)
-                skip.clear()
                 self.spotify.pause_playback(self.device)
                 self.is_playing = False
                 info = (track[0] + ":" + track[1]).replace(" ", "_")
@@ -86,6 +85,7 @@ class Player(threading.Thread):
                         iuxe:spotify iuxe:info iuxe:{0} .
                         """.format(info)
                 self.ws.send_json({"type":"event", "event": "info", "data": data, "dataType": "text/turtle"})
+                skip.clear()
                 if not stop.is_set():
                     time.sleep(5)
 
