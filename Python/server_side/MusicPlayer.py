@@ -41,7 +41,7 @@ class Player(threading.Thread):
 
         for track in self.playlist:
             if stop.is_set():
-                print ''
+                return ""
             else:
                 pause.wait()
                 self.spotify.start_playback(self.device, uris=[track[2]])
@@ -106,6 +106,7 @@ class Player(threading.Thread):
         print "stopping the player"
         self.spotify.pause_playback(self.device)
         self.stopp = True
+        self.playlist = self.playlist[:1]
         interupt.set()
 
 # works partially

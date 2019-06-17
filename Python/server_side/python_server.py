@@ -11,7 +11,7 @@ class Server:
         self.thread = ""
 
     def start(self):
-        if self.thread == "" or not self.thread.is_alive():
+        if self.thread == "" or not self.thread.stopp:
             print "initing player"
             player = Player.Player(self.username, self.spotify, self.device, self.playlist,)
             self.thread = player
@@ -52,6 +52,3 @@ class Server:
             return "skipping song"
         else:
             return "no active player"
-# s = zerorpc.Server(HelloRPC())
-# s.bind("tcp://0.0.0.0:4242")
-# s.run()
