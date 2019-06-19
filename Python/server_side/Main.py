@@ -8,7 +8,7 @@ import PlaylistLoader as Loader
 import python_server as Server
 import check_length as Checker
 
-#import CardGenerator as Generator
+import CardGenerator as Generator
 import requests
 import json
 import client
@@ -42,46 +42,48 @@ class Main:
         if token:
             spotify = spotipy.Spotify(auth=token)
             devices = spotify.devices()
+            deviceID = ''
             print devices
             if self.target_device:
                 for device in devices['devices']:
                     if device['name'] == "MILLENLAPTOP": #"DESKTOP-4RSNA5J"
                         deviceID = device['id']
-                    else:
-                        deviceID = devices['devices'][0]['id']
-                        print "couldn't find target, picked first found isntead"
+                if deviceID == '':
+                    deviceID = devices['devices'][0]['id']
+                    print "couldn't find target, picked first found isntead"
             else:
                 deviceID = devices['devices'][0]['id']
             loader = Loader.Loader(username, spotify)
-            playlist = loader.load('5gGIKJ3e0uuGr7e4I0TAnY')
+            playlist = loader.load('4Af2P9pBRuI34bjlvM9JHZ')#, 5gGIKJ3e0uuGr7e4I0TAnY
+            example = playlist[0]
             checker = Checker.Checker()
-            print checker.check(playlist, 10)
-            #self.createBingocards(playlist)
-            pserver = Server.Server(username, spotify, deviceID, playlist)
+            #print checker.check(playlist, 10)
+            self.createBingocards(playlist[1:15], example)
+            pserver = Server.Server(username, spotify, deviceID, playlist[1:15], example)
             server = zerorpc.Server(pserver)
             print "binding server to: tcp://0.0.0.0:4242"
             server.bind("tcp://0.0.0.0:4242")
             print "starting server"
             server.run()
-            # player.play(playlist, 5)
 
         else:
             print "Can't get token for", username
 
 
-    def createBingocards(self, playlist):
+    def createBingocards(self, playlist, example):
         Terms = open("bingo_terms.txt", "w")
         for track in playlist:
             song = track[0]
             artist = track[1]
-            line = song + ":"+ artist + "\n"
+            line = song + " : "+ artist + "\n"
             Terms.write(line)
         Terms.close()
-        generator = Generator.Generator("bingo_terms.txt", 12)
+        example = example[0] + " : " + example[1]
+        generator = Generator.Generator("bingo_terms.txt", 12, example)
         #generator.readTerms()
         generator.start(3)
-        generator.start(4)
-        generator.start(5)
+        #generator.start(4)
+        #generator.start(5)
 
 if __name__ == "__main__":
     main = Main()

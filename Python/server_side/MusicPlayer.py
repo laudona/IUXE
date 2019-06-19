@@ -13,6 +13,10 @@ global stop
 stop = threading.Event()
 global skip
 skip = threading.Event()
+global next
+next = threading.Event()
+global confirmation
+confirmation = threading.Event()
 
 
 class Player(threading.Thread):
@@ -38,22 +42,42 @@ class Player(threading.Thread):
         random.shuffle(self.playlist)
         # for t in self.playlist[:self.tracks]:
         #     print t[0]
+        info = ""
+        data = """
+                @prefix iuxe:  <http://www.tudelft.nl/ewi/iuxe#> .
+                @prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
+
+                iuxe:spotify iuxe:info iuxe:{0} .
+                """.format(info)
+        self.ws.send_json({"type": "event", "event": "info", "data": data, "dataType": "text/turtle"})
 
         for track in self.playlist:
+            next.clear()
             if stop.is_set():
                 return ""
             else:
                 pause.wait()
+                #send warning that music starts
+                info = ""
+                data = """
+                        @prefix iuxe:  <http://www.tudelft.nl/ewi/iuxe#> .
+                        @prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
+
+                        iuxe:spotify iuxe:info iuxe:{0} .
+                        """.format(info)
+                self.ws.send_json({"type": "event", "event": "info", "data": data, "dataType": "text/turtle"})
+                confirmation.wait()
                 self.spotify.start_playback(self.device, uris=[track[2]])
                 self.offset = track[3]/3
                 self.spotify.seek_track(self.offset, self.device)
                 self.is_playing = True
-                interupt.wait(10)
+                confirmation.clear()
+                interupt.wait(30)
                 if interupt.is_set() and self.paused:
                     pause.wait()
                     playback = self.spotify.current_playback()
                     progress = (playback['progress_ms'] - self.offset)/1000
-                    remainder = 10 - progress
+                    remainder = 30 - progress
                     print remainder
                     interupt.clear()
                     interupt.wait(remainder)
@@ -75,7 +99,7 @@ class Player(threading.Thread):
                 skip.clear()
                 self.spotify.pause_playback(self.device)
                 self.is_playing = False
-                info = (track[0] + ":" + track[1]).replace(" ", "_")
+                info = (track[0] + " : " + track[1]).replace(" ", "_")
                 print info
                 data = """
                         @prefix iuxe:  <http://www.tudelft.nl/ewi/iuxe#> .
@@ -85,7 +109,15 @@ class Player(threading.Thread):
                         """.format(info)
                 self.ws.send_json({"type":"event", "event": "info", "data": data, "dataType": "text/turtle"})
                 if not stop.is_set():
-                    time.sleep(5)
+                    next.wait()
+                info = ""
+                data = """
+                        @prefix iuxe:  <http://www.tudelft.nl/ewi/iuxe#> .
+                        @prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
+
+                        iuxe:spotify iuxe:info iuxe:{0} .
+                        """.format(info)
+                self.ws.send_json({"type": "event", "event": "info", "data": data, "dataType": "text/turtle"})
 
         data = """
                 @prefix iuxe:  <http://www.tudelft.nl/ewi/iuxe#> .
@@ -123,5 +155,11 @@ class Player(threading.Thread):
             self.unpaused = True
             pause.set()
 
-    def skip(self):
+    def skipsong(self):
         skip.set()
+
+    def nextsong(self):
+        next.set()
+
+    def confirm(self):
+        confirmation.set()
