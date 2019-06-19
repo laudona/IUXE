@@ -13,7 +13,7 @@ class Server:
         self.thread = ""
 
     def start(self):
-        if self.thread == "" or not self.thread.is_alive():
+        if self.thread == "" or self.thread.stopp:
             print "initing player"
             player = Player.Player(self.username, self.spotify, self.device, self.playlist)
             self.thread = player
@@ -35,6 +35,7 @@ class Server:
         print "trying to stop player"
         if self.thread.is_alive():
             self.thread.stopplayer()
+            self.thread = ""
             return "stop player"
         else:
             return "no active player"

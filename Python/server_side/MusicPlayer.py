@@ -55,24 +55,18 @@ class Player(threading.Thread):
             next.clear()
             if stop.is_set():
                 return ""
+
             else:
                 pause.wait()
                 #send warning that music starts
-                info = ""
-                data = """
-                        @prefix iuxe:  <http://www.tudelft.nl/ewi/iuxe#> .
-                        @prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
-
-                        iuxe:spotify iuxe:info iuxe:{0} .
-                        """.format(info)
-                self.ws.send_json({"type": "event", "event": "info", "data": data, "dataType": "text/turtle"})
+                self.ws.send_json({"type":"event", "event": "new", "data": "song", "dataType": "text/turtle"})
                 confirmation.wait()
                 self.spotify.start_playback(self.device, uris=[track[2]])
                 self.offset = track[3]/3
                 self.spotify.seek_track(self.offset, self.device)
                 self.is_playing = True
+                interupt.wait(30)    
                 confirmation.clear()
-                interupt.wait(30)
                 if interupt.is_set() and self.paused:
                     pause.wait()
                     playback = self.spotify.current_playback()
@@ -118,6 +112,7 @@ class Player(threading.Thread):
                         iuxe:spotify iuxe:info iuxe:{0} .
                         """.format(info)
                 self.ws.send_json({"type": "event", "event": "info", "data": data, "dataType": "text/turtle"})
+
 
         data = """
                 @prefix iuxe:  <http://www.tudelft.nl/ewi/iuxe#> .

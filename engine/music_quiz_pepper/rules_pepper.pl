@@ -48,6 +48,10 @@ rule(end_game_goodbye,
     event(spotify-end_game-Data) then
         action(pepper-say-"Bedankt voor het meespelen")).
 
+rule(introduce_next_song,
+    event(spotify-new-song) then
+        action(pepper-song-"new")).
+
 
 %%
 %% Handle pepper word inputs
@@ -122,7 +126,7 @@ rule(tablet_06,
 
 rule(tablet_07,
     intermediate(user-clicked-skip) then
-    action(pino-skip-song)).
+        action(pino-skip-song)).
 
 %%
 %% Chain topics when previous topic finsihed.

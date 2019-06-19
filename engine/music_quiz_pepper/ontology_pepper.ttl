@@ -14,26 +14,17 @@ iuxe:game iuxe:is_followed_by iuxe:setup .
 iuxe:setup iuxe:title "Muziek Bingo" .
 iuxe:setup iuxe:main "Zullen we een muziek spelletje spelen?" .
 iuxe:setup iuxe:support "Roep 'Beginnen' om een nieuw muziek quiz spelletje te starten." .
-iuxe:setup iuxe:say_during_setup "Zullen we een muziek spelletje spelen?" .
-iuxe:setup iuxe:button_a_text "Beginnen" .
-iuxe:setup iuxe:show_page "http://192.168.0.152:3000/www/index.html" .
-iuxe:setup iuxe:answer iuxe:start .
+iuxe:setup iuxe:say_during_setup "Zullen we een muziek spelletje spelen? " .
 iuxe:setup iuxe:type iuxe:setup .
 
 iuxe:rules iuxe:title "Muziek Bingo" .
 iuxe:rules iuxe:main "Zullen we een muziek spelletje spelen?" .
 iuxe:rules iuxe:support "Roep 'Beginnen' om een nieuw muziek quiz spelletje te starten." .
-iuxe:rules iuxe:say_during_setup "Vink het vakje aan van de artiest en titel van het nummer dat zich afspeeld. Wie er 3 op rij heeft afgevinkt wint." .
-iuxe:rules iuxe:button_a_text "Beginnen" .
-iuxe:rules iuxe:show_page "http://192.168.0.152:3000/www/index.html" .
-iuxe:rules iuxe:answer iuxe:start .
+iuxe:rules iuxe:say_during_setup "Vink het vakje aan van de artiest en titel van het nummer dat zich afspeeld. Wie er 3 op rij heeft afgevinkt wint. ADD HERE THE EXPLANATION OF THE CARDS" .
 iuxe:rules iuxe:type iuxe:rules .
 
 iuxe:game iuxe:title "Muziek Bingo" .
 iuxe:game iuxe:main "Zullen we een muziek spelletje spelen?" .
 iuxe:game iuxe:support "Roep 'Beginnen' om een nieuw muziek quiz spelletje te starten." .
 iuxe:game iuxe:say_during_setup "" .
-iuxe:game iuxe:button_a_text "Beginnen" .
-iuxe:game iuxe:show_page "http://192.168.0.152:3000/www/index.html" .
-iuxe:game iuxe:answer iuxe:start .
 iuxe:game iuxe:type iuxe:game .
