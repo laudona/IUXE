@@ -93,5 +93,9 @@ class QiApplication:
         self.behavior.start(text)
 
     def song(self, data):
-        text = self.random_sentences[random.randinit(0,len(self.random_sentences)-1)]
-        self.audio.say(text)
+        text = self.random_sentences[random.randint(0,3)]
+        self.audio.song(text)
+
+    def start_example(self, data):
+        text = "Laten we beginnen met een voorbeeld. Ik ga een liedje spelen."
+        self.audio.start_example(text)

@@ -68,10 +68,11 @@ class Server:
 
     def examplestart(self):
         if self.thread == "" or not self.thread.is_alive():
-            print "initing player"
+            print "initing eplayer"
             eplayer = Eplayer.Eplayer(self.username, self.spotify, self.device, self.example)
-            self.thread = eplayer
-            self.thread.start()
+            #self.thread = eplayer
+            #self.thread.start()
+            eplayer.start()
             return "started example player"
         else:
             print "player is already running"
@@ -84,3 +85,11 @@ class Server:
             return "end example"
         else:
             return "no active player"
+
+    def confirm(self):
+            print "trying to finish song"
+            if self.thread.is_alive():
+                self.thread.confirm()
+                return "end example"
+            else:
+                return "no active player"

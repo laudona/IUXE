@@ -54,13 +54,20 @@ class Player(threading.Thread):
         for track in self.playlist:
             next.clear()
             if stop.is_set():
-                return ""
+                print ""
 
             else:
                 pause.wait()
                 #send warning that music starts
-                self.ws.send_json({"type":"event", "event": "new", "data": "song", "dataType": "text/turtle"})
-                #confirmation.wait()
+                data = """
+                                @prefix iuxe:  <http://www.tudelft.nl/ewi/iuxe#> .
+                                @prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
+
+                                iuxe:spotify iuxe:new iuxe:data .
+                                """
+                self.ws.send_json({"type":"event", "event": "new", "data": data, "dataType": "text/turtle"})
+                print "Sending event"
+                confirmation.wait()
                 self.spotify.start_playback(self.device, uris=[track[2]])
                 self.offset = track[3]/3
                 self.spotify.seek_track(self.offset, self.device)

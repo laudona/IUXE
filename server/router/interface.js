@@ -33,7 +33,7 @@ class Interface {
     event ({ event, data, dataType }) {
         const eventName = (event.indexOf('.') < 0 ? `${this.role}.event.${event}` : event);
         console.log(`Client '${this.name}' emits ${eventName} event.`);
-        if(eventName == 'confirm event') {
+        if(eventName == 'pepper.event.newsong') {
             client.invoke("confirm",function(error, res, more) {
                 console.log("confirming to start song");
                 // console.log(res.toString());
@@ -42,6 +42,13 @@ class Interface {
         }
         else if(eventName == 'spotify.event.info'){
             console.log(data);
+        }
+        else if (eventName == 'pepper.event.example_started'){
+            client.invoke("examplestart",function(error, res, more) {
+                console.log("confirming to start EXAMPLE");
+                // console.log(res.toString());
+                //for some reason this doesn't work: this.send_message_to_client({action: 'say',data: 'hello',dataType: 'text/turtle'});
+            });
         }
         this.router.emit(eventName, { event, data, dataType });
     }

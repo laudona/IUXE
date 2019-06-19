@@ -148,3 +148,23 @@ class Audio:
                     """
             self.send("detected", data, "text/turtle")
         #pass
+
+    def song(self, text):
+        self.speech_service.say(text)
+        data = """
+                @prefix iuxe:  <http://www.tudelft.nl/ewi/iuxe#> .
+                @prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
+
+                iuxe:pepper iuxe:newsong iuxe:newsong .
+                """
+        self.send("newsong", data, "text/turtle")
+
+    def start_example(self, text):
+        self.speech_service.say(text)
+        data = """
+                @prefix iuxe:  <http://www.tudelft.nl/ewi/iuxe#> .
+                @prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
+
+                iuxe:pepper iuxe:example_started iuxe:lol .
+                """
+        self.send("example_started", data, "text/turtle")

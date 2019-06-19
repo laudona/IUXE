@@ -20,7 +20,7 @@ iuxe:setup iuxe:type iuxe:setup .
 iuxe:rules iuxe:title "Muziek Bingo" .
 iuxe:rules iuxe:main "Zullen we een muziek spelletje spelen?" .
 iuxe:rules iuxe:support "Roep 'Beginnen' om een nieuw muziek quiz spelletje te starten." .
-iuxe:rules iuxe:say_during_setup "Vink het vakje aan van de artiest en titel van het nummer dat zich afspeeld. Wie er 3 op rij heeft afgevinkt wint. ADD HERE THE EXPLANATION OF THE CARDS" .
+iuxe:rules iuxe:say_during_setup "Als het goed is heeft u nu voor u een bingo kaart liggen, per vakje staat de titel van een muziek nummer en achter de : de artiest die dit nummer gemaakt heeft. Er wordt straks 30 seconden lang een muziek nummer afgespeeld, als de titel en de artiest van het nummer dat zich afspeelt hetzelfde is als een van de vakjes op uw kaart, dan kruist u dit vakje aan. Wanneer u 3 vakjes in een rij heeft aangekruist dan u bingo. Een rij mag van links naar rechts, van boven naar onder, en hij mag schuin. De eerste met bingo wint." .
 iuxe:rules iuxe:type iuxe:rules .
 
 iuxe:game iuxe:title "Muziek Bingo" .

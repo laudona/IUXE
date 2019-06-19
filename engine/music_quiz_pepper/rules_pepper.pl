@@ -49,13 +49,13 @@ rule(end_game_goodbye,
         action(pepper-say-"Bedankt voor het meespelen")).
 
 rule(introduce_next_song,
-    event(spotify-new-song) then
+    event(spotify-new-Song) then
         action(pepper-song-"new")).
 
 
 %%
 %% Handle pepper word inputs
-%%
+%%event(spotify-new-Song)
 
 rule(pepper_01,
     event(pepper-heard-Wid) and
@@ -127,6 +127,16 @@ rule(tablet_06,
 rule(tablet_07,
     intermediate(user-clicked-skip) then
         action(pino-skip-song)).
+
+rule(tablet_08,
+    event(tablet-clicked-example_start_button) then
+        action(pepper-start_example-example)).
+
+%%-"Laten we beginnen met een voorbeeld. Ik ga een liedje spelen.")).
+
+rule(tablet_09,
+    event(spotify-end_example-Example) then
+        action(pepper-say-"Markeer het vakje van het nummer als je het op je kaart hebt staan. ")).
 
 %%
 %% Chain topics when previous topic finsihed.

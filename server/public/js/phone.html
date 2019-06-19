@@ -48,7 +48,7 @@
         </div>
         <div style="display:inline-block; width:45%;text-align:center;">
             <form action="/example" method="post">
-                <button type="submit" class="pause_button btn btn-primary btn-lg btn-block py-3 my-2" value="">Click here to end the example</button>
+                <button type="submit" class="example_stop_button btn btn-primary btn-lg btn-block py-3 my-2" value="">Click here to end the example</button>
             </form>
         </div>
     </div>
@@ -83,6 +83,14 @@
 
     $(".skip_button").on('click', function () {
         Spotless.send_event('clicked', click_start + 'skip_button' + click_end, 'text/turtle');
+    });
+
+    $(".example_start_button").on('click', function () {
+        Spotless.send_event('clicked', click_start + 'example_start_button' + click_end, 'text/turtle');
+    });
+
+    $(".example_stop_button").on('click', function () {
+        Spotless.send_event('clicked', click_start + 'example_stop_button' + click_end, 'text/turtle');
     });
 
     Spotless.actions['tablet'] = {
