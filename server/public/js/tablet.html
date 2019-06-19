@@ -8,11 +8,16 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
 <body>
 
+<div class="container-fluid">
+    <div class="container" style="width:50%; margin:auto; text-align: center;"><h1 class="mx-auto">PEPPER ROBOT for BINGO!</h1></div>
 
+</div>
 <div class="info container-fluid">
     <label class="song_info" style="font-size: 80px"></label>
 </div>
-
+<div class="info container-fluid">
+    <label class="song_artist" style="font-size: 80px"></label>
+</div>
 <script src="client.js"></script>
 <script src="tablet.js"></script>
 
@@ -50,7 +55,12 @@
             $("." + cls).show();
         },
         'artist_info': function(text) {
-            $('.song_info').text(text.replace(/_/g, ' '));
+            var t = text.replace(/_/g, ' ');
+            var t2 = t.split(":");
+            var title = "Titel: " + t2[0];
+            var artist = "Artiest: " + t2[1];
+            $('.song_info').text(title);
+            $('.song_artist').text(artist);
         }
     };
 

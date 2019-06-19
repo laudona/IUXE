@@ -44,14 +44,17 @@
     </div>
     <div style="width:50%; margin:auto;">
         <div style="display:inline-block; width:45%;text-align:center;">
-            <form action="/pause" method="post">
-                <button type="submit" class="pause_button btn btn-primary btn-lg btn-block py-3 my-2" value="">Click here to pause the game</button>
-            </form>
+                <button class="example_start_button btn btn-primary btn-lg btn-block py-3 my-2" value="">Click here to start the example</button>
         </div>
         <div style="display:inline-block; width:45%;text-align:center;">
-            <button class="rules_button btn btn-primary btn-lg btn-block py-3 my-2">Click here to explain the rules</button>
+            <form action="/example" method="post">
+                <button type="submit" class="pause_button btn btn-primary btn-lg btn-block py-3 my-2" value="">Click here to end the example</button>
+            </form>
         </div>
     </div>
+    <form action="/next" method="post">
+        <button type="submit" class="next_button btn btn-primary btn-lg btn-block py-3 my-2" value="">Click here to go to next song</button>
+    </form>
 </div>
 
 

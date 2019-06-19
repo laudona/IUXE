@@ -35,7 +35,7 @@ class Interface {
         console.log(`Client '${this.name}' emits ${eventName} event.`);
         if(eventName == 'confirm event') {
             client.invoke("confirm",function(error, res, more) {
-                console.log("testin python node connection");
+                console.log("confirming to start song");
                 // console.log(res.toString());
                 //for some reason this doesn't work: this.send_message_to_client({action: 'say',data: 'hello',dataType: 'text/turtle'});
             });

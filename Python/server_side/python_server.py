@@ -81,6 +81,6 @@ class Server:
         print "trying to finish song"
         if self.thread.is_alive():
             self.thread.finishexample()
-            return "finish song"
+            return "end example"
         else:
             return "no active player"

@@ -133,7 +133,6 @@ class Player(threading.Thread):
         print "stopping the player"
         self.spotify.pause_playback(self.device)
         self.stopp = True
-        self.playlist = self.playlist[:1]
         interupt.set()
 
 # works partially

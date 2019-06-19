@@ -24,7 +24,7 @@ module.exports = function ({port, webDirectory}, ip_address, router, spotify) {
             client.invoke("start",function(error, res, more) {
                 console.log("---- LETS GO ----");
             });
-            ctx.redirect('public/js/tablet.html');
+            ctx.redirect('public/js/phone.html');
         }));
 
     app.use(route.post('/finish',
@@ -32,32 +32,32 @@ module.exports = function ({port, webDirectory}, ip_address, router, spotify) {
             client.invoke("finish", function(error, res, more) {
                 console.log("---- FINISHING THE SONG ----");
             });
-            ctx.redirect('public/js/tablet.html');
-        }));
-    app.use(route.post('/finishm',
-        function (ctx, next) {
-            client.invoke("finish", function(error, res, more) {
-                console.log("---- FINISHING THE SONG ----");
-            });
             ctx.redirect('public/js/phone.html');
         }));
+    // app.use(route.post('/finishm',
+    //     function (ctx, next) {
+    //         client.invoke("finish", function(error, res, more) {
+    //             console.log("---- FINISHING THE SONG ----");
+    //         });
+    //         ctx.redirect('public/js/phone.html');
+    //     }));
 
+    // app.use(route.post('/pausem',
+    //     function (ctx, next) {
+    //         client.invoke("pause", function(error, res, more) {
+    //         console.log("----   PAUSING THE GAME ----");
+    //         });
+    //         ctx.redirect('public/js/tablet.html');
+    //     }));
     app.use(route.post('/pause',
         function (ctx, next) {
             client.invoke("pause", function(error, res, more) {
             console.log("----   PAUSING THE GAME ----");
             });
-            ctx.redirect('public/js/tablet.html');
-        }));
-    app.use(route.post('/pausem',
-        function (ctx, next) {
-            client.invoke("pause", function(error, res, more) {
-            console.log("----   PAUSING THE GAME ----");
-            });
             ctx.redirect('public/js/phone.html');
         }));
 
-    app.use(route.post('/skipm',
+    app.use(route.post('/skip',
         function (ctx, next) {
             client.invoke("skip", function(error, res, more) {
             console.log("----   SKIPPING THE SONG ----");
@@ -65,20 +65,38 @@ module.exports = function ({port, webDirectory}, ip_address, router, spotify) {
             ctx.redirect('public/js/phone.html');
         }));
 
+    // app.use(route.post('/stop',
+    //     function (ctx, next) {
+    //          client.invoke("playerstop", function(error, res, more) {
+    //             console.log("---- STOPPING THE PLAYER -----");
+    //         });
+    //         ctx.redirect('public/js/tablet.html');
+    //     }));
+
     app.use(route.post('/stop',
-        function (ctx, next) {
-             client.invoke("playerstop", function(error, res, more) {
-                console.log("---- STOPPING THE PLAYER -----");
-            });
-            ctx.redirect('public/js/tablet.html');
-        }));
-    app.use(route.post('/stopm',
         function (ctx, next) {
              client.invoke("playerstop", function(error, res, more) {
                 console.log("---- STOPPING THE PLAYER -----");
             });
             ctx.redirect('public/js/phone.html');
         }));
+
+    app.use(route.post('/example',
+        function (ctx, next) {
+             client.invoke("examplefinish", function(error, res, more) {
+                console.log("---- STOPPING THE EXAMPLE PLAYER -----");
+            });
+            ctx.redirect('public/js/phone.html');
+        }));
+
+    app.use(route.post('/next',
+        function (ctx, next) {
+             client.invoke("nexttrack", function(error, res, more) {
+                console.log("---- NEXT SONG COMING UP -----");
+            });
+            ctx.redirect('public/js/phone.html');
+        }));
+
 
     // app.use(route.post('/skip',
     //     function (ctx, next) {
