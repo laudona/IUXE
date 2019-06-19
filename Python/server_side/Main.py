@@ -8,7 +8,7 @@ import PlaylistLoader as Loader
 import python_server as Server
 import check_length as Checker
 
-import CardGenerator as Generator
+#import CardGenerator as Generator
 import requests
 import json
 import client
@@ -58,7 +58,7 @@ class Main:
             example = playlist[0]
             checker = Checker.Checker()
             #print checker.check(playlist, 10)
-            self.createBingocards(playlist[1:15], example)
+            #self.createBingocards(playlist[1:15], example)
             pserver = Server.Server(username, spotify, deviceID, playlist[1:15], example)
             server = zerorpc.Server(pserver)
             print "binding server to: tcp://0.0.0.0:4242"

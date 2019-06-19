@@ -57,6 +57,50 @@
     </form>
 </div>
 
+<script>
+    var base = 'http://www.tudelft.nl/ewi/iuxe#';
 
+    var click_start = '<http://www.tudelft.nl/ewi/iuxe#tablet> <http://www.tudelft.nl/ewi/iuxe#clicked> <http://www.tudelft.nl/ewi/iuxe#';
+    var click_end = '> . ';
+
+    $(".start_button").on('click', function () {
+        Spotless.send_event('clicked', click_start + 'start_button' + click_end, 'text/turtle');
+    });
+
+    $(".finish_button").on('click', function () {
+        Spotless.send_event('clicked', click_start + 'finish_button' + click_end, 'text/turtle');
+    });
+
+    $(".stop_button").on('click', function () {
+        Spotless.send_event('clicked', click_start + 'stop_button' + click_end, 'text/turtle');
+    });
+
+    $(".rules_button").on('click', function () {
+        Spotless.send_event('clicked', click_start + 'rules_button' + click_end, 'text/turtle');
+    });
+
+    $(".skip_button").on('click', function () {
+        Spotless.send_event('clicked', click_start + 'skip_button' + click_end, 'text/turtle');
+    });
+
+    Spotless.actions['tablet'] = {
+        'hide': function(cls) {
+            $("." + cls).hide();
+        },
+        'show': function(cls) {
+            $("." + cls).show();
+        },
+        'artist_info': function(text) {
+            var t = text.replace(/_/g, ' ');
+            var t2 = t.split(":");
+            var title = "Titel: " + t2[0];
+            var artist = "Artiest: " + t2[1];
+            $('.song_info').text(title);
+            $('.song_artist').text(artist);
+        }
+    };
+
+    Spotless.connect();
+</script>
 </body>
 </html>

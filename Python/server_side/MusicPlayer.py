@@ -60,7 +60,7 @@ class Player(threading.Thread):
                 pause.wait()
                 #send warning that music starts
                 self.ws.send_json({"type":"event", "event": "new", "data": "song", "dataType": "text/turtle"})
-                confirmation.wait()
+                #confirmation.wait()
                 self.spotify.start_playback(self.device, uris=[track[2]])
                 self.offset = track[3]/3
                 self.spotify.seek_track(self.offset, self.device)
