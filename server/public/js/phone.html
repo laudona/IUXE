@@ -56,6 +56,8 @@
         <button type="submit" class="next_button btn btn-primary btn-lg btn-block py-3 my-2" value="">Click here to go to next song</button>
     </form>
 </div>
+<script src="client.js"></script>
+<script src="tablet.js"></script>
 
 <script>
     var base = 'http://www.tudelft.nl/ewi/iuxe#';
@@ -90,14 +92,6 @@
         'show': function(cls) {
             $("." + cls).show();
         },
-        'artist_info': function(text) {
-            var t = text.replace(/_/g, ' ');
-            var t2 = t.split(":");
-            var title = "Titel: " + t2[0];
-            var artist = "Artiest: " + t2[1];
-            $('.song_info').text(title);
-            $('.song_artist').text(artist);
-        }
     };
 
     Spotless.connect();

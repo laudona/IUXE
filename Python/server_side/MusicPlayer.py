@@ -42,7 +42,7 @@ class Player(threading.Thread):
         random.shuffle(self.playlist)
         # for t in self.playlist[:self.tracks]:
         #     print t[0]
-        info = ""
+        info = ":"
         data = """
                 @prefix iuxe:  <http://www.tudelft.nl/ewi/iuxe#> .
                 @prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
