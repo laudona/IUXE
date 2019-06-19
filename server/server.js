@@ -57,6 +57,14 @@ module.exports = function ({port, webDirectory}, ip_address, router, spotify) {
             ctx.redirect('public/js/phone.html');
         }));
 
+    app.use(route.post('/skipm',
+        function (ctx, next) {
+            client.invoke("skip", function(error, res, more) {
+            console.log("----   SKIPPING THE SONG ----");
+            });
+            ctx.redirect('public/js/phone.html');
+        }));
+
     app.use(route.post('/stop',
         function (ctx, next) {
              client.invoke("playerstop", function(error, res, more) {

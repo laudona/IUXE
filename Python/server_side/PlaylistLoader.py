@@ -37,4 +37,6 @@ class Loader:
             name = name.replace(" -", "")
         if "'" in name:
             name = name.replace("'","")
+        if "/" in name:
+            name = name.replace("/","")
         return name

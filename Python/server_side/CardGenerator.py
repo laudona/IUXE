@@ -7,9 +7,10 @@ import pdfkit
 
 class Generator:
 
-    def __init__(self, terms, amount):
+    def __init__(self, terms, amount, example):
         self.terms = terms
         self.amount = amount
+        self.example = example
 
     # read in the bingo terms
     def readTerms(self):
@@ -59,7 +60,7 @@ class Generator:
     # Generates an HTML table representation of the bingo card for terms
     def generateTable(self, terms, size, pagebreak = True):
         if size == 3:
-            ts = terms[:9]
+            ts = terms[:4] + [self.example] + terms[4:8]
         elif size == 4:
             ts = terms[:16]
         elif size == 5:

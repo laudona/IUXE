@@ -33,8 +33,8 @@ class Interface {
     event ({ event, data, dataType }) {
         const eventName = (event.indexOf('.') < 0 ? `${this.role}.event.${event}` : event);
         console.log(`Client '${this.name}' emits ${eventName} event.`);
-        if(eventName == 'pepper.event.start') {
-            client.invoke("start", 2,function(error, res, more) {
+        if(eventName == 'confirm event') {
+            client.invoke("confirm",function(error, res, more) {
                 console.log("testin python node connection");
                 // console.log(res.toString());
                 //for some reason this doesn't work: this.send_message_to_client({action: 'say',data: 'hello',dataType: 'text/turtle'});
