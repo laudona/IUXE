@@ -49,6 +49,10 @@ class Player(threading.Thread):
                 self.spotify.seek_track(self.offset, self.device)
                 self.is_playing = True
                 interupt.wait(30)
+
+                #This has to go right before starting a new song
+                self.ws.send_json({"type":"event", "event": "new", "data": "song", "dataType": "text/turtle"})
+
                 if interupt.is_set() and self.paused:
                     pause.wait()
                     playback = self.spotify.current_playback()

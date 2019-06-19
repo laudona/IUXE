@@ -5,6 +5,7 @@ import touch
 import motion
 import behavior
 import tablet
+import random
 
 
 class QiApplication:
@@ -28,6 +29,8 @@ class QiApplication:
         self.touch.set_callback(self.send)  # Set send fallback
         self.motion.set_callback(self.send)  # Set send fallback
         self.behavior.set_callback(self.send)  # Set send fallback
+
+        self.random_sentences = ["let's start a new song", "did you like it? here it is a new one!", "Let's continue with the game", "A new song is coming"]
 
     def send(self, message):
         """
@@ -55,11 +58,10 @@ class QiApplication:
         try:
             text = data[0]['http://www.tudelft.nl/ewi/iuxe#say'][0]['@value']
         except:
-            self.audio.text_to_speech_service.setLanguage('English')
+            #self.audio.text_to_speech_service.setLanguage('English')
             text = data[0]['http://www.tudelft.nl/ewi/iuxe#say'][0]['@id']
-            text=text.split('#')[1]
+            text = text.split('#')[1]
             text = text.replace("_", " ")
-            text = "This was" + text + "Next song"
         self.audio.say("\\pau=700\\ \\rspd=80\\" + text)
 
     def listen(self, data):
@@ -89,3 +91,7 @@ class QiApplication:
     def start(self, data):
         text = data[0]['http://www.tudelft.nl/ewi/iuxe#start'][0]['@value']
         self.behavior.start(text)
+
+    def song(self, data):
+        text = self.random_sentences[random.randinit(0,len(self.random_sentences)-1)]
+        self.audio.say(text)
