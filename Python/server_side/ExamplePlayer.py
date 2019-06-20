@@ -46,14 +46,6 @@ class Eplayer(threading.Thread):
         self.ws.send_json({"type": "event", "event": "end_example", "data": data, "dataType": "text/turtle"})
         end.wait()
         #have the robot finish the example run
-        info = (self.example[0] + " : " + self.example[1]).replace(" ", "_")
-        data = """
-                                        @prefix iuxe:  <http://www.tudelft.nl/ewi/iuxe#> .
-                                        @prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
-
-                                        iuxe:spotify iuxe:info iuxe:{0} .
-                                        """.format(info)
-        self.ws.send_json({"type": "event", "event": "info", "data": data, "dataType": "text/turtle"})
         self.ws.close()
         end.clear()
 

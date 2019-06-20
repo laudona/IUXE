@@ -132,11 +132,11 @@ rule(tablet_08,
     event(tablet-clicked-example_start_button) then
         action(pepper-start_example-example)).
 
-%%-"Laten we beginnen met een voorbeeld. Ik ga een liedje spelen.")).
+%%-"Laten we beginnen met een voorbeeld. Ik ga zo een liedje spelen en dan gaan jullie luisteren of jullie het nummer kennen. hier komt het nummer")).
 
 rule(tablet_09,
     event(spotify-end_example-Example) then
-        action(pepper-say-"Markeer het vakje van het nummer als je het op je kaart hebt staan. ")).
+        action(pepper-say-"dit nummer staat in het middelste vakje van uw bingo kaart. als u hem nog niet aangekruisd heeft, dan kunt u dat nu nog doen.")).
 
 %%
 %% Chain topics when previous topic finsihed.

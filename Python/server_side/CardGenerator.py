@@ -62,7 +62,8 @@ class Generator:
         if size == 3:
             ts = terms[:4] + [self.example] + terms[4:8]
         elif size == 4:
-            ts = terms[:16]
+            ts = terms[:9]
+            size -= 1
         elif size == 5:
             ts = terms[:12] + ["Muziek Bingo"] + terms[12:24]
         if pagebreak:

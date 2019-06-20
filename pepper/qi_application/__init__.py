@@ -30,7 +30,7 @@ class QiApplication:
         self.motion.set_callback(self.send)  # Set send fallback
         self.behavior.set_callback(self.send)  # Set send fallback
 
-        self.random_sentences = ["let's start a new song", "did you like it? here it is a new one!", "Let's continue with the game", "A new song is coming"]
+        self.random_sentences = ["laten we het volgende nummer starten!", "dat was een leuk nummer, hier is de volgende!", "Laten we verdergaan met het spel", "Een nieuw liedje komt eraan"]
 
     def send(self, message):
         """
@@ -97,5 +97,5 @@ class QiApplication:
         self.audio.song(text)
 
     def start_example(self, data):
-        text = "Laten we beginnen met een voorbeeld. Ik ga een liedje spelen."
+        text = "Laten we beginnen met een voorbeeld. Ik ga zo een liedje spelen en dan gaan jullie luisteren of je het nummer kent. hier komt het nummer."
         self.audio.start_example(text)
