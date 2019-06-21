@@ -55,10 +55,15 @@
             $("." + cls).show();
         },
         'artist_info': function(text) {
-            var t = text.replace(/_/g, ' ');
-            var t2 = t.split(":");
-            var title = "Titel: " + t2[0];
-            var artist = "Artiest: " + t2[1];
+            if(text == ""){
+                var title = "Titel: "
+                var artist = "Artiest: "
+            }else {
+                var t = text.replace(/_/g, ' ');
+                var t2 = t.split(":");
+                var title = "Titel: " + t2[0];
+                var artist = "Artiest: " + t2[1];
+            }
             $('.song_info').text(title);
             $('.song_artist').text(artist);
         }
